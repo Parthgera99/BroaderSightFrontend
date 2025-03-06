@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import * as z from "zod";
+import { useAuth } from "@/context/UserContext";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ export default function OtpForm() {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const {fetchUser} = useAuth();
+  
 
   useEffect(() => {
     const email = sessionStorage.getItem('emailForVerification'); 
@@ -24,8 +26,15 @@ export default function OtpForm() {
     }
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  useEffect(() => {
+    if (otp.length === 6) {
+      handleSubmit();
+    }
+  }, [otp]);
+
+  const handleSubmit = async (event?: React.FormEvent) => {
+    if (event) event.preventDefault();
+    if (loading) return; 
 
     if (otp.length !== 6) {
       toast.error("Please enter a 6-digit OTP.");
@@ -42,6 +51,7 @@ export default function OtpForm() {
       console.log(response)
       toast.success("OTP verified successfully!");
       if (response.data.success) {
+        await fetchUser();
         router.push("/dashboard"); // Redirect to dashboard
       } else {
         setError("Invalid OTP. Try again.");

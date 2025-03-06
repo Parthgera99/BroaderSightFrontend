@@ -33,19 +33,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Function to fetch user data
   const fetchUser = async () => {
-    setLoading(true)
-    try {
+      setLoading(true);
+    
+      // Check if accessToken exists in cookies/localStorage
+      // const accessToken = document.cookie
+      //   .split("; ")
+      //   .find((row) => row.startsWith("accessToken="))
+      //   ?.split("=")[1];
+
+        // const cookies = Object.fromEntries(
+        //   document.cookie.split("; ").map(c => c.split("="))
+        // );
+        // const accessToken = cookies.accessToken;
+
+        // const match = document.cookie.match(/(?:^|;\s*)accessToken=([^;]*)/);
+        // const accessToken = match ? match[1] : undefined;
+
+        console.log(document.cookie)
+            
+        // console.log(accessToken)
+        //   if (!accessToken) {
+        //     console.warn("No access token found. Skipping API call.");
+        //     setUser(null);
+        //     setLoading(false);
+        //     return;
+        //   }
       
-        const response = await api.get("/users/details",{withCredentials:true}); // Replace with your API route
-        console.log("user data = ", response.data.data)
-        setUser(response.data.data.givableUser);
-      
-    } catch (error) {
-      console.error("Failed to fetch user", error);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+          try {
+            const response = await api.get("/users/details", { withCredentials: true });
+            console.log("User data = ", response.data.data);
+            setUser(response.data.data.givableUser);
+            
+          } catch (error: any) {
+            if (error.response?.status === 401) {
+              console.warn("User not authenticated.");
+              setUser(null); // Ensure user state is set to null
+            } else {
+              console.error("Failed to fetch user", error);
+            }
+          } finally {
+            setLoading(false);
+          }
   };
 
   // Logout function

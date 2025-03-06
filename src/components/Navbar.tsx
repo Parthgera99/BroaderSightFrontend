@@ -52,7 +52,9 @@ function Navbar() {
 
       {/* Right - Sign In Button */}
       {loading ? (
-         <Skeleton className="h-10 w-[50px] rounded-full" /> // Placeholder while loading
+        <Button variant="nav" className='bg-zinc-800 w-[8vw] h-[40px]'>
+          <Skeleton className="" /> 
+        </Button>
 ) : isAuthenticated ? (
         <>
         <DropdownMenu>
@@ -82,7 +84,7 @@ function Navbar() {
         </>
       ) : (
         <Link href="/sign-in">
-          <Button variant="outline">Sign In</Button>
+          <Button variant="outline" className='w-[8vw] h-[40px]'>Sign In</Button>
         </Link>
       )}
       
