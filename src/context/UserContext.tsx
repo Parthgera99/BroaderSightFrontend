@@ -8,7 +8,7 @@ import { destroyCookie, parseCookies } from "nookies";
 
 interface User {
   id: string;
-  name: string;
+  fullname: string;
   email: string;
   profilePicture?:string;
   username?:string;
@@ -62,7 +62,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           try {
             const response = await api.get("/users/details", { withCredentials: true });
             console.log("User data = ", response.data.data);
+            const fetchedUser = response.data.data.givableUser;
             setUser(response.data.data.givableUser);
+
+            if (!fetchedUser.fullname) {
+               // Redirect new users
+            }
+        
             
           } catch (error: any) {
             if (error.response?.status === 401) {

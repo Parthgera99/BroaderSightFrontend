@@ -46,13 +46,12 @@ export default function OtpForm() {
 
 
     try {
-      const email = sessionStorage.getItem('emailForVerification');  // Retrieve the stored email from session storage  
+      const email = sessionStorage.getItem('emailForVerification');  // Retrieve the stored email from session storage
       const response = await api.post("/users/verifyotp", { email,otp });
-      console.log(response)
       toast.success("OTP verified successfully!");
       if (response.data.success) {
         await fetchUser();
-        router.push("/dashboard"); // Redirect to dashboard
+          router.replace("/dashboard"); // Otherwise, go to dashboard
       } else {
         setError("Invalid OTP. Try again.");
       }

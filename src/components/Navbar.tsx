@@ -1,16 +1,13 @@
 "use client"
 import React from 'react'
-// import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { MoreDropdown } from './layout/MoreDropdown';
+// import { MoreDropdown } from './layout/MoreDropdown';
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -52,8 +49,8 @@ function Navbar() {
 
       {/* Right - Sign In Button */}
       {loading ? (
-        <Button variant="nav" className='bg-zinc-800 w-[8vw] h-[40px]'>
-          <Skeleton className="" /> 
+        <Button variant="nav" className='bg-slate-200 dark:bg-zinc-800 w-[8vw] h-[40px]'>
+          <Skeleton /> 
         </Button>
 ) : isAuthenticated ? (
         <>
@@ -61,7 +58,12 @@ function Navbar() {
           <DropdownMenuTrigger>
             <Avatar>
               <AvatarImage src={user?.profilePicture || undefined} className='h-10 border rounded-full' />
-              {/* <AvatarFallback>CN</AvatarFallback> */}
+              <AvatarFallback>{user?.email.charAt(0).toUpperCase()}</AvatarFallback>
+              {/* <AvatarFallback>
+                {user?.name
+                  ? user.name.split(" ").map(word => word[0]).join("").toUpperCase()
+                  : user?.email?.slice(0, 2).toUpperCase()} 
+              </AvatarFallback> */}
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -77,6 +79,11 @@ function Navbar() {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <ThemeToggle/>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+            <Button onClick={logout}>
+                Logout
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
