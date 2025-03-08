@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import api from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import {useAuth} from "@/context/UserContext";
 import {
   Card,
   CardContent,
@@ -32,6 +33,8 @@ export function LoginForm({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  const { user , loading: authLoading} = useAuth();
+
 
   const {
     register,
@@ -41,6 +44,13 @@ export function LoginForm({
     resolver: zodResolver(SignUpSchema),
   });
 
+  useEffect(() => {
+    if (user) {
+      router.replace("/dashboard");
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || user) return null;
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -62,6 +72,8 @@ export function LoginForm({
       setLoading(false);
     }
   };
+
+  
 
   return (
     <div className={cn("flex flex-col h-[60svh] gap-16", className)} {...props}>

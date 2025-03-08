@@ -6,12 +6,37 @@ import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies } from "nookies";
 
 
+interface Category {
+  _id: string;
+  name: string;
+  slug?: string;
+}
+
+interface Blog {
+  _id: string;
+  title: string;
+  slug?: string;
+  description?: string;
+  displayImage?: string;
+  content?: string;
+  category?: Category[];
+  metaDescription?: string;
+  authorId?: string;
+  isPublished?: boolean;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
 interface User {
   id: string;
   fullname: string;
   email: string;
   profilePicture?:string;
   username?:string;
+  mobileNumber?:string;
+  bio?:string;
+  earnings?:number;
+  blogs?:Blog[];
   role: "user" | "admin" | "superadmin";
 }
 
@@ -63,12 +88,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const response = await api.get("/users/details", { withCredentials: true });
             console.log("User data = ", response.data.data);
             const fetchedUser = response.data.data.givableUser;
-            setUser(response.data.data.givableUser);
 
-            if (!fetchedUser.fullname) {
-               // Redirect new users
-            }
-        
+            const blogs = await api.get(`/blog/user/${fetchedUser.username}`);
+            fetchedUser.blogs=blogs.data.data.user.blogs;
+
+            console.log(fetchedUser?.blogs[0]?.category)
+
+            setUser(fetchedUser);
             
           } catch (error: any) {
             if (error.response?.status === 401) {
