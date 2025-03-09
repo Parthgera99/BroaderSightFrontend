@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import HeadingInput from "@/components/InputComponents/HeadingInput";
 import ParagraphInput from "@/components/InputComponents/ParagraphInput";
 import ImageInput from "@/components/InputComponents/ImageInput";
@@ -16,9 +18,12 @@ import TableInput from "@/components/InputComponents/TableInput";
 import QuoteInput from "@/components/InputComponents/QuoteInput";
 import { z } from "zod";
 import { SaveIcon } from "lucide-react";
+import api from "@/lib/api";
+import { toast } from "sonner";
 
 // Define schema for the entire blog post
 const blogSchema = z.object({
+  _id: z.string(),
   title: z.string().min(1, "Title is required"),
   displayImage: z.string().optional(),
   slug: z.string().min(1, "Slug is required"),
@@ -47,64 +52,35 @@ const blogSchema = z.object({
 type BlogData = z.infer<typeof blogSchema>;
 
 
+interface Category {
+  _id: string;
+  name: string;
+}
+
+
 function EditBlogPage() {
   const params = useParams();
   const router = useRouter();
   const { user, loading } = useAuth();
   const slug = params?.slug?.toString(); 
   const blog = user?.blogs?.find((b) => b.slug === slug);
-  
+  const [categories, setCategories] = useState<Category[]>([]);
   const [blogData, setBlogData] = useState<BlogData>({
+    _id: "",//
     title: "",
     displayImage: "",
-    slug: "",
+    slug: "",//
     category: [],
-    author: "",
-    date: "",
+    author: "",//
+    date: "",//
     tags: [],
     metaTitle: "",
     metaDescription: "",
     faq: [],
-    earnings: 0,
+    earnings: 0,//
     isPublished: false,
     content: [],
   });
-  
-  // Add a new content block
-  const addContentBlock = (type: BlogData["content"][number]["type"]) => {
-    setBlogData({
-      ...blogData,
-      content: [...blogData.content, { type, value: "" }],
-    });
-    console.log(blogData)
-  };
-
-  // Update content
-  const updateContent = (index: number, newValue: string | string[]) => {
-    const updatedContent = [...blogData.content];
-    updatedContent[index].value = newValue;
-    setBlogData({ ...blogData, content: updatedContent });
-  };
-  
-
-
-  // Save blog
-  const saveBlog = async () => {
-    try {
-      blogSchema.parse(blogData); // Validate data
-      const response = await fetch("/api/blogs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(blogData),
-      });
-      if (!response.ok) throw new Error("Failed to save blog");
-      alert("Blog saved successfully");
-    } catch (error) {
-      console.error("Validation or API Error:", error);
-      alert("Failed to save blog");
-    }
-  };
-
 
   useEffect(() => {
     if (!loading) {
@@ -113,10 +89,112 @@ function EditBlogPage() {
       } else if (!blog) {
         router.replace("/"); // Redirect if the blog is not theirs
       }
+      else{
+        fetchCategories();
+      }
     }
   }, [user, loading, router, slug]);
 
+  // Fetch existing blog data when editing (if needed)
+  useEffect(() => {
+    if (blog) {
+      setBlogData({
+        _id: blog._id,
+        title: blog.title || "",
+        slug: blog.slug || "",
+        category: blog.category?.map((cat) => cat._id) || [], // Extract category names as strings
+        author: blog.author?.fullname || "Unknown", // Convert author object to string
+        content: Array.isArray(blog.content) ? blog.content : [], 
+        tags: blog.tags || [],
+        metaTitle: blog.metaTitle || "",
+        metaDescription: blog.metaDescription || "",
+        isPublished: blog.isPublished ?? false,
+      });
+    }
+  }, [loading]);
+  
+  
+  // Add a new content block
+  const addContentBlock = (type: BlogData["content"][number]["type"]) => {
+    setBlogData({
+      ...blogData,
+      content: [...blogData.content, { type, value: "" }],
+    });
+    // console.log(blogData)
+  };
 
+  // Update content
+  const updateContent = (index: number, newValue: string | string[]) => {
+    const updatedContent = [...blogData.content];
+    updatedContent[index].value = newValue;
+    setBlogData({ ...blogData, content: updatedContent });
+    // console.log("blog data after update",blogData)
+  };
+  
+
+  const saveBlog = async () => {
+    try {
+      if (!blogData) {
+        alert("No blog data found.");
+        return;
+      }
+
+      const { _id, title, slug, category, author, content, tags, metaTitle, metaDescription, isPublished } = blogData;
+
+      const cleanBlogData = { title, category, content, tags, metaTitle, metaDescription, isPublished };
+
+      console.log(cleanBlogData);
+
+      const response = await api.put(
+        `/blog/update/${blogData._id}`,
+        cleanBlogData,
+        { withCredentials: true } // ✅ Ensures cookies or auth tokens are sent
+      );
+
+      console.log("Full Response:", response);
+
+
+      // if (!response.data.success) {
+      //   toast.error("Failed to update blog");
+      // }
+      toast.success("Blog updated successfully");
+    } catch (error) {
+      console.error("Validation or API Error:", error);
+      toast.error("Failed to update blog");
+    }
+  };
+  
+  // const fetchCategories = async () => {
+  //   try {
+  //     const response = await api.get("/category/list");
+  //     setCategories(response.data.data.map((category: { name: string }) => category.name));
+  //     console.log("categories set to",categories)
+  //   } catch (error) {
+  //     console.error("Error fetching categories:", error);
+  //   }
+  // };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get<{ data: Category[] }>("/category/list"); 
+  
+      if (response.data?.data) {
+        setCategories(response.data.data.map((category) => ({ _id: category._id, name: category.name }))); // Store as an array of { _id, name }
+        console.log("Categories fetched:", categories);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+
+
+
+
+  useEffect(() => {
+    console.log("Updated categories:", blogData.category);
+  }, [categories]); // Logs when categories update
+  
 
   if (loading) return <p>Loading...</p>;
 
@@ -137,12 +215,46 @@ function EditBlogPage() {
           </Button>
         </div>
 
-        <p>
-          {blog.title}
-        </p>
 
         <div className="flex flex-row gap-2">
-        <div className="w-[75%] ml-12">
+        <div className="w-[75%] ml-12 flex flex-col gap-5">
+
+        <Input type="text" placeholder="Title" style={{ fontSize: "36px" }} className="w-[60%] h-[85px] !text-4xl font-bold px-4 py-2" value={blogData.title} onChange={(e) => setBlogData({ ...blogData, title: e.target.value })} />
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="w-[30%]">
+              {blogData.category.length
+                ? categories
+                    .filter((cat) => blogData.category.includes(cat._id))
+                    .map((cat) => cat.name)
+                    .join(", ")
+                : "Select Categories"}
+            </Button>
+          </PopoverTrigger>
+
+          <PopoverContent className="w-[30%] p-4">
+            <ToggleGroup
+              type="multiple"
+              value={blogData.category} // Using ObjectIds
+              onValueChange={(selectedIds) => {
+                setBlogData((prev) => ({
+                  ...prev,
+                  category: selectedIds, // Store as ObjectIds
+                }));
+              }}
+              className="flex flex-wrap gap-2"
+            >
+              {categories?.map((cat) => (
+                <ToggleGroupItem key={cat._id} value={cat._id} className="px-3 py-2">
+                  {cat.name}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </PopoverContent>
+        </Popover>
+
+
           {blogData?.content?.map((block, index) => (
             <Card key={index} className="mb-4 w-[80%]">
             <CardContent className="p-4 space-y-2">
@@ -175,6 +287,7 @@ function EditBlogPage() {
 
         </div>
         </div>
+
       </>
 
     )

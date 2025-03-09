@@ -21,7 +21,9 @@ interface Blog {
   content?: string;
   category?: Category[];
   metaDescription?: string;
-  authorId?: string;
+  metaTitle?: string;
+  tags?: string[];
+  author?: User;
   isPublished?: boolean;
   createdAt: Date;
   updatedAt?: Date;
@@ -59,30 +61,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Function to fetch user data
   const fetchUser = async () => {
       setLoading(true);
-    
-      // Check if accessToken exists in cookies/localStorage
-      // const accessToken = document.cookie
-      //   .split("; ")
-      //   .find((row) => row.startsWith("accessToken="))
-      //   ?.split("=")[1];
-
-        // const cookies = Object.fromEntries(
-        //   document.cookie.split("; ").map(c => c.split("="))
-        // );
-        // const accessToken = cookies.accessToken;
-
-        // const match = document.cookie.match(/(?:^|;\s*)accessToken=([^;]*)/);
-        // const accessToken = match ? match[1] : undefined;
 
         console.log(document.cookie)
-            
-        // console.log(accessToken)
-        //   if (!accessToken) {
-        //     console.warn("No access token found. Skipping API call.");
-        //     setUser(null);
-        //     setLoading(false);
-        //     return;
-        //   }
       
           try {
             const response = await api.get("/users/details", { withCredentials: true });
@@ -91,8 +71,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             const blogs = await api.get(`/blog/user/${fetchedUser.username}`);
             fetchedUser.blogs=blogs.data.data.user.blogs;
-
-            console.log(fetchedUser?.blogs[0]?.category)
 
             setUser(fetchedUser);
             
