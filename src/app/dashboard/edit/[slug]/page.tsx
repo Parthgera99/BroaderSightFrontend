@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useAuth } from "@/context/UserContext";
+import { useAuth , User} from "@/context/UserContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +20,7 @@ import { z } from "zod";
 import { SaveIcon } from "lucide-react";
 import api from "@/lib/api";
 import { toast } from "sonner";
+import { Trash } from "lucide-react";
 
 // Define schema for the entire blog post
 const blogSchema = z.object({
@@ -61,9 +62,9 @@ interface Category {
 function EditBlogPage() {
   const params = useParams();
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, fetchUser } = useAuth();
   const slug = params?.slug?.toString(); 
-  const blog = user?.blogs?.find((b) => b.slug === slug);
+  let blog = user?.blogs?.find((b) => b.slug === slug);
   const [categories, setCategories] = useState<Category[]>([]);
   const [blogData, setBlogData] = useState<BlogData>({
     _id: "",//
@@ -151,7 +152,30 @@ function EditBlogPage() {
         { withCredentials: true } // ✅ Ensures cookies or auth tokens are sent
       );
 
+      const updatedBlog = response?.data?.data?.blog;
+      if (!updatedBlog) {
+        console.error("Blog update failed.");
+        return;
+      }
+
       console.log("Full Response:", response);
+
+      
+
+      fetchUser();
+      blog = user?.blogs?.find((b) => b.slug === updatedBlog.slug);
+      console.log("user blog" , blog)
+      
+      
+      
+      
+
+        if(response?.data.data.blog.slug !== blog?.slug){
+          router.replace(`/dashboard/edit/${response?.data.data.blog.slug}`);
+        }
+
+      // console.log("Full Response:", response);
+      // console.log(blog?.slug)
 
 
       // if (!response.data.success) {
@@ -164,22 +188,14 @@ function EditBlogPage() {
     }
   };
   
-  // const fetchCategories = async () => {
-  //   try {
-  //     const response = await api.get("/category/list");
-  //     setCategories(response.data.data.map((category: { name: string }) => category.name));
-  //     console.log("categories set to",categories)
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //   }
-  // };
+  
 
   const fetchCategories = async () => {
     try {
       const response = await api.get<{ data: Category[] }>("/category/list"); 
   
       if (response.data?.data) {
-        setCategories(response.data.data.map((category) => ({ _id: category._id, name: category.name }))); // Store as an array of { _id, name }
+        setCategories(response.data.data.map((category) => ({ _id: category._id, name: category.name })));
         console.log("Categories fetched:", categories);
       }
     } catch (error) {
@@ -188,7 +204,11 @@ function EditBlogPage() {
   };
 
 
-
+ const handleDeleteSection = async (index: number) => {
+    const updatedContent = [...blogData.content];
+    updatedContent.splice(index, 1);
+    setBlogData({ ...blogData, content: updatedContent });
+  };
 
 
   useEffect(() => {
@@ -256,9 +276,9 @@ function EditBlogPage() {
 
 
           {blogData?.content?.map((block, index) => (
-            <Card key={index} className="mb-4 w-[80%]">
-            <CardContent className="p-4 space-y-2">
-              <p className="font-bold capitalize">{block.type}</p>
+            <Card key={index} className="mb-4 flex border-none items-center gap-4 w-[80%] group">
+            {/* <CardContent className="p-4 space-y-2"> */}
+              {/* <p className="font-bold capitalize">{block.type}</p> */}
               {block.type === "heading" ? (
                 <HeadingInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
               ) : block.type === "paragraph" ? (
@@ -274,7 +294,10 @@ function EditBlogPage() {
               ) : block.type === "quote" ? (
                 <QuoteInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
               ) : null}
-            </CardContent>
+            {/* </CardContent> */}
+            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <Button variant="destructive" className='hover:bg-red-600' onClick={() => handleDeleteSection(index)}><Trash className="w-5 h-5 " /></Button>
+            </div>
           </Card>
           ))}
         </div>

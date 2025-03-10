@@ -29,7 +29,7 @@ interface Blog {
   updatedAt?: Date;
 }
 
-interface User {
+export interface User {
   id: string;
   fullname: string;
   email: string;
@@ -44,6 +44,7 @@ interface User {
 
 interface AuthContextProps {
   user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   isAuthenticated: boolean;
   isAdmin: boolean;
   loading: boolean;
@@ -60,31 +61,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Function to fetch user data
   const fetchUser = async () => {
-      setLoading(true);
+    setLoading(true);
+    console.log(document.cookie);
+  
+    try {
+      const response = await api.get("/users/details", { withCredentials: true });
+  
+      if (!response) {
+        console.log("Failed to fetch user details")
+      }
 
-        console.log(document.cookie)
       
-          try {
-            const response = await api.get("/users/details", { withCredentials: true });
-            console.log("User data = ", response.data.data);
-            const fetchedUser = response.data.data.givableUser;
-
-            const blogs = await api.get(`/blog/user/${fetchedUser.username}`);
-            fetchedUser.blogs=blogs.data.data.user.blogs;
-
-            setUser(fetchedUser);
-            
-          } catch (error: any) {
-            if (error.response?.status === 401) {
-              console.warn("User not authenticated.");
-              setUser(null); // Ensure user state is set to null
-            } else {
-              console.error("Failed to fetch user", error);
-            }
-          } finally {
-            setLoading(false);
-          }
+  
+      const fetchedUser = response?.data.data.givableUser;
+      
+      // Fetch blogs only if user exists
+      let blogs = [];
+      if (fetchedUser?.username) {
+        const blogsResponse = await api.get(`/blog/user/${fetchedUser.username}`);
+        blogs = blogsResponse ? blogsResponse.data.data.user.blogs : [];
+      }
+      
+      fetchedUser.blogs = blogs;
+      setUser(fetchedUser);
+      
+    } catch (error: any) {
+        console.log("refreshing")
+        // Attempt to refresh token
+        const refreshed = await refreshToken();
+        if (refreshed) {
+          return fetchUser(); 
+        }
+  
+        setUser(null); // Clear user state if refresh fails
+      
+    } finally {
+      setLoading(false);
+      console.clear()
+    }
   };
+  
+  // ✅ Fixed refreshToken function
+  const refreshToken = async () => {
+    try {
+      const res = await api.post("/users/refreshtoken", {}, { withCredentials: true }).catch(() => null);
+      if (res?.status === 200) {
+        console.log("Access token refreshed successfully.");
+        return true;
+      }
+    } catch (error) {
+      console.warn("Error refreshing token");
+    }
+    return false;
+  };
+
+  
+  
 
   // Logout function
   const logout = async () => {
@@ -94,7 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       router.push("/sign-in");
     } catch (error) {
-      console.error(error)
+      console.log(error)
     } finally{
       setLoading(false)
     }
@@ -108,7 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isAdmin = user?.role === "admin";
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isAdmin, loading, fetchUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, isAuthenticated, isAdmin, loading, fetchUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
