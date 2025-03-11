@@ -260,7 +260,7 @@ function DashboardPage() {
             {/* Left Side: Blog Cards */}
             <div className="w-[60%] flex flex-col gap-2">
               {user?.blogs?.filter(blog => filter === "all" || blog.isPublished).map((blog) => (
-                <Card key={blog._id} className="cursor-pointer group shadow-none border-0 flex gap-4 justify-between items-center p-4" >
+                <Card key={blog._id} className="dark:bg-zinc-900 bg-zinc-100 cursor-pointer group shadow-none border-0 flex gap-4 justify-between items-center p-4" >
 
 
                   <div className="flex items-center group relative gap-8 w-full p-4" onClick={() => router.push(`/dashboard/edit/${blog.slug}`)}>
@@ -274,9 +274,10 @@ function DashboardPage() {
                       <CardTitle className='line-clamp-2 text-lg font-montserrat'>{blog.title}</CardTitle>
                       <CardDescription className='line-clamp-3 font-montserrat text-sm'>{blog.metaDescription}</CardDescription>
                       <div className="text-sm text-gray-500 flex items-center gap-2">
-                        <Image src={user?.profilePicture || "logo.svg"} alt="Author" width={24} height={24} className="shrink-0 rounded-full" />
-                        {user.fullname} - {new Date(blog.createdAt).toLocaleDateString()}
-                      </div>
+                        {/* <Image src={user?.profilePicture || "logo.svg"} alt="Author" width={24} height={24} className="shrink-0 rounded-full" /> */}
+                        {/* {user.fullname} - */}
+                        {blog?.date ? new Date(blog.date).toDateString() : "No Date Available"}
+                        </div>
                     </div>
                   </div>
                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

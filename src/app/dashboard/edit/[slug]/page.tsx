@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth , User} from "@/context/UserContext";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,6 +22,7 @@ import { SaveIcon } from "lucide-react";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import { Trash } from "lucide-react";
+import UploadImageButton from "@/components/InputComponents/UploadImageButton";
 
 // Define schema for the entire blog post
 const blogSchema = z.object({
@@ -66,6 +68,8 @@ function EditBlogPage() {
   const slug = params?.slug?.toString(); 
   let blog = user?.blogs?.find((b) => b.slug === slug);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [isChecking, setIsChecking] = useState(false);
   const [blogData, setBlogData] = useState<BlogData>({
     _id: "",//
     title: "",
@@ -103,6 +107,7 @@ function EditBlogPage() {
         _id: blog._id,
         title: blog.title || "",
         slug: blog.slug || "",
+        displayImage: blog.displayImage || "",
         category: blog.category?.map((cat) => cat._id) || [], // Extract category names as strings
         author: blog.author?.fullname || "Unknown", // Convert author object to string
         content: Array.isArray(blog.content) ? blog.content : [], 
@@ -131,18 +136,51 @@ function EditBlogPage() {
     setBlogData({ ...blogData, content: updatedContent });
     // console.log("blog data after update",blogData)
   };
+
+  useEffect(() => {
+    if (!blogData.title) {
+      setError(null);
+      return;
+    }
+
+    const checkTitle = async () => {
+      setIsChecking(true);
+      try {
+        const response = await api.post(`/blog/check-title/${blogData.title}` ,{blogid: blogData._id },  { withCredentials: true });
+        console.log(response)
+        if (response.data.data.exists) {
+          setError("This title already exists. Please choose another.");
+        } else {
+          setError(null);
+        }
+      } catch (error) {
+        console.error("Error checking title:", error);
+        setError("Error checking title. Try again.");
+      }
+      setIsChecking(false);
+    };
+
+    // Debounce the API call (wait 500ms after user stops typing)
+    const timeout = setTimeout(checkTitle, 500);
+
+    return () => clearTimeout(timeout);
+  }, [blogData.title]);
   
 
   const saveBlog = async () => {
+    if(error){
+      toast.error(error);
+      return;
+    }
     try {
       if (!blogData) {
         alert("No blog data found.");
         return;
       }
 
-      const { _id, title, slug, category, author, content, tags, metaTitle, metaDescription, isPublished } = blogData;
+      const { _id, title, slug, displayImage, category, author, content, tags, metaTitle, metaDescription, isPublished } = blogData;
 
-      const cleanBlogData = { title, category, content, tags, metaTitle, metaDescription, isPublished };
+      const cleanBlogData = { title, category, displayImage, content, tags, metaTitle, metaDescription, isPublished };
 
       console.log(cleanBlogData);
 
@@ -163,24 +201,12 @@ function EditBlogPage() {
       
 
       fetchUser();
-      blog = user?.blogs?.find((b) => b.slug === updatedBlog.slug);
-      console.log("user blog" , blog)
-      
-      
-      
-      
+      if(response?.data.data.blog.slug !== blog?.slug){
+        blog = user?.blogs?.find((b) => b.slug === updatedBlog.slug);
+        console.log("user blog" , blog)
+        router.replace(`/dashboard/edit/${response?.data.data.blog.slug}`);
+      }
 
-        if(response?.data.data.blog.slug !== blog?.slug){
-          router.replace(`/dashboard/edit/${response?.data.data.blog.slug}`);
-        }
-
-      // console.log("Full Response:", response);
-      // console.log(blog?.slug)
-
-
-      // if (!response.data.success) {
-      //   toast.error("Failed to update blog");
-      // }
       toast.success("Blog updated successfully");
     } catch (error) {
       console.error("Validation or API Error:", error);
@@ -225,7 +251,7 @@ function EditBlogPage() {
 
           <div className="flex space-x-6">
             {["heading", "paragraph", "image", "youtube Video", "list", "table", "quote"].map((type) => (
-              <Button variant="outline" className="hover:bg-purple-200 dark:hover:bg-purple-700" key={type} onClick={() => addContentBlock(type as BlogData["content"][number]["type"])}>
+              <Button variant="outline" className="dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 hover:bg-purple-200 dark:hover:bg-purple-700" key={type} onClick={() => addContentBlock(type as BlogData["content"][number]["type"])}>
                 Add {type.charAt(0).toUpperCase() + type.slice(1)}
               </Button>
             ))}
@@ -237,78 +263,108 @@ function EditBlogPage() {
 
 
         <div className="flex flex-row gap-2">
-        <div className="w-[75%] ml-12 flex flex-col gap-5">
 
-        <Input type="text" placeholder="Title" style={{ fontSize: "36px" }} className="w-[60%] h-[85px] !text-4xl font-bold px-4 py-2" value={blogData.title} onChange={(e) => setBlogData({ ...blogData, title: e.target.value })} />
+          {/* Left Side */}
+          <div className="w-[75%] ml-12 mb-96 flex flex-col gap-5">
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="w-[30%]">
-              {blogData.category.length
-                ? categories
-                    .filter((cat) => blogData.category.includes(cat._id))
-                    .map((cat) => cat.name)
-                    .join(", ")
-                : "Select Categories"}
-            </Button>
-          </PopoverTrigger>
-
-          <PopoverContent className="w-[30%] p-4">
-            <ToggleGroup
-              type="multiple"
-              value={blogData.category} // Using ObjectIds
-              onValueChange={(selectedIds) => {
-                setBlogData((prev) => ({
-                  ...prev,
-                  category: selectedIds, // Store as ObjectIds
-                }));
-              }}
-              className="flex flex-wrap gap-2"
-            >
-              {categories?.map((cat) => (
-                <ToggleGroupItem key={cat._id} value={cat._id} className="px-3 py-2">
-                  {cat.name}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          </PopoverContent>
-        </Popover>
-
-
-          {blogData?.content?.map((block, index) => (
-            <Card key={index} className="mb-4 flex border-none items-center gap-4 w-[80%] group">
-            {/* <CardContent className="p-4 space-y-2"> */}
-              {/* <p className="font-bold capitalize">{block.type}</p> */}
-              {block.type === "heading" ? (
-                <HeadingInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
-              ) : block.type === "paragraph" ? (
-                <ParagraphInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
-              ) : block.type === "image" ? (
-                <ImageInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
-              ) : block.type === "youtube Video" ? (
-                <VideoInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
-              ) : block.type === "list" ? (
-                <ListInput value={block.value as string[]} onChange={(value) => updateContent(index, value)} />
-              ) : block.type === "table" ? (
-                <TableInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
-              ) : block.type === "quote" ? (
-                <QuoteInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
-              ) : null}
-            {/* </CardContent> */}
-            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <Button variant="destructive" className='hover:bg-red-600' onClick={() => handleDeleteSection(index)}><Trash className="w-5 h-5 " /></Button>
+            {/* Title Input and Error */}
+            <div className="w-full">
+              <input
+                type="text"
+                placeholder="Title"
+                style={{ fontSize: "36px", width: `${Math.min(80, 30 + blogData.title.length * 2)}%` }}
+                className={`min-w-[30%] max-w-[80%] w-auto transition-all duration-300 dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 rounded h-[85px] !text-4xl font-bold px-4 py-2 border ${
+                  error ? "border-red-500" : "border-transparent"
+                } focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 focus:border-transparent`}
+                value={blogData.title}
+                
+                onChange={(e) => setBlogData({ ...blogData, title: e.target.value })}
+              />
+              {isChecking && <p className="text-sm text-gray-500 mt-1">Checking title...</p>}
+              {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
             </div>
-          </Card>
-          ))}
-        </div>
+          
+            {/* Category Dropdown    */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-[30%] hover:bg-purple-200 dark:hover:bg-purple-700 dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 truncate">
+                  {blogData.category.length
+                    ? (() => {
+                        const selectedCategories = categories.filter((cat) => blogData.category.includes(cat._id));
+                        const displayedCategories = selectedCategories.slice(0, 2).map((cat) => cat.name).join(", ");
+                        const remainingCount = selectedCategories.length - 2;
+                        return remainingCount > 0 ? `${displayedCategories} +${remainingCount} more` : displayedCategories;
+                      })()
+                    : "Select Categories"}
+                </Button>
+              </PopoverTrigger>
 
-        <div className="w-[2px] rounded bg-zinc-100 mx-16">
-        {/* Divider Line   */}
-        </div> 
+              <PopoverContent className="w-[50%] dark:text-zinc-50 dark:bg-zinc-700 bg-zinc-200 text-zinc-600 p-4 ml-12">
+                <ToggleGroup
+                  type="multiple"
+                  value={blogData.category} // Using ObjectIds
+                  onValueChange={(selectedIds) => {
+                    setBlogData((prev) => ({
+                      ...prev,
+                      category: selectedIds, // Store as ObjectIds
+                    }));
+                  }}
+                  className="flex flex-wrap gap-1"
+                >
+                  {categories?.map((cat) => (
+                    <ToggleGroupItem key={cat._id} value={cat._id} className=" px-3">
+                      {cat.name}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </PopoverContent>
+            </Popover>
 
-        <div className="w-[25%] pl-4">
+            {/* DisplayImage Component */}
+            <div className="flex gap-4">
+              <UploadImageButton blogId={blogData._id} src={blogData.displayImage} setBlogData={setBlogData} />
+            </div>
 
-        </div>
+            {/* Separator Line for Content */}
+            <Separator className="dark:bg-zinc-700 bg-zinc-400 my-2" />
+
+            {/* Content */}
+            {blogData?.content?.map((block, index) => (
+              <Card key={index} className="mb-4 flex border-none bg-transparent shadow-none  items-center gap-4 w-[100%] group">
+              {/* <CardContent className="p-4 space-y-2"> */}
+                {/* <p className="font-bold capitalize">{block.type}</p> */}
+                {block.type === "heading" ? (
+                  <HeadingInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                ) : block.type === "paragraph" ? (
+                  <ParagraphInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                ) : block.type === "image" ? (
+                  <ImageInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                ) : block.type === "youtube Video" ? (
+                  <VideoInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                ) : block.type === "list" ? (
+                  <ListInput value={block.value as string[]} onChange={(value) => updateContent(index, value)} />
+                ) : block.type === "table" ? (
+                  <TableInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                ) : block.type === "quote" ? (
+                  <QuoteInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                ) : null}
+              {/* </CardContent> */}
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button variant="destructive" className='hover:bg-red-600' onClick={() => handleDeleteSection(index)}><Trash className="w-5 h-5 " /></Button>
+              </div>
+            </Card>
+            ))}
+          </div>
+
+          <div className="w-[2px] mb-24 rounded dark:bg-zinc-700 bg-zinc-400 mx-16">
+          {/* Divider Line   */}
+          </div>         
+
+          {/* Right Side  */}
+          <div className="w-[25%] pl-4">
+
+          </div>
+
         </div>
 
       </>

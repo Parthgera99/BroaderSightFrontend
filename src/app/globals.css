@@ -12,6 +12,32 @@
   display: none; /* Chrome, Safari */
 }
 
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 #1a1a1a;
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+  border-radius: 10px;
+  border: 1px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a78bfa;
+}
+
+
 
 @layer base {
   :root {

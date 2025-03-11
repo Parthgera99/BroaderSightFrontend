@@ -27,6 +27,7 @@ interface Blog {
   isPublished?: boolean;
   createdAt: Date;
   updatedAt?: Date;
+  date?: Date;
 }
 
 export interface User {

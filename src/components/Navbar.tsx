@@ -22,7 +22,7 @@ function Navbar() {
   const { user, isAuthenticated, isAdmin, loading, logout } = useAuth();
   return (
 
-    <nav className="flex justify-between items-center px-12 py-4 bg-slate-50 dark:bg-zinc-900 border-b">
+    <nav className="flex justify-between items-center px-12 py-4 bg-zinc-50 dark:bg-zinc-800 border-b">
       {/* Left - Brand Logo */}
       <Link href="/" className="text-lg flex gap-4 items-center font-semibold">
       <Image
