@@ -23,6 +23,7 @@ interface Blog {
   metaDescription?: string;
   metaTitle?: string;
   tags?: string[];
+  faq?: { question: string; answer: string }[];
   author?: User;
   isPublished?: boolean;
   createdAt: Date;
@@ -72,8 +73,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log("Failed to fetch user details")
       }
 
-      
-  
       const fetchedUser = response?.data.data.givableUser;
       
       // Fetch blogs only if user exists
@@ -98,14 +97,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
     } finally {
       setLoading(false);
-      console.clear()
+      // console.clear()
     }
   };
   
   // ✅ Fixed refreshToken function
   const refreshToken = async () => {
+    console.log("Refreshing token...");
     try {
-      const res = await api.post("/users/refreshtoken", {}, { withCredentials: true }).catch(() => null);
+      const res = await api.post("/users/refreshtoken", {}, { withCredentials: true });
+      console.log(res)
       if (res?.status === 200) {
         console.log("Access token refreshed successfully.");
         return true;

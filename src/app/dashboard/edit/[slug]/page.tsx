@@ -23,6 +23,8 @@ import api from "@/lib/api";
 import { toast } from "sonner";
 import { Trash } from "lucide-react";
 import UploadImageButton from "@/components/InputComponents/UploadImageButton";
+import TagInput from "@/components/InputComponents/TagInput";
+import FaqInput from "@/components/InputComponents/faqInput";
 
 // Define schema for the entire blog post
 const blogSchema = z.object({
@@ -112,9 +114,10 @@ function EditBlogPage() {
         author: blog.author?.fullname || "Unknown", // Convert author object to string
         content: Array.isArray(blog.content) ? blog.content : [], 
         tags: blog.tags || [],
+        faq: blog.faq || [],
         metaTitle: blog.metaTitle || "",
         metaDescription: blog.metaDescription || "",
-        isPublished: blog.isPublished ?? false,
+        isPublished: blog.isPublished ,
       });
     }
   }, [loading]);
@@ -126,7 +129,7 @@ function EditBlogPage() {
       ...blogData,
       content: [...blogData.content, { type, value: "" }],
     });
-    // console.log(blogData)
+    console.log(blogData)
   };
 
   // Update content
@@ -167,7 +170,9 @@ function EditBlogPage() {
   }, [blogData.title]);
   
 
-  const saveBlog = async () => {
+  
+
+  const saveBlog = async (publish = false) => {
     if(error){
       toast.error(error);
       return;
@@ -178,11 +183,15 @@ function EditBlogPage() {
         return;
       }
 
-      const { _id, title, slug, displayImage, category, author, content, tags, metaTitle, metaDescription, isPublished } = blogData;
+      const { _id, title, slug, displayImage, faq, category, author, content, tags, metaTitle, metaDescription, isPublished } = blogData;
 
-      const cleanBlogData = { title, category, displayImage, content, tags, metaTitle, metaDescription, isPublished };
+      const filteredFaq = faq?.filter((faqItem: { question: string; answer: string }) => 
+        faqItem.question.trim() || faqItem.answer.trim()
+      ) || [];
 
-      console.log(cleanBlogData);
+      const cleanBlogData = { title, category, faq : filteredFaq, displayImage, content, tags, metaTitle, metaDescription, isPublished : !blogData.isPublished };
+
+      console.log("clean blog data - ",cleanBlogData);
 
       const response = await api.put(
         `/blog/update/${blogData._id}`,
@@ -207,7 +216,17 @@ function EditBlogPage() {
         router.replace(`/dashboard/edit/${response?.data.data.blog.slug}`);
       }
 
-      toast.success("Blog updated successfully");
+      if(publish){
+        if(updatedBlog.isPublished){
+          toast.success("Blog published successfully");
+        }
+        else{
+          toast.success("Blog unpublished successfully");
+        }
+      } else {
+        toast.success("Blog updated successfully");
+      }
+
     } catch (error) {
       console.error("Validation or API Error:", error);
       toast.error("Failed to update blog");
@@ -256,30 +275,33 @@ function EditBlogPage() {
               </Button>
             ))}
           </div>
-          <Button onClick={saveBlog} className="dark:bg-zinc-900">
+          <Button onClick={() => saveBlog(false)} className="dark:bg-zinc-900">
             <SaveIcon className="dark:text-slate-50" />
           </Button>
         </div>
 
 
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row px-24 gap-2">
 
           {/* Left Side */}
-          <div className="w-[75%] ml-12 mb-96 flex flex-col gap-5">
+          <div className="w-[75%] mb-96 flex flex-col gap-5">
 
             {/* Title Input and Error */}
             <div className="w-full">
-              <input
-                type="text"
-                placeholder="Title"
-                style={{ fontSize: "36px", width: `${Math.min(80, 30 + blogData.title.length * 2)}%` }}
-                className={`min-w-[30%] max-w-[80%] w-auto transition-all duration-300 dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 rounded h-[85px] !text-4xl font-bold px-4 py-2 border ${
-                  error ? "border-red-500" : "border-transparent"
-                } focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 focus:border-transparent`}
-                value={blogData.title}
-                
-                onChange={(e) => setBlogData({ ...blogData, title: e.target.value })}
-              />
+            <input
+              type="text"
+              placeholder="Title"
+              style={{ fontSize: "36px", width: `${Math.min(80, 30 + blogData.title.length * 2)}%` }}
+              className={`min-w-[30%] max-w-[80%] w-auto transition-[width] duration-300 
+                          focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700
+                          dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 
+                          rounded h-[85px] !text-4xl font-bold px-4 py-2 border border-transparent
+                          ${error ? "border-red-500" : "border-transparent"}`}
+
+              value={blogData.title}
+              onChange={(e) => setBlogData({ ...blogData, title: e.target.value })}
+            />
+
               {isChecking && <p className="text-sm text-gray-500 mt-1">Checking title...</p>}
               {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
             </div>
@@ -299,7 +321,7 @@ function EditBlogPage() {
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className="w-[50%] dark:text-zinc-50 dark:bg-zinc-700 bg-zinc-200 text-zinc-600 p-4 ml-12">
+              <PopoverContent className="w-[240px] max-h-60 overflow-y-auto dark:text-zinc-50 dark:bg-zinc-700 bg-zinc-200 text-zinc-600 p-4 ml-24 scrollbar-hidden">
                 <ToggleGroup
                   type="multiple"
                   value={blogData.category} // Using ObjectIds
@@ -312,10 +334,11 @@ function EditBlogPage() {
                   className="flex flex-wrap gap-1"
                 >
                   {categories?.map((cat) => (
-                    <ToggleGroupItem key={cat._id} value={cat._id} className=" px-3">
+                    <ToggleGroupItem key={cat._id} value={cat._id} className="px-3 py-2 w-full">
                       {cat.name}
                     </ToggleGroupItem>
                   ))}
+                  
                 </ToggleGroup>
               </PopoverContent>
             </Popover>
@@ -356,12 +379,59 @@ function EditBlogPage() {
             ))}
           </div>
 
-          <div className="w-[2px] mb-24 rounded dark:bg-zinc-700 bg-zinc-400 mx-16">
+          <div className="w-[2px] mb-24 rounded dark:bg-zinc-700 bg-zinc-400 ml-16 mr-8">
           {/* Divider Line   */}
           </div>         
 
           {/* Right Side  */}
-          <div className="w-[25%] pl-4">
+          <div className="w-[25%] flex flex-col gap-4 pl-4 mb-24">
+
+          <h1 className="text-purple-800 text-xl font-semibold dark:text-purple-400 font-montserrat">
+              Meta Title
+          </h1>
+
+          <Textarea
+            className="font-montserrat dark:text-zinc-50 py-2 px-6 !text-base font-semibold min-h-[70px] max-h-[300px] dark:bg-zinc-800 bg-zinc-200 text-zinc-600 rounded scrollbar-hidden border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 dark:focus-visible:ring-purple-700 focus-visible:border-purple-400 dark:focus-visible:border-purple-700 overflow-hidden resize-none"
+            
+            value={blogData.metaTitle}
+            onChange={(e) => setBlogData({ ...blogData, metaTitle: e.target.value })}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement; // 👈 Fix: Type assertion
+              target.style.height = "auto"; // Reset height
+              target.style.height = `${target.scrollHeight}px`; // Set new height
+            }}
+            />
+
+          <h1 className="text-purple-800 text-xl font-semibold dark:text-purple-400 font-montserrat">
+              Meta Description
+          </h1>
+          <Textarea
+            className="font-montserrat dark:text-zinc-50 py-2 px-6 font-semibold !text-base min-h-[120px] max-h-[300px] dark:bg-zinc-800 bg-zinc-200 text-zinc-600 rounded scrollbar-hidden border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 dark:focus-visible:ring-purple-700 focus-visible:border-purple-400 dark:focus-visible:border-purple-700 overflow-hidden resize-none"
+            
+            onChange={(e) => setBlogData({ ...blogData, metaDescription: e.target.value })}
+            value={blogData.metaDescription}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement; // 👈 Fix: Type assertion
+              target.style.height = "auto"; // Reset height
+              target.style.height = `${target.scrollHeight}px`; // Set new height
+            }}
+          />
+
+          <TagInput tagsArray={blogData.tags} setBlogData={setBlogData}/>
+
+          <FaqInput setBlogData={setBlogData} faqArray={blogData.faq}/>
+
+          <Button
+            onClick={() => saveBlog(true)}
+            className={`px-4 py-2 font-semibold font-montserrat text-lg rounded transition ${
+              blogData.isPublished
+                ? "bg-red-600 hover:bg-red-700 text-white" // Unpublish
+                : "bg-green-600 hover:bg-green-700 text-white" // Publish
+            }`}
+          >
+            {blogData.isPublished ? "Unpublish" : "Publish"}
+          </Button>
+
 
           </div>
 

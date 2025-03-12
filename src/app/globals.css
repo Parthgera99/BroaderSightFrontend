@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for WebKit (Chrome, Safari) */
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* Hide scrollbar for IE & Edge */
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
 .custom-scrollbar {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -12,30 +21,29 @@
   display: none; /* Chrome, Safari */
 }
 
+/* For Firefox */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #8b5cf6 #1a1a1a;
+  scrollbar-color: #8b5cf6 var(--scrollbar-bg);
 }
 
-/* Chrome, Edge, Safari */
+/* Light & Dark Mode Scrollbar Background */
+:root {
+  --scrollbar-bg: #ffffff; /* Light mode */
+}
+
+.dark {
+  --scrollbar-bg: #0f0f0f; /* Dark mode */
+}
+
+/* WebKit Browsers (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 4px; /* Adjust width */
+  border-radius: 10px; /* Ensures roundness */
 }
 
-::-webkit-scrollbar-track {
-  background: #1a1a1a;
-  border-radius: 5px;
-}
 
-::-webkit-scrollbar-thumb {
-  background: #8b5cf6;
-  border-radius: 10px;
-  border: 1px solid #1a1a1a;
-}
 
-::-webkit-scrollbar-thumb:hover {
-  background: #a78bfa;
-}
 
 
 
