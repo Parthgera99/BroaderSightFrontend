@@ -7,6 +7,10 @@
   display: none; /* Hide scrollbar for WebKit (Chrome, Safari) */
 }
 
+.tiptap:focus {
+  outline: none !important;
+}
+
 .scrollbar-hidden {
   -ms-overflow-style: none;  /* Hide scrollbar for IE & Edge */
   scrollbar-width: none;  /* Hide scrollbar for Firefox */

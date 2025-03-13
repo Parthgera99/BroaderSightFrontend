@@ -3,9 +3,7 @@ import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
 import { Pencil } from "lucide-react";
 
-type BlogData = {
-  displayImage: string;
-};
+
 
 const UploadImageButton = ({blogId, src, setBlogData }: { blogId: string, src: string | undefined, setBlogData: React.Dispatch<React.SetStateAction<any>> }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);

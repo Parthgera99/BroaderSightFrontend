@@ -129,6 +129,7 @@ function EditBlogPage() {
       ...blogData,
       content: [...blogData.content, { type, value: "" }],
     });
+    toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} Block Added Successfully`)
     console.log(blogData)
   };
 
@@ -189,7 +190,13 @@ function EditBlogPage() {
         faqItem.question.trim() || faqItem.answer.trim()
       ) || [];
 
-      const cleanBlogData = { title, category, faq : filteredFaq, displayImage, content, tags, metaTitle, metaDescription, isPublished : !blogData.isPublished };
+      let cleanBlogData;
+
+      if(publish) {
+         cleanBlogData = { title, category, faq : filteredFaq, displayImage, content, tags, metaTitle, metaDescription, isPublished : !blogData.isPublished };
+      } else {
+        cleanBlogData = { title, category, faq : filteredFaq, displayImage, content, tags, metaTitle, metaDescription, isPublished : blogData.isPublished };
+      }
 
       console.log("clean blog data - ",cleanBlogData);
 
@@ -361,7 +368,7 @@ function EditBlogPage() {
                 ) : block.type === "paragraph" ? (
                   <ParagraphInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
                 ) : block.type === "image" ? (
-                  <ImageInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                  <ImageInput value={block.value as string} blogId={blogData._id} onChange={(value) => updateContent(index, value)} />
                 ) : block.type === "youtube Video" ? (
                   <VideoInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
                 ) : block.type === "list" ? (

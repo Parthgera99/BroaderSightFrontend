@@ -9,7 +9,7 @@ export default function HeadingInput({ value, onChange }: HeadingInputProps) {
   return (
     <input
       type="text"
-      placeholder="Enter heading..."
+      placeholder="Enter heading"
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className="!text-3xl min-w-[30%] max-w-[70%] w-auto transition-[width] duration-300 
