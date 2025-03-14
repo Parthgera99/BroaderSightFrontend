@@ -218,7 +218,7 @@ const ParagraphInput: React.FC<FloatingEditorProps> = ({ value, onChange }) => {
           className="w-full p-4 resize-none min-h-[100px] rounded 
             dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 
             !focus:outline-none !focus:ring-0 !focus:border-transparent 
-            [&>div]:min-h-[100px] [&>div]:h-full [&>div]:w-full [&_a]:text-purple-200 [&_a]:rounded [&_a]:px-1 [&_a]:bg-zinc-700 [&_a]:cursor-pointer [&_a]:hover:text-blue-200"
+            [&>div]:min-h-[100px] [&>div]:h-full [&>div]:w-full [&_a]:text-purple-700 dark:[&_a]:text-purple-200 [&_a]:rounded [&_a]:px-1 [&_a]:bg-zinc-300 dark:[&_a]:bg-zinc-700 [&_a]:cursor-pointer dark:[&_a]:hover:text-blue-200 [&_a]:hover:text-blue-800"
         />
       </div>
     </div>

@@ -49,7 +49,7 @@ const blogSchema = z.object({
   content: z.array(
     z.object({
       type: z.enum(["heading", "paragraph", "image", "youtube Video", "list", "table", "quote"]),
-      value: z.union([z.string(), z.array(z.string())]),
+      value: z.union([z.string(), z.array(z.string()),  z.object({ type: z.enum(["ul", "ol"]), items: z.array(z.string()) })]),
     })
   ),
 });
@@ -134,12 +134,22 @@ function EditBlogPage() {
   };
 
   // Update content
-  const updateContent = (index: number, newValue: string | string[]) => {
+  const updateContent = (index: number, newValue: string | string[] | { type: "ul" | "ol"; items: string[] }) => {
     const updatedContent = [...blogData.content];
-    updatedContent[index].value = newValue;
+
+    if (updatedContent[index].type === "list") {
+        updatedContent[index].value =
+            typeof newValue === "string"
+                ? { type: "ul", items: [newValue] } // Convert string to object with default UL
+                : Array.isArray(newValue)
+                ? { type: "ul", items: newValue } // Convert array to object
+                : newValue; // Keep existing object
+    } else {
+        updatedContent[index].value = newValue; // Other blocks remain unchanged
+    }
+
     setBlogData({ ...blogData, content: updatedContent });
-    // console.log("blog data after update",blogData)
-  };
+};
 
   useEffect(() => {
     if (!blogData.title) {
@@ -372,7 +382,10 @@ function EditBlogPage() {
                 ) : block.type === "youtube Video" ? (
                   <VideoInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
                 ) : block.type === "list" ? (
-                  <ListInput value={block.value as string[]} onChange={(value) => updateContent(index, value)} />
+                  <ListInput
+                      value={block.value as { type: "ul" | "ol"; items: string[] }}
+                      onChange={(value) => updateContent(index, value)}
+                  />
                 ) : block.type === "table" ? (
                   <TableInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
                 ) : block.type === "quote" ? (
