@@ -49,7 +49,7 @@ const blogSchema = z.object({
   content: z.array(
     z.object({
       type: z.enum(["heading", "paragraph", "image", "youtube Video", "list", "table", "quote"]),
-      value: z.union([z.string(), z.array(z.string()),  z.object({ type: z.enum(["ul", "ol"]), items: z.array(z.string()) })]),
+      value: z.union([z.string(), z.array(z.string()), z.array(z.array(z.string())) , z.object({ type: z.enum(["ul", "ol"]), items: z.array(z.string()) })]),
     })
   ),
 });
@@ -134,17 +134,21 @@ function EditBlogPage() {
   };
 
   // Update content
-  const updateContent = (index: number, newValue: string | string[] | { type: "ul" | "ol"; items: string[] }) => {
+  const updateContent = (index: number, newValue: string | string[] | string[][] | { type: "ul" | "ol"; items: string[] }) => {
     const updatedContent = [...blogData.content];
 
     if (updatedContent[index].type === "list") {
-        updatedContent[index].value =
-            typeof newValue === "string"
-                ? { type: "ul", items: [newValue] } // Convert string to object with default UL
-                : Array.isArray(newValue)
-                ? { type: "ul", items: newValue } // Convert array to object
-                : newValue; // Keep existing object
-    } else {
+      updatedContent[index].value =
+      typeof newValue === "string"
+          ? { type: "ul", items: [newValue] } // Wrap single string in array
+          : Array.isArray(newValue) && newValue.every(item => typeof item === "string")
+          ? { type: "ul", items: newValue as string[] } // Ensure it's string[]
+          : newValue; // Keep existing object
+    } else if (updatedContent[index].type === "table") {
+      updatedContent[index].value = Array.isArray(newValue) && Array.isArray(newValue[0])
+          ? (newValue as string[][]) 
+          : [["", ""],["", ""]]; // Default empty table
+  } else {
         updatedContent[index].value = newValue; // Other blocks remain unchanged
     }
 
@@ -387,7 +391,13 @@ function EditBlogPage() {
                       onChange={(value) => updateContent(index, value)}
                   />
                 ) : block.type === "table" ? (
-                  <TableInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
+                  <TableInput 
+                      value={Array.isArray(block.value) && Array.isArray(block.value[0]) 
+                          ? (block.value as string[][]) 
+                          : [["", ""]] // Default empty table if not valid
+                      } 
+                      onChange={(newTable) => updateContent(index, newTable)}
+                  />
                 ) : block.type === "quote" ? (
                   <QuoteInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
                 ) : null}

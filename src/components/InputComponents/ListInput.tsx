@@ -66,6 +66,11 @@ export default function ListInput({ value, onChange }: ListInputProps) {
             value={item}
             className="dark:text-zinc-50 dark:bg-zinc-800 py-2 px-4 rounded-xl bg-zinc-200 text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700"
             onChange={(e) => handleInputChange(index, e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                addItem(); // Call your function here
+              }
+            }}
             placeholder={`List item ${index + 1}`}
           />
           <Button variant="unselected" className="hover:bg-red-200 dark:hover:bg-red-600" onClick={() => removeItem(index)}>
