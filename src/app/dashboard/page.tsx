@@ -12,6 +12,7 @@ import { Pencil, Trash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import DialogForInfo from '@/components/DialogForInfo';
 import { toast } from 'sonner';
+import { Skeleton } from "@/components/ui/skeleton"
 
 function DashboardPage() {
   const { user, isAuthenticated, isAdmin, loading, fetchUser } = useAuth();
@@ -26,12 +27,12 @@ function DashboardPage() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (!loading && (!user?.username || !user?.fullname)) {
-      setOpenModal(true);
-    }
-    console.log("this is user",user);
-  }, [loading, isAuthenticated, router]);
+  // useEffect(() => {
+  //   if (!loading && (!user?.username || !user?.fullname)) {
+  //     setOpenModal(true);
+  //   }
+  //   console.log("this is user",user);
+  // }, [loading, isAuthenticated, router]);
 
 
   const createBlog = () => {
@@ -43,12 +44,12 @@ function DashboardPage() {
       setSaving(true);
       const response = await api.post("/blog/create", { title }, { withCredentials: true });
       const newBlog = response.data.data.blog;
-      router.push(`/dashboard/edit/${newBlog.slug}`);
+      router.push(`/dashboard/${newBlog.slug}/edit`);
       setTimeout( async () => {
         await fetchUser();
         setCreateModal(false), 200
+        setSaving(false), 200;
       });
-      setSaving(false);
     } catch (error) {
       toast.error("Blog with this name already Exists");
       setSaving(false);
@@ -80,10 +81,43 @@ function DashboardPage() {
         setOpenModal(true);
       }
       setRedirecting(false);
+
+      if (!loading && (!user?.username || !user?.fullname)) {
+        setOpenModal(true);
+      }
+      console.log("this is user",user);
     }
   }, [isAuthenticated, loading, router]);
 
-  if (loading || redirecting || saving) return <p>Loading...</p>;
+  if (loading || redirecting || saving) return (
+    <div className="flex flex-col space-x-4 my-6 mx-12">
+      <Skeleton className="h-8 w-64 mx-6 rounded-xl" />
+      <div className="space-y-6 flex mx-12">
+        <Skeleton className="mx-12 my-12 h-32 w-32" />
+        <div className='flex flex-col'>
+          <Skeleton className="mt-6 mb-2 h-6 w-[200px]" />
+          <Skeleton className="my-2 h-12 w-[400px]" />
+          <Skeleton className="my-2 h-6 w-[100px]" />
+        </div>
+      </div>
+      <div className="space-y-6 flex mx-12">
+        <Skeleton className="mx-12 my-12 h-32 w-32" />
+        <div className='flex flex-col'>
+          <Skeleton className="mt-6 mb-2 h-6 w-[200px]" />
+          <Skeleton className="my-2 h-12 w-[400px]" />
+          <Skeleton className="my-2 h-6 w-[100px]" />
+        </div>
+      </div>
+      <div className="space-y-6 flex mx-12">
+        <Skeleton className="mx-12 my-12 h-32 w-32" />
+        <div className='flex flex-col'>
+          <Skeleton className="mt-6 mb-2 h-6 w-[200px]" />
+          <Skeleton className="my-2 h-12 w-[400px]" />
+          <Skeleton className="my-2 h-6 w-[100px]" />
+        </div>
+      </div>
+    </div>
+  )
 
   return (
     <div className="mx-[5vw] my-5">
@@ -106,7 +140,7 @@ function DashboardPage() {
                 <Card key={blog._id} className="dark:bg-zinc-900 bg-zinc-100 cursor-pointer group shadow-none border-0 flex gap-4 justify-between items-center p-4" >
 
 
-                  <div className="flex items-center group relative gap-8 w-full p-4" onClick={() => router.push(`/dashboard/edit/${blog.slug}`)}>
+                  <div className="flex items-center group relative gap-8 w-full p-4" onClick={() => router.push(`/dashboard/${blog.slug}/edit`)}>
                     <div className="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                     <Pencil className="text-white text-4xl transition-transform duration-300" />
                   </div>

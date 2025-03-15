@@ -70,7 +70,7 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChange }) => {
                     {
                       handleCellChange(0, colIndex, e.target.value)
                     }}
-                  className="w-[140px] p-1 rounded bg-purple-400 dark:text-zinc-50 text-zinc-50 dark:bg-purple-900 font-bold text-center focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-700"
+                  className="w-[200px] p-1 rounded bg-purple-400 dark:text-zinc-50 text-zinc-50 dark:bg-purple-900 font-bold text-center focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-700"
                   />
               </th>
             ))}
@@ -86,7 +86,7 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChange }) => {
                     type="text"
                     value={cell}
                     onChange={(e) => handleCellChange(rowIndex + 1, colIndex, e.target.value)}
-                    className="w-[140px] py-1 px-4 rounded bg-zinc-300 dark:text-zinc-50 text-zinc-600 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700"
+                    className="w-[200px] py-1 px-4 rounded bg-zinc-300 dark:text-zinc-50 text-zinc-600 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700"
                     />
                 </td>
               ))}

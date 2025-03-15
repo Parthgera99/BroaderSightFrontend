@@ -25,6 +25,7 @@ import { Trash } from "lucide-react";
 import UploadImageButton from "@/components/InputComponents/UploadImageButton";
 import TagInput from "@/components/InputComponents/TagInput";
 import FaqInput from "@/components/InputComponents/faqInput";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Define schema for the entire blog post
 const blogSchema = z.object({
@@ -228,8 +229,6 @@ function EditBlogPage() {
 
       console.log("Full Response:", response);
 
-      
-
       fetchUser();
       if(response?.data.data.blog.slug !== blog?.slug){
         blog = user?.blogs?.find((b) => b.slug === updatedBlog.slug);
@@ -282,12 +281,44 @@ function EditBlogPage() {
   }, [categories]); // Logs when categories update
   
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (
+<>
+    <div className="flex space-x-6 mt-6 mx-12">
+      <Skeleton className="h-8 w-32 ml-12"/>
+      <Skeleton className="h-8 w-32"/>
+      <Skeleton className="h-8 w-32"/>
+      <Skeleton className="h-8 w-32"/>
+      <Skeleton className="h-8 w-32"/>
+      <Skeleton className="h-8 w-32"/>
+      <Skeleton className="h-8 w-32"/>
+    </div>
+    <div className="flex gap-2">
+      <div className="w-[66%]">
+
+        <div className="mt-12 flex flex-col space-y-6">
+          <Skeleton className="h-20 mt-2 w-[400px] mx-24"/>
+          <Skeleton className="h-[40px] w-64 mx-24"/>
+          <Skeleton className="h-8 w-32 mx-24"/>
+        </div>
+      </div>
+      
+      <div className="w-[2px] h-[500px] mt-12 rounded dark:bg-zinc-700 bg-zinc-400 ml-16 mr-8">
+      {/* Divider Line   */}
+      </div>         
+
+      {/* Right Side  */}
+      <div className="w-[25%] flex flex-col gap-12 my-24">
+        <Skeleton className="h-[70px] mb-4 w-64 mx-4"/>
+        <Skeleton className="h-[120px] w-64 mx-4"/>
+      </div>
+    </div>
+</>
+  )
 
   return (
     !blog ? <p>Loading...</p> :(
       <>
-        <div className="flex justify-between py-12 px-24">
+        <div className="flex justify-between pb-12 pt-6 px-24">
 
           <div className="flex space-x-6">
             {["heading", "paragraph", "image", "youtube Video", "list", "table", "quote"].map((type) => (
@@ -436,7 +467,7 @@ function EditBlogPage() {
               Meta Description
           </h1>
           <Textarea
-            className="font-montserrat dark:text-zinc-50 py-2 px-6 font-semibold !text-base min-h-[120px] max-h-[300px] dark:bg-zinc-800 bg-zinc-200 text-zinc-600 rounded scrollbar-hidden border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 dark:focus-visible:ring-purple-700 focus-visible:border-purple-400 dark:focus-visible:border-purple-700 overflow-hidden resize-none"
+            className="font-montserrat dark:text-zinc-50 py-2 px-6 !text-base min-h-[120px] max-h-[300px] dark:bg-zinc-800 bg-zinc-200 text-zinc-600 rounded scrollbar-hidden border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 dark:focus-visible:ring-purple-700 focus-visible:border-purple-400 dark:focus-visible:border-purple-700 overflow-hidden resize-none"
             
             onChange={(e) => setBlogData({ ...blogData, metaDescription: e.target.value })}
             value={blogData.metaDescription}
