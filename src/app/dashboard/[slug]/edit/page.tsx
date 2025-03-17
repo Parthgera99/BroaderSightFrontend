@@ -68,11 +68,13 @@ function EditBlogPage() {
   const params = useParams();
   const router = useRouter();
   const { user, loading, fetchUser } = useAuth();
+  const [fetching , setFetching] = useState(false);
   const slug = params?.slug?.toString(); 
   let blog = user?.blogs?.find((b) => b.slug === slug);
   const [categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState(false);
+  const timerRef = React.useRef<number | null>(null);
   const [blogData, setBlogData] = useState<BlogData>({
     _id: "",//
     title: "",
@@ -94,14 +96,16 @@ function EditBlogPage() {
     if (!loading) {
       if (!user) {
         router.replace("/sign-in"); // Redirect if not logged in
+        toast.error("You must be logged in to edit a blog");
       } else if (!blog) {
         router.replace("/"); // Redirect if the blog is not theirs
       }
       else{
+        setFetching(true);
         fetchCategories();
       }
     }
-  }, [user, loading, router, slug]);
+  }, [loading,user,blog]);
 
   // Fetch existing blog data when editing (if needed)
   useEffect(() => {
@@ -121,7 +125,7 @@ function EditBlogPage() {
         isPublished: blog.isPublished ,
       });
     }
-  }, [loading]);
+  }, [blog]);
   
   
   // Add a new content block
@@ -189,6 +193,7 @@ function EditBlogPage() {
   
 
   const saveBlog = async (publish = false) => {
+    setFetching(true);
     if(error){
       toast.error(error);
       return;
@@ -250,12 +255,15 @@ function EditBlogPage() {
     } catch (error) {
       console.error("Validation or API Error:", error);
       toast.error("Failed to update blog");
+    } finally {
+      setFetching(false);
     }
   };
   
   
 
   const fetchCategories = async () => {
+    setFetching(true)
     try {
       const response = await api.get<{ data: Category[] }>("/category/list"); 
   
@@ -265,6 +273,8 @@ function EditBlogPage() {
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
+    } finally {
+      setFetching(false)
     }
   };
 
@@ -275,13 +285,9 @@ function EditBlogPage() {
     setBlogData({ ...blogData, content: updatedContent });
   };
 
-
-  useEffect(() => {
-    console.log("Updated categories:", blogData.category);
-  }, [categories]); // Logs when categories update
   
 
-  if (loading) return (
+  if (loading || fetching) return (
 <>
     <div className="flex space-x-6 mt-6 mx-12">
       <Skeleton className="h-8 w-32 ml-12"/>
@@ -316,7 +322,7 @@ function EditBlogPage() {
   )
 
   return (
-    !blog ? <p>Loading...</p> :(
+    !blog ? <p>...</p> :(
       <>
         <div className="flex justify-between pb-12 pt-6 px-24">
 

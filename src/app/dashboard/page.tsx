@@ -73,8 +73,15 @@ function DashboardPage() {
     
   };
 
+  const redirectToBlog = (slug: string | undefined) => {
+    if (!slug) return
+    setRedirecting(true)
+    router.push(`/dashboard/${slug}/edit`)
+    setRedirecting(false)
+  }
+
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if ( !user) {
       router.replace("/sign-in"); // Redirect if not authenticated
     } else{
       if (!loading && (!user?.username || !user?.fullname)) {
@@ -87,10 +94,10 @@ function DashboardPage() {
       }
       console.log("this is user",user);
     }
-  }, [isAuthenticated, loading, router]);
+  }, []);
 
   if (loading || redirecting || saving) return (
-    <div className="flex flex-col space-x-4 my-6 mx-12">
+    <div className="flex flex-col space-x-4 py-6 mx-12">
       <Skeleton className="h-8 w-64 mx-6 rounded-xl" />
       <div className="space-y-6 flex mx-12">
         <Skeleton className="mx-12 my-12 h-32 w-32" />
@@ -120,7 +127,7 @@ function DashboardPage() {
   )
 
   return (
-    <div className="mx-[5vw] my-5">
+    <div className="mx-[5vw] py-5">
       <DialogForInfo openModal={openModal} setOpenModal={setOpenModal} />
 
       {isAuthenticated ? (
@@ -140,7 +147,7 @@ function DashboardPage() {
                 <Card key={blog._id} className="dark:bg-zinc-900 bg-zinc-100 cursor-pointer group shadow-none border-0 flex gap-4 justify-between items-center p-4" >
 
 
-                  <div className="flex items-center group relative gap-8 w-full p-4" onClick={() => router.push(`/dashboard/${blog.slug}/edit`)}>
+                  <div className="flex items-center group relative gap-8 w-full p-4" onClick={()=>redirectToBlog(blog?.slug)}>
                     <div className="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                     <Pencil className="text-white text-4xl transition-transform duration-300" />
                   </div>

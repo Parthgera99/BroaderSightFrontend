@@ -48,7 +48,7 @@ export function LoginForm({
     if (user) {
       router.replace("/dashboard");
     }
-  }, [user, authLoading, router]);
+  }, [user]);
 
   if (authLoading || user) return null;
 

@@ -1,104 +1,103 @@
 "use client"
-import React from 'react'
+import React, { useState , useEffect} from "react";
 import { Button } from "@/components/ui/button";
-import Link from 'next/link';
-// import { MoreDropdown } from './layout/MoreDropdown';
-import { Skeleton } from "@/components/ui/skeleton"
+import Link from "next/link";
+import Image from "next/image";
+import { useAuth } from "@/context/UserContext";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ThemeToggle from "./ThemeToggle";
+import { Squash as Hamburger } from "hamburger-react"; 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-import Image from 'next/image';
-import { useAuth } from '@/context/UserContext';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import ThemeToggle from './ThemeToggle';
-
+} from "@/components/ui/dropdown-menu";
+import styles from "./navbar.module.css";
+import { Skeleton } from "./ui/skeleton";
 
 
 function Navbar() {
-  const { user, isAuthenticated, isAdmin, loading, logout } = useAuth();
+  const { user, isAuthenticated, loading, logout } = useAuth();
+  const [isOpen, setIsOpen] = useState(false); // Hamburger state
+  const [openDropDown, setOpenDropDown] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, []);
+  
+
   return (
+    <>
+    <nav className="fixed w-full z-50 top-0 flex items-center justify-between px-6 py-4 bg-zinc-50 dark:bg-zinc-900 border-b">
+      
+      {/* Left Side - Logo & Name (Desktop) / Hamburger Menu (Mobile) */}
+      <div className="flex items-center gap-4 lg:hidden ">
+        {/* Hamburger (Visible only on Mobile) */}
+        <div onClick={() => setIsOpen(!isOpen)} className="z-60">
+          <Hamburger toggled={isOpen} toggle={setIsOpen} direction="left" size={24}/>
+        </div>
+        
+      </div>
+      
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.svg" alt="Logo" width={32} height={32} />
+          <h1 className="text-lg font-semibold text-zinc-900 dark:text-white">
+            BroaderSight
+          </h1>
+        </Link>
 
-    <nav className="flex justify-between items-center px-12 py-4 bg-zinc-50 dark:bg-zinc-800 border-b">
-      {/* Left - Brand Logo */}
-      <Link href="/" className="text-lg flex gap-4 items-center font-semibold">
-      <Image
-        src="/logo.svg"
-        alt="Logo"
-        width={32}
-        height={32}
-        className="mr-2"
-      />
-        <h1 className='text-md text-zinc-900 hover:text-purple-700 duration-500 dark:hover:text-purple-200 dark:text-slate-50 font-montserrat'>
-          BroaderSight  
-        </h1>
-      </Link>
+          <ul className="font-montserrat lg:flex max-lg:hidden items-center gap-16">
+            <Link href="/explore-blogs" className="nav-link">Explore</Link>
+            <Link href="/category" className="nav-link">Categories</Link>
+            <Link href="/about" className="nav-link">About</Link>
+          </ul>
+      
 
-      {/* Middle - Navigation Links */}
-      <div className="flex gap-12 items-center font-montserrat">
-        <Link href="/explore-blogs" className="text-base px-4 font-semibold hover:text-purple-700 dark:hover:text-purple-200 text-zinc-900 dark:text-slate-50 duration-500">Explore</Link>
-        <Link href="/category" className="text-base px-4 font-semibold hover:text-purple-700 dark:hover:text-purple-200 text-zinc-900 dark:text-slate-50 dark:hover:text-gray-300 duration-500">Categories</Link>
-        <Link href="/about" className="text-base px-4 font-semibold hover:text-purple-700 dark:hover:text-purple-200 text-zinc-900 dark:text-slate-50 dark:hover:text-gray-300 duration-500">About</Link>
-
-        {/* More Dropdown (Client Component) */}
-        {/* <MoreDropdown/> */}
+      {/* Right Side - Sign In / User Profile */}
+      <div className="h-[45px]">
+        {loading ? (
+          <Skeleton className="w-[75px] h-10 bg-gray-200 dark:bg-gray-700 rounded-md"></Skeleton>
+        ) : isAuthenticated ? (
+          <DropdownMenu open={openDropDown} onOpenChange={setOpenDropDown}>
+            <DropdownMenuTrigger>
+            <Avatar>
+                <AvatarFallback>
+                  {user?.email?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              <AvatarImage
+                src={user?.profilePicture}
+                className="h-10 border rounded-full"
+              />
+            </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-full">
+              <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)} href="/dashboard/profile" className="w-full">Profile</Link></DropdownMenuItem>
+              <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)}  href="/dashboard">Dashboard</Link></DropdownMenuItem>
+              <DropdownMenuItem><ThemeToggle /></DropdownMenuItem>
+              <DropdownMenuItem><Button onClick={logout}>Logout</Button></DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link href="/sign-in">
+            <Button variant="outline" className="max-sm:text-xs h-[40px]">Sign In</Button>
+          </Link>
+        )}
       </div>
 
-      {/* Right - Sign In Button */}
-      {loading ? (
-        <Button variant="nav" className='bg-slate-200 dark:bg-zinc-800 w-[8vw] h-[40px]'>
-          <Skeleton /> 
-        </Button>
-) : isAuthenticated ? (
-        <>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar>
-              <AvatarImage src={user?.profilePicture || undefined} className='h-10 border rounded-full' />
-              <AvatarFallback>{user?.email.charAt(0).toUpperCase()}</AvatarFallback>
-              {/* <AvatarFallback>
-                {user?.name
-                  ? user.name.split(" ").map(word => word[0]).join("").toUpperCase()
-                  : user?.email?.slice(0, 2).toUpperCase()} 
-              </AvatarFallback> */}
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
-              <Link href={"/dashboard/profile"}>
-                Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-            <Link href={"/dashboard"}>
-                DashBoard
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <ThemeToggle/>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-            <Button onClick={logout}>
-                Logout
-              </Button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-          
-        </>
-      ) : (
-        <Link href="/sign-in">
-          <Button variant="outline" className='w-[8vw] h-[40px]'>Sign In</Button>
-        </Link>
-      )}
-      
     </nav>
 
-
-  )
+        {/* SideNavbar */}
+    <div className={isOpen ? styles.sideNavOpen : styles.sideNavClose} >
+          <ul className={styles.navList}>
+            <Link href="/explore-blogs" onClick={() => setIsOpen(false)} className="hover:bg-zinc-100 py-4 nav-link font-montserrat font-semibold">Explore</Link>
+            <Link href="/category" onClick={() => setIsOpen(false)} className="hover:bg-zinc-100 py-4 nav-link font-montserrat font-semibold">Categories</Link>
+            <Link href="/about" onClick={() => setIsOpen(false)} className="hover:bg-zinc-100 py-4 nav-link font-montserrat font-semibold">About</Link>
+          </ul>
+        </div>
+      
+      </>
+  );
 }
 
-export default Navbar
+export default Navbar;

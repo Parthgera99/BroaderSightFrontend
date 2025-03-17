@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 
+html, body {
+  width: 100%;
+  min-width: 100%;
+  overflow-x: hidden;
+}
+
+
 .scrollbar-hidden::-webkit-scrollbar {
   display: none; /* Hide scrollbar for WebKit (Chrome, Safari) */
 }
@@ -26,7 +33,7 @@
 }
 
 /* For Firefox */
-html {
+html , .scrollbar{
   scrollbar-width: thin;
   scrollbar-color: #8b5cf6 var(--scrollbar-bg);
 }

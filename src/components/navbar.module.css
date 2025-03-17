@@ -1,0 +1,36 @@
+     .navList{
+    color: black;
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+   }
+
+   .sideNavOpen{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    transform: translateX(0%);
+    transition: all 0.5s ease-in-out;
+    top: 78px;
+    overflow: hidden;
+    background: white; 
+    z-index: 40; 
+   }
+
+   .sideNavClose{
+    position: fixed;
+    width: 300px;
+    height: 100vh;
+    background-color: black;
+    transform: translateX(-100%);
+    transition: all 0.5s ease-in-out;
+    top: 78px;
+    background: white; 
+    z-index: 50; 
+   }

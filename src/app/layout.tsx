@@ -30,9 +30,12 @@ export default async function RootLayout({
   return (
     <html lang="en" className={montserrat.variable + " " + cn(theme === "dark" && "dark") }>
       <AuthProvider>
-      <body className="bg-zinc-100 dark:bg-zinc-900">
+      <body className="bg-zinc-100 dark:bg-zinc-900 ">
+        
         <Navbar/>
+        <div className="mt-[78px] max-sm:mt-[40px]">
         {children}
+          </div>
         <Toaster position="top-right" richColors />
       </body>
       </AuthProvider>
