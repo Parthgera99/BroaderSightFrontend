@@ -25,7 +25,7 @@ export default async function RootLayout({
 }>) {
 
   const cookieStore = await cookies(); // Get all cookies
-  const theme = cookieStore.get("theme")?.value || "light";
+  const theme = cookieStore.get("theme")?.value || "dark";
 
   return (
     <html lang="en" className={montserrat.variable + " " + cn(theme === "dark" && "dark") }>

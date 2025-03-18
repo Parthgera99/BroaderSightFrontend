@@ -3,10 +3,150 @@
 @tailwind utilities;
 
 
+
+
+
+
+.wrapper {
+  width: 90%;
+  max-width: 1536px;
+  margin-inline: auto;
+  position: relative;
+  height: 40px;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 1) 80%,
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.wrapper:hover .item , .wrapper:hover .rightItem{
+  animation-play-state: paused;
+}
+
+.item:hover, .rightItem:hover{
+  background-color: #6b21a8 !important;
+  cursor: pointer;
+}
+
+@keyframes scrollRight {
+  to {
+    right: -200px;
+  }
+}
+
+.rightItem {
+  width: 200px;
+  position: absolute;
+  right: max(calc(200px * 8), 100%);
+  animation-name: scrollRight; /* Apply rightward animation */
+  animation-duration: 30s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transition: background-color 0.3s ease-in-out;
+}
+
+@keyframes scrollLeft {
+  to {
+    left: -200px;
+  }
+}
+
+.item {
+  width: 200px;
+  position: absolute;
+  left: max(calc(200px * 8), 100%);
+  animation-name: scrollLeft;
+  animation-duration: 30s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.item1 {
+  animation-delay: calc(30s / 8 * (8 - 1) * -1);
+}
+
+.item2 {
+  animation-delay: calc(30s / 8 * (8 - 2) * -1);
+}
+
+.item3 {
+  animation-delay: calc(30s / 8 * (8 - 3) * -1);
+}
+
+.item4 {
+  animation-delay: calc(30s / 8 * (8 - 4) * -1);
+}
+
+.item5 {
+  animation-delay: calc(30s / 8 * (8 - 5) * -1);
+}
+
+.item6 {
+  animation-delay: calc(30s / 8 * (8 - 6) * -1);
+}
+
+.item7 {
+  animation-delay: calc(30s / 8 * (8 - 7) * -1);
+}
+
+.item8 {
+  animation-delay: calc(30s / 8 * (8 - 8) * -1);
+}
+
+
+
+
+
 html, body {
   width: 100%;
   min-width: 100%;
   overflow-x: hidden;
+}
+
+@layer utilities {
+  .animate-delay-5s {
+    animation: appear 0s ease-in 5s forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 2s ease-in-out forwards;
+  }
+
+  /* .animate-button-click {
+    animation: button-click 0.3s ease-in-out 2s forwards;
+  } */
+
+  @keyframes clickEffect {
+    0% { transform: scale(1); background-color: inherit;}
+    50% { transform: scale(0.9); background-color: #8b5cf6; } /* Slight shrink */
+    100% { transform: scale(1); background-color: inherit; } /* Back to normal */
+  }
+
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      /* transform: translateY(15px); */
+    }
+    to {
+      opacity: 1;
+      /* transform: translateY(0); */
+    }
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 
