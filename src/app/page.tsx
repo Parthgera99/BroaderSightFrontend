@@ -1,17 +1,26 @@
 import CategorySlider from "@/components/CategorySlider";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { ArrowRight, BookOpen, PenLine, Upload, Wallet } from "lucide-react";
+import { ArrowRight, ArrowUpRightIcon, BookOpen, PenLine, Upload, Wallet } from "lucide-react";
+import api from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+async function getCategories() {
+  const response = await api.get("/category/list");
+  // if (!response.data.ok) throw new Error("Failed to fetch categories");
+  return response.data.data;
+}
 
+
+
+export default async function Home() {
   
+  const categories = await getCategories();
 
   return (
     <div className="relative ">
-      <div className="relative w-full pb-[150px]">
+      <div className="relative w-full pb-[100px]">
 
         {/* Background Image */}
         <div className="absolute inset-0 h-90% bg-[url('/homegridbg2.svg')] dark:opacity-80 bg-cover bg-center"></div>
@@ -29,14 +38,14 @@ export default function Home() {
             <div className="flex gap-8 max-sm:gap-2 mt-2">
               <Link href="/explore" className="hover:dark:bg-zinc-700 font-montserrat font-regular max-sm:text-sm max-lg:text-base hover:bg-zinc-300 duration-300 text-zinc-800 dark:text-zinc-200 font-semibold py-2 px-8 rounded-full focus:outline-none focus:shadow-outline">
               Explore
-              <ArrowRight className="inline-block ml-2 w-6 h-6"/>
+              <ArrowRight className="inline-block ml-2 w-6 h-6 max-sm:w-4 max-sm:h-4"/>
               </Link>
               <Link href="/sign-in" className="bg-purple-100 hover:bg-purple-200 max-sm:text-sm max-lg:text-base duration-300 font-montserrat text-purple-800 font-semibold py-2 max-sm:px-4 px-8 rounded-full focus:outline-none focus:shadow-outline">Start Writing</Link>
             </div>
           </div>
 
         {/* Animated div  */}
-        <div className="relative z-20 w-[80vw] max-sm:mt-[60px] backdrop-blur-sm mt-[80px] mx-auto rounded-xl dark:bg-zinc-700/30 bg-zinc-400/30 h-[650px] max-sm:p-[10px] p-[20px]">
+        <div className="relative z-20 w-[80vw] max-sm:mt-[60px] backdrop-blur-sm mt-[80px] mx-auto rounded-xl dark:bg-zinc-700/30 bg-purple-600/30 h-[650px] max-sm:p-[10px] p-[20px]">
           <div className="w-full h-full overflow-hidden dark:bg-zinc-950 backdrop-blur-lg dark:opacity-50 opacity-50 bg-zinc-50 rounded-xl">
 
             {/* SUB Navbar Dummy */}
@@ -44,10 +53,10 @@ export default function Home() {
               <div className="text-center max-sm:text-xs text-sm dark:text-zinc-50 text-zinc-50 rounded-tl-lg font-semibold py-2 dark:bg-purple-800 bg-purple-400 w-full">
                 Edit
               </div>
-              <div className="text-center text-sm max-sm:text-xs font-semibold dark:text-zinc-50 text-zinc-800 py-2 dark:bg-purple-600 bg-purple-200 w-full">
+              <div className="text-center text-sm max-sm:text-xs font-semibold dark:text-zinc-50 text-zinc-800 py-2 dark:bg-purple-600 bg-zinc-200 w-full">
                 Preview
               </div>
-              <div className="text-center text-sm max-sm:text-xs font-semibold dark:text-zinc-50 text-zinc-800 py-2 rounded-tr-lg dark:bg-purple-600 bg-purple-200 w-full">
+              <div className="text-center text-sm max-sm:text-xs font-semibold dark:text-zinc-50 text-zinc-800 py-2 rounded-tr-lg dark:bg-purple-600 bg-zinc-200 w-full">
                 Change Order
               </div>
             </div>
@@ -103,90 +112,147 @@ export default function Home() {
           </div>
         </div>
 
+        <h1 className="text-center mt-16 mx-64 max-xl:mx-32 max-md:mx-16 max-sm:text-lg max-sm:mx-8 font-montserrat font-semibold text-3xl text-zinc-700 dark:text-zinc-200">At Broader Sight, we dont just share knowledge - we think beyong limits.</h1>
+
         </div>
 
       </div>
 
-      <div className="px-64 max-2xl:px-32 max-md:px-10 py-32 flex max-lg:flex-col max-lg:gap-16 gap-32 max-lg:px-24 justify-center items-center bg-zinc-50 dark:bg-zinc-900">
-        <div className="font-montserrat flex flex-col gap-2">
-          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-zinc-700 dark:text-zinc-50">
+      <div className="px-64 max-2xl:px-32 max-xl:px-64 max-lg:px-48 max-md:px-16 py-32 max-sm:py-16 max-sm:px-8 flex max-xl:flex-col max-lg:gap-16 gap-32 justify-center items-center bg-zinc-200 dark:bg-zinc-900">
+        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
+          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
             <PenLine className="w-6 h-6 my-auto"/>
             Effortless Blog Creation
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-300">Easily draft, edit, and publish your ideas with our seamless blog generator —no technical expertise needed!</p>
+          <p className="text-sm text-zinc-800 dark:text-zinc-300">Easily draft, edit, and publish your ideas with our seamless blog generator —no technical expertise needed!</p>
         </div>
-        <div className="font-montserrat flex flex-col gap-2">
-          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-zinc-700 dark:text-zinc-50">
+        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
+          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
             <BookOpen className="w-6 h-6 my-auto"/>
             Endless Learning Opportunities
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-300">Explore diverse topics across education, technology, personal growth, and more. Never stop expanding your knowledge and gaining fresh insights.</p>
+          <p className="text-sm text-zinc-800 dark:text-zinc-300">Explore diverse topics across education, technology, personal growth, and more. Never stop expanding your knowledge and gaining fresh insights.</p>
         </div>
-        <div className="font-montserrat flex flex-col gap-2">
-          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-zinc-700 dark:text-zinc-50">
+        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
+          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
             <Wallet className="w-6 h-6 my-auto"/>
             Monetize Your Blogs
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-300">Share your knowledge and gain visibility while unlocking future opportunities to monetize your content.</p>
+          <p className="text-sm text-zinc-800 dark:text-zinc-300">Share your knowledge and gain visibility while unlocking future opportunities to monetize your content.</p>
         </div>
       </div>
 
-      {/* <div className="flex overflow-hidden space-x-10 py-32">
-        <div className="flex space-x-10 animate-loop-scroll">
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Education
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Business
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Technology
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Health
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Finance
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Cryptocurrency
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Cars
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Tech
-          </div>
-        </div>
-        <div className="flex space-x-10 animate-loop-scroll" aria-hidden="true">
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Education
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Business
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Technology
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Health
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Finance
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Cryptocurrency
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Cars
-          </div>
-          <div className="w-[170px] py-2 text-center text-base font-normal rounded-full bg-zinc-300 dark:bg-zinc-800">
-            Tech
-          </div>
-        </div>
-      </div> */}
+      {/* Click - NonClick Blocks Section  */}
+      <div className="flex flex-col gap-16 dark:bg-zinc-950 bg-zinc-100 justify-center px-20 max-md:px-8 xl:px-32 max-sm:py-16 py-24">
+        <h1 className="text-center font-montserrat font-semibold text-4xl mx-8 max-sm:mx-0 max-sm:text-3xl text-zinc-700 dark:text-zinc-200">About Our Team and Supporters</h1>
+      <div className="grid grid-cols-4 max-md:grid-cols-2 gap-8 max-sm:gap-4 mx-auto">
 
-      <CategorySlider/>
+        <Link href={"#"} className="relative rounded-xl dark:bg-sky-600 bg-sky-400 dark:hover:bg-sky-700 hover:bg-sky-500 duration-300 py-8 max-lg:py-4 max-xl:pt-4 max-xl:pb-8 min-w-[440px] max-xl:min-w-[380px] max-lg:min-w-[300px] max-sm:min-w-[200px] font-montserrat flex flex-col gap-4 max-lg:gap-2 px-10 max-lg:px-4 col-span-2">
+          <h2 className="text-2xl max-xl:text-xl max-lg:text-lg font-semibold dark:text-zinc-100 text-sky-950">How BroaderSight Blogs Works?</h2>
+          <p className="text-sm mb-4 max-md:mb-8 text-zinc-800 dark:text-zinc-100 pr-8 max-lg:pr-4">Get a sneal peak of how we curate top-quality Blogs for you and how are the blogs handled by us.</p>
+          <button className="flex absolute gap-2 bottom-4 right-4 max-lg:bottom-2 font-medium text-sm text-zinc-800 dark:text-zinc-300">Read More <ArrowUpRightIcon className="w-6 h-6 my-auto"/> </button>
+        </Link>
+
+        <div className="rounded-xl font-montserrat cursor-drag flex flex-col justify-center items-center dark:bg-zinc-800 bg-zinc-300 min-w-[220px] max-xl:min-w-[180px] max-lg:min-w-[150px] max-sm:min-w-fit">
+          <h3 className="max-sm:px-4 text-center duration-300 font-semibold dark:text-zinc-300 text-zinc-700 text-xl max-lg:text-lg max-md:py-12">Crystal Brain</h3>
+        </div>
+
+        <div className="rounded-xl font-montserrat flex justify-center items-center dark:bg-zinc-800 bg-zinc-300 min-w-[220px] max-xl:min-w-[180px] max-lg:min-w-[150px] max-sm:min-w-fit">
+          <h3 className="max-sm:px-4 text-center font-semibold dark:text-zinc-300 text-zinc-700 text-xl max-lg:text-lg max-md:py-12">IBM Olympiads</h3>
+        </div>
+
+        <div className="rounded-xl font-montserrat flex justify-center items-center dark:bg-zinc-800 bg-zinc-300 min-w-[220px] max-xl:min-w-[180px] max-lg:min-w-[150px] max-sm:min-w-fit">
+          <h3 className="max-sm:px-4 text-center font-semibold dark:text-zinc-300 text-zinc-700 text-xl max-lg:text-lg max-md:py-12">CrownSpire Jewelz</h3>
+        </div>
+
+        <div className="rounded-xl font-montserrat flex justify-center items-center dark:bg-zinc-800 bg-zinc-300 min-w-[220px] max-xl:min-w-[180px] max-lg:min-w-[150px] max-sm:min-w-fit">
+          <h3 className="max-sm:px-4 text-center font-semibold dark:text-zinc-300 text-zinc-700 text-xl max-lg:text-lg max-md:py-12">Hindi Classes</h3>
+        </div>
+
+        <Link href={"#"} className="relative  rounded-xl dark:bg-lime-600 bg-lime-400 hover:bg-lime-500 dark:hover:bg-lime-700 duration-300 cursor-pointer  py-8 max-lg:py-4 max-xl:pt-4 max-xl:pb-8 min-w-[440px] max-xl:min-w-[380px] max-lg:min-w-[300px] max-sm:min-w-[200px] font-montserrat flex flex-col gap-4 max-lg:gap-2 px-10 max-lg:px-4 col-span-2">
+          <h2 className="text-2xl max-xl:text-xl max-lg:text-lg font-semibold dark:text-zinc-50 text-lime-950">Why We Started This Platform</h2>
+          <p className="text-sm mb-4 max-md:mb-8 text-zinc-800 dark:text-zinc-50 pr-8 max-lg:pr-4">Our journey, mission, and the vision behind BroaderSight.</p>
+          <button className="flex absolute gap-2 bottom-4 right-4 max-lg:bottom-2 font-medium text-sm text-zinc-800 dark:text-zinc-300">Read More <ArrowUpRightIcon className="w-6 h-6 my-auto"/> </button>
+        </Link>
+
+        <Link href={"/about"} className="relative  rounded-xl dark:bg-pink-600 bg-pink-400 hover:bg-pink-500 dark:hover:bg-pink-700 duration-300 cursor-pointer  py-8 max-lg:py-4 max-xl:pt-4 max-xl:pb-8 min-w-[440px] max-xl:min-w-[380px] max-lg:min-w-[300px] max-sm:min-w-[200px] font-montserrat flex flex-col gap-4 max-lg:gap-2 px-10 max-lg:px-4 col-span-2">
+          <h2 className="text-2xl max-xl:text-xl max-lg:text-lg font-semibold dark:text-zinc-50 text-pink-950">Meet the Team Behind BroaderSight</h2>
+          <p className="text-sm mb-4 max-md:mb-8 text-zinc-800 dark:text-zinc-50 pr-8 max-lg:pr-4">Learn about the minds shaping the future of knowledge sharing.</p>
+          <button className="flex absolute gap-2 bottom-4 right-4 max-lg:bottom-2 font-medium text-sm text-zinc-800 dark:text-zinc-300">About Us <ArrowUpRightIcon className="w-6 h-6 my-auto"/> </button>
+        </Link>
+        
+        <div className="rounded-xl font-montserrat flex justify-center items-center dark:bg-zinc-800 bg-zinc-300 min-w-[220px] max-xl:min-w-[180px] max-lg:min-w-[150px] max-sm:min-w-fit">
+          <h3 className="max-sm:px-4 text-center font-semibold dark:text-zinc-300 text-zinc-700 text-xl max-lg:text-lg max-md:py-12">Krystal Devs</h3>
+        </div>
+
+        <div className="rounded-xl font-montserrat flex justify-center items-center dark:bg-zinc-800 bg-zinc-300 min-w-[220px] max-xl:min-w-[180px] max-lg:min-w-[150px] max-sm:min-w-fit">
+          <h3 className="max-sm:px-4 text-center font-semibold dark:text-zinc-300 text-zinc-700 text-xl max-lg:text-lg max-md:py-12">Apollo Tiles</h3>
+        </div>
+
+      </div>
+      </div>
+
+
+      {/* Infinite Scroller  */}
+      <div className="relative dark:bg-purple-950 max-sm:dark:bg-violet-950 bg-purple-100 mask-fade py-[120px]">
+      <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-zinc-100 to-transparent dark:from-zinc-950 dark:to-transparent"></div>
+        <CategorySlider categories={categories.slice(0, 16)}/>
+        <h2 className=" my-12 max-sm:my-10 max-md:mx-16 max-sm:text-lg max-sm:mx-8 max-md:text-xl max-lg:mx-32 lg:mx-64 text-center text-3xl font-semibold font-montserrat dark:text-purple-200 text-purple-800">Explore a Wide Range of Categories</h2>
+        {/* Change slice values  */}
+        <CategorySlider categories={categories.slice(0, 16)}/> 
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-zinc-100 to-transparent dark:from-zinc-950 dark:to-transparent"></div> 
+      </div>
+
+
+      {/* Number Showcase Section  */}
+      <div className="flex flex-col gap-16 dark:bg-zinc-950 bg-zinc-100 justify-center items-center py-[80px] px-32 max-sm:px-10 max-xl:px-12">
+        <h3 className="text-3xl max-sm:text-2xl font-semibold font-montserrat dark:text-zinc-50 text-zinc-700 ">This is the Future of Blogging</h3>
+        <div className="flex flex-row justify-center gap-16 flex-wrap w-full">
+
+          <div className="font-montserrat w-[300px] max-md:w-[80%] max-sm:w-[100%] justify-center border border-1 dark:border-zinc-600 dark:bg-zinc-950 bg-zinc-100 border-zinc-400 dark:text-zinc-200 text-zinc-700 rounded-xl p-8 max-sm:px-6 flex flex-col gap-5 max-sm:gap-4">
+            <h2 className="text-5xl max-xl:text-3xl">
+              1000+
+            </h2>
+            <p className="text-sm dark:text-zinc-400">
+              Knowledge Seakers join weekly - A Growing Community of Curious Minds
+            </p>
+            <Link href={"/sign-in"} className="dark:bg-purple-800 max-sm:dark:bg-violet-800 dark:hover:bg-purple-700 dark:text-zinc-50 bg-purple-300 hover:bg-blue-300 duration-300 text-zinc-800 max-sm:text-sm font-medium py-2 px-8 rounded-full w-fit">Sign Up</Link>
+          </div>
+
+          <div className="font-montserrat w-[300px] max-md:w-[80%] max-sm:w-[100%] justify-center border border-1 dark:border-zinc-600 dark:bg-zinc-950 bg-zinc-100 border-zinc-400 dark:text-zinc-200 text-zinc-700 rounded-xl p-8 max-sm:px-6 flex flex-col gap-5 max-sm:gap-4">
+            <h2 className="text-5xl max-xl:text-3xl">
+              75%
+            </h2>
+            <p className="text-sm dark:text-zinc-400">
+              Faster Blog Creation - Publish your thoughts in minutes with World's Best Blog Generator Tool
+            </p>
+            <Link href={"#"} className="dark:bg-purple-800 max-sm:dark:bg-violet-800 dark:hover:bg-purple-700 dark:text-zinc-50 bg-purple-300 hover:bg-blue-300 duration-300 text-zinc-800 max-sm:text-sm font-medium py-2 px-8 rounded-full w-fit">See How</Link>
+          </div>
+
+          <div className="font-montserrat w-[300px] max-md:w-[80%] max-sm:w-[100%] justify-center border border-1 dark:border-zinc-600 dark:bg-zinc-950 bg-zinc-100 border-zinc-400 dark:text-zinc-200 text-zinc-700 rounded-xl p-8 max-sm:px-6 flex flex-col gap-5 max-sm:gap-4">
+            <h2 className="text-5xl max-xl:text-3xl">
+              100+
+            </h2>
+            <p className="text-sm dark:text-zinc-400">
+              Categories Covered - From Education to Technology, Lifestyle and beyond.
+            </p>
+            <Link href={"/category"} className="dark:bg-purple-800 max-sm:dark:bg-violet-800 dark:hover:bg-purple-700 bg-purple-300 hover:bg-blue-300 duration-300 text-zinc-800 dark:text-zinc-50 max-sm:text-sm font-medium py-2 px-8 rounded-full w-fit whitespace-nowrap">Explore Categories</Link>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Best Blog Generator Panel in the World */}
+      <div>
+        
+      </div>
+
+      {/* Trending Blogs Section */}
+      <div>
+        
+      </div>
+
+      {/* Footer  */}
 
     </div>
   );

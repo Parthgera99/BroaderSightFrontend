@@ -88,11 +88,11 @@ function Navbar() {
     </nav>
 
         {/* SideNavbar */}
-    <div className={isOpen ? styles.sideNavOpen : styles.sideNavClose} >
+    <div className={`${isOpen ? styles.sideNavOpen : styles.sideNavClose} dark:bg-zinc-950 bg-zinc-50 dark:text-zinc-50 text-zinc-900`} >
           <ul className={styles.navList}>
-            <Link href="/explore-blogs" onClick={() => setIsOpen(false)} className="hover:bg-zinc-100 py-4 nav-link font-montserrat font-semibold">Explore</Link>
-            <Link href="/category" onClick={() => setIsOpen(false)} className="hover:bg-zinc-100 py-4 nav-link font-montserrat font-semibold">Categories</Link>
-            <Link href="/about" onClick={() => setIsOpen(false)} className="hover:bg-zinc-100 py-4 nav-link font-montserrat font-semibold">About</Link>
+            <Link href="/explore-blogs" onClick={() => setIsOpen(false)} className="dark:hover:bg-zinc-700 hover:bg-zinc-200 dark:text-zinc-50 py-4 nav-link font-montserrat font-semibold">Explore</Link>
+            <Link href="/category" onClick={() => setIsOpen(false)} className="dark:hover:bg-zinc-700 hover:bg-zinc-200 dark:text-zinc-50 py-4 nav-link font-montserrat font-semibold">Categories</Link>
+            <Link href="/about" onClick={() => setIsOpen(false)} className="dark:hover:bg-zinc-700 hover:bg-zinc-200 dark:text-zinc-50 py-4 nav-link font-montserrat font-semibold">About</Link>
           </ul>
         </div>
       

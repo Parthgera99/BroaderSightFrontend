@@ -3,12 +3,17 @@
 @tailwind utilities;
 
 
-
+@layer utilities {
+  .mask-fade {
+    -webkit-mask-image: linear-gradient(to bottom, black 10%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 1) 60%, black 90%);
+    mask-image: linear-gradient(to bottom, black 10%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 1) 60%, black 90%);
+  }
+}
 
 
 
 .wrapper {
-  width: 90%;
+  width: 70%;
   max-width: 1536px;
   margin-inline: auto;
   position: relative;
@@ -23,14 +28,30 @@
   );
 }
 
-.wrapper:hover .item , .wrapper:hover .rightItem{
+.wrapper2 {
+  width: 70%;
+  max-width: 1536px;
+  margin-inline: auto;
+  position: relative;
+  height: 40px;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 1) 80%,
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.wrapper:hover .item , .wrapper2:hover .rightItem{
   animation-play-state: paused;
 }
 
-.item:hover, .rightItem:hover{
+/* .item:hover, .rightItem:hover{
   background-color: #6b21a8 !important;
   cursor: pointer;
-}
+} */
 
 @keyframes scrollRight {
   to {
@@ -66,39 +87,97 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.item1 {
+
+@media screen and (max-width: 768px) {
+  .wrapper, .wrapper2{
+    width: 90%;
+  }
+
+  .rightItem {
+    width: 130px;
+    font-size: 13px;
+    position: absolute;
+    right: max(calc((130px) * 8), 100%);
+    animation-name: scrollRight; /* Apply rightward animation */
+    animation-duration: 30s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .item {
+    width: 130px;
+    font-size: 13px;
+    position: absolute;
+    left: max(calc(130px * 8), 100%);
+    animation-name: scrollLeft;
+    animation-duration: 30s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+}
+
+
+.wrapper .item1 {
   animation-delay: calc(30s / 8 * (8 - 1) * -1);
 }
 
-.item2 {
+.wrapper .item2 {
   animation-delay: calc(30s / 8 * (8 - 2) * -1);
 }
 
-.item3 {
+.wrapper .item3 {
   animation-delay: calc(30s / 8 * (8 - 3) * -1);
 }
 
-.item4 {
+.wrapper .item4 {
   animation-delay: calc(30s / 8 * (8 - 4) * -1);
 }
 
-.item5 {
+.wrapper .item5 {
   animation-delay: calc(30s / 8 * (8 - 5) * -1);
 }
 
-.item6 {
+.wrapper .item6 {
   animation-delay: calc(30s / 8 * (8 - 6) * -1);
 }
 
-.item7 {
+.wrapper .item7 {
   animation-delay: calc(30s / 8 * (8 - 7) * -1);
 }
 
-.item8 {
+.wrapper .item8 {
   animation-delay: calc(30s / 8 * (8 - 8) * -1);
 }
 
 
+/* Right Scrolling Items */
+.wrapper2 .item1 {
+  animation-delay: calc(30s / 8 * (8 - 7) * -1);
+}
+.wrapper2 .item2 {
+  animation-delay: calc(30s / 8 * (8 - 6) * -1);
+}
+.wrapper2 .item3 {
+  animation-delay: calc(30s / 8 * (8 - 5) * -1);
+}
+.wrapper2 .item4 {
+  animation-delay: calc(30s / 8 * (8 - 4) * -1);
+}
+.wrapper2 .item5 {
+  animation-delay: calc(30s / 8 * (8 - 3) * -1);
+}
+.wrapper2 .item6 {
+  animation-delay: calc(30s / 8 * (8 - 2) * -1);
+}
+.wrapper2 .item7 {
+  animation-delay: calc(30s / 8 * (8 - 1) * -1);
+}
+.wrapper2 .item8 {
+  animation-delay: calc(30s / 8 * (8 - 0) * -1);
+}
 
 
 
