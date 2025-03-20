@@ -1,16 +1,23 @@
 import CategorySlider from "@/components/CategorySlider";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { ArrowRight, ArrowUpRightIcon, BookOpen, PenLine, Upload, Wallet } from "lucide-react";
 import api from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
+import BlogSection from "@/components/BlogSection";
+import { AxiosError } from "axios";
 
 async function getCategories() {
-  const response = await api.get("/category/list");
-  // if (!response.data.ok) throw new Error("Failed to fetch categories");
-  return response.data.data;
+  try {
+    const response = await api.get("/category/list");
+    return response.data.data;  
+  } catch (error) {
+    const err = error as AxiosError;
+    console.error("Error fetching categories:", err.response?.data || err.message);
+    return [];  
+  }
 }
+
 
 
 
@@ -115,32 +122,56 @@ export default async function Home() {
         <h1 className="text-center mt-16 mx-64 max-xl:mx-32 max-md:mx-16 max-sm:text-lg max-sm:mx-8 font-montserrat font-semibold text-3xl text-zinc-700 dark:text-zinc-200">At Broader Sight, we dont just share knowledge - we think beyong limits.</h1>
 
         </div>
-
       </div>
 
-      <div className="px-64 max-2xl:px-32 max-xl:px-64 max-lg:px-48 max-md:px-16 py-32 max-sm:py-16 max-sm:px-8 flex max-xl:flex-col max-lg:gap-16 gap-32 justify-center items-center bg-zinc-200 dark:bg-zinc-900">
-        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
-          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
-            <PenLine className="w-6 h-6 my-auto"/>
-            Effortless Blog Creation
-          </h1>
-          <p className="text-sm text-zinc-800 dark:text-zinc-300">Easily draft, edit, and publish your ideas with our seamless blog generator —no technical expertise needed!</p>
-        </div>
-        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
-          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
-            <BookOpen className="w-6 h-6 my-auto"/>
-            Endless Learning Opportunities
-          </h1>
-          <p className="text-sm text-zinc-800 dark:text-zinc-300">Explore diverse topics across education, technology, personal growth, and more. Never stop expanding your knowledge and gaining fresh insights.</p>
-        </div>
-        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
-          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
-            <Wallet className="w-6 h-6 my-auto"/>
-            Monetize Your Blogs
-          </h1>
-          <p className="text-sm text-zinc-800 dark:text-zinc-300">Share your knowledge and gain visibility while unlocking future opportunities to monetize your content.</p>
+
+      {/* Best Blog Generator Section  */}
+      <div className="flex dark:bg-zinc-900 bg-zinc-200 py-32 px-48 max-2xl:px-32 max-xl:px-16 max-sm:py-16 max-sm:px-6">
+        <div className="flex border max-lg:flex-col border-1 dark:border-zinc-700 border-zinc-400 w-full dark:border-zinc-700 rounded-xl gap-8">
+          {/* left div  */}
+          <div className="flex flex-col w-[60%] max-lg:w-[80%] max-md:w-[100%] py-12 px-12 max-sm:px-6 gap-6 font-montserrat">
+            <h1 className="text-5xl max-md:text-4xl max-sm:text-2xl text-zinc-700 dark:text-zinc-200">
+              Best Blog Generator Panel with Modern Interface 
+            </h1>
+            <Link href={"/sign-in"} className="py-2 px-4 mb-10 text-sm rounded-full dark:bg-purple-800 max-sm:dark:bg-violet-800 bg-purple-300 hover:bg-purple-400 hover:dark:bg-purple-950 duration-300  w-fit">Explore Dashboard</Link>
+            <div className="flex flex-col gap-1 ">
+              <Link href={"#"} className="flex gap-2 group">
+              <h2 className="font-semibold text-regular dark:text-zinc-100 hover:dark:text-purple-200 duration-300 ">Fastest Blog Making</h2>
+              <ArrowRight className="dark:text-purple-200 w-6 h-6 my-auto opacity-0 group-hover:opacity-100 duration-300"/>
+              </Link>
+              <p className="text-sm text-zinc-800 dark:text-zinc-300">Easily draft, edit, and publish your ideas. Our Blog Generator is an out of the box solution for creating new blogs in no time.</p>
+            </div>
+            <div className="flex flex-col gap-1 ">
+              <Link href={"#"} className="flex gap-2 group">
+              <h2 className="font-semibold text-regular dark:text-zinc-100 hover:dark:text-purple-200 duration-300">Grow Your Audience Rapidly</h2>
+              <ArrowRight className="dark:text-purple-200 w-6 h-6 my-auto opacity-0 group-hover:opacity-100 duration-300"/>
+              </Link>
+              <p className="text-sm text-zinc-800 dark:text-zinc-300">Grow your audience effortlessly because our algorithm is there to handle that.</p>
+            </div>
+            <div className="flex flex-col gap-1 ">
+              <Link href={"#"} className="flex gap-2 group">
+              <h2 className="font-semibold text-regular dark:text-zinc-100 hover:dark:text-purple-200 duration-300">Full Blog Customization</h2>
+              <ArrowRight className="dark:text-purple-200 w-6 h-6 my-auto opacity-0 group-hover:opacity-100 duration-300"/>
+              </Link>
+              <p className="text-sm text-zinc-800 dark:text-zinc-300">It offers every minor customization that you need for a blog that is ought to be viral.</p>
+            </div>
+            <div className="flex flex-col gap-1 ">
+              <Link href={"#"} className="flex gap-2 group">
+              <h2 className="font-semibold text-regular dark:text-zinc-100 hover:dark:text-purple-200 duration-300">Start Earning an Extra Income</h2>
+              <ArrowRight className="dark:text-purple-200 w-6 h-6 my-auto opacity-0 group-hover:opacity-100 duration-300"/>
+              </Link>
+              <p className="text-sm text-zinc-800 dark:text-zinc-300">Get weekly Expert blogging tips. Start generating an extra income with just writing blogs daily.</p>
+            </div>
+          </div>
+          {/* right div  */}
+          <div className="dark:bg-purple-800 max-sm:dark:bg-violet-800 bg-purple-400 max-sm:bg-violet-400 w-[40%] max-lg:w-full max-lg:rounded-b-xl h-full lg:rounded-r-xl">
+            <Image src={"/computerTick.svg"} alt="Best Blog Generator Panel" width={90} height={90} className="mx-auto max-lg:py-8 max-w-[370px] w-[90%] h-[90%] rounded-r-xl" />
+          </div>
         </div>
       </div>
+
+
+      
 
       {/* Click - NonClick Blocks Section  */}
       <div className="flex flex-col gap-16 dark:bg-zinc-950 bg-zinc-100 justify-center px-20 max-md:px-8 xl:px-32 max-sm:py-16 py-24">
@@ -207,7 +238,7 @@ export default async function Home() {
       {/* Number Showcase Section  */}
       <div className="flex flex-col gap-16 dark:bg-zinc-950 bg-zinc-100 justify-center items-center py-[80px] px-32 max-sm:px-10 max-xl:px-12">
         <h3 className="text-3xl max-sm:text-2xl font-semibold font-montserrat dark:text-zinc-50 text-zinc-700 ">This is the Future of Blogging</h3>
-        <div className="flex flex-row justify-center gap-16 flex-wrap w-full">
+        <div className="flex flex-row justify-center gap-16 max-sm:gap-8 flex-wrap w-full">
 
           <div className="font-montserrat w-[300px] max-md:w-[80%] max-sm:w-[100%] justify-center border border-1 dark:border-zinc-600 dark:bg-zinc-950 bg-zinc-100 border-zinc-400 dark:text-zinc-200 text-zinc-700 rounded-xl p-8 max-sm:px-6 flex flex-col gap-5 max-sm:gap-4">
             <h2 className="text-5xl max-xl:text-3xl">
@@ -242,15 +273,33 @@ export default async function Home() {
         </div>
       </div>
 
-      {/* Best Blog Generator Panel in the World */}
-      <div>
-        
+      {/* Second Section  */}
+      <div className="px-64 max-2xl:px-32 max-xl:px-64 max-lg:px-48 max-md:px-16 py-32 max-sm:py-16 max-sm:px-8 flex max-xl:flex-col max-lg:gap-16 gap-32 justify-center items-center bg-zinc-200 dark:bg-zinc-900">
+        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
+          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
+            <PenLine className="w-6 h-6 my-auto"/>
+            Effortless Blog Creation
+          </h1>
+          <p className="text-sm text-zinc-800 dark:text-zinc-300">Easily draft, edit, and publish your ideas with our seamless blog generator —no technical expertise needed!</p>
+        </div>
+        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
+          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
+            <BookOpen className="w-6 h-6 my-auto"/>
+            Endless Learning Opportunities
+          </h1>
+          <p className="text-sm text-zinc-800 dark:text-zinc-300">Explore diverse topics across education, technology, personal growth, and more. Never stop expanding your knowledge and gaining fresh insights.</p>
+        </div>
+        <div className="font-montserrat flex flex-col gap-2 max-sm:gap-4">
+          <h1 className="flex gap-4 xl:whitespace-nowrap font-semibold text-lg text-purple-800 dark:text-purple-100">
+            <Wallet className="w-6 h-6 my-auto"/>
+            Monetize Your Blogs
+          </h1>
+          <p className="text-sm text-zinc-800 dark:text-zinc-300">Share your knowledge and gain visibility while unlocking future opportunities to monetize your content.</p>
+        </div>
       </div>
 
       {/* Trending Blogs Section */}
-      <div>
-        
-      </div>
+        <BlogSection />
 
       {/* Footer  */}
 
