@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import DialogForInfo from '@/components/DialogForInfo';
 import { toast } from 'sonner';
 import { Skeleton } from "@/components/ui/skeleton"
+import Link from 'next/link';
 
 function DashboardPage() {
   const { user, isAuthenticated, isAdmin, loading, fetchUser } = useAuth();
@@ -176,6 +177,16 @@ function DashboardPage() {
               <Card className="flex items-center justify-center h-48 cursor-pointer group" onClick={createBlog}>
                 <h1 className="text-6xl font-bold group-hover:scale-110 group-hover:text-purple-700 dark:group-hover:text-purple-300 duration-300">+</h1>
               </Card>
+
+              {user?.role === "admin" && (
+                <div className="mt-4">
+                  <Link href="/admin" className="flex items-center gap-2 mt-4 text-sm font-medium text-zinc-900 dark:text-white hover:text-zinc-600 dark:hover:text-zinc-400">
+                    Admin Panel
+                  </Link>
+                </div>
+              )}
+
+              
             </div>
           </div>
         </>

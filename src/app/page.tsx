@@ -1,29 +1,18 @@
 import CategorySlider from "@/components/CategorySlider";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { ArrowRight, ArrowUpRightIcon, BookOpen, PenLine, Upload, Wallet } from "lucide-react";
-import api from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
 import BlogSection from "@/components/BlogSection";
-import { AxiosError } from "axios";
-
-async function getCategories() {
-  try {
-    const response = await api.get("/category/list");
-    return response.data.data;  
-  } catch (error) {
-    const err = error as AxiosError;
-    console.error("Error fetching categories:", err.response?.data || err.message);
-    return [];  
-  }
-}
-
-
+import { getCategories } from "@/lib/categoryService";
+import { fetch3BlogList } from "@/lib/fetchBlogList";
 
 
 export default async function Home() {
   
   const categories = await getCategories();
+
+  const blogs = await fetch3BlogList();
 
   return (
     <div className="relative ">
@@ -126,7 +115,7 @@ export default async function Home() {
 
 
       {/* Best Blog Generator Section  */}
-      <div className="flex dark:bg-zinc-900 bg-zinc-200 py-32 px-48 max-2xl:px-32 max-xl:px-16 max-sm:py-16 max-sm:px-6">
+      <div className="flex dark:bg-zinc-900 bg-zinc-50 py-32 px-48 max-2xl:px-32 max-xl:px-16 max-sm:py-16 max-sm:px-6">
         <div className="flex border max-lg:flex-col border-1 dark:border-zinc-700 border-zinc-400 w-full dark:border-zinc-700 rounded-xl gap-8">
           {/* left div  */}
           <div className="flex flex-col w-[60%] max-lg:w-[80%] max-md:w-[100%] py-12 px-12 max-sm:px-6 gap-6 font-montserrat">
@@ -299,7 +288,7 @@ export default async function Home() {
       </div>
 
       {/* Trending Blogs Section */}
-        <BlogSection />
+        <BlogSection blogs={blogs} title="Trending Blogs" type="trending"/>
 
       {/* Footer  */}
 

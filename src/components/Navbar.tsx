@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import styles from "./navbar.module.css";
 import { Skeleton } from "./ui/skeleton";
+import { User2 } from "lucide-react";
 
 
 function Navbar() {
@@ -63,7 +64,9 @@ function Navbar() {
             <DropdownMenuTrigger>
             <Avatar>
                 <AvatarFallback>
-                  {user?.email?.charAt(0).toUpperCase()}
+                  <div className="w-10 h-10 rounded-full bg-gray-800 p-auto flex text-center items-center">
+                    <User2 className="w-[60%] h-[60%] text-gray-300 my-auto m-auto" />
+                  </div>                
                 </AvatarFallback>
               <AvatarImage
                 src={user?.profilePicture}
@@ -73,7 +76,8 @@ function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-full">
               <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)} href="/dashboard/profile" className="w-full">Profile</Link></DropdownMenuItem>
-              <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)}  href="/dashboard">Dashboard</Link></DropdownMenuItem>
+              <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)}  href="/dashboard" className="w-full">Dashboard</Link></DropdownMenuItem>
+              {user?.role === "admin" && <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)} className="w-full" href="/admin">Admin</Link></DropdownMenuItem>}
               <DropdownMenuItem><ThemeToggle /></DropdownMenuItem>
               <DropdownMenuItem><Button onClick={logout}>Logout</Button></DropdownMenuItem>
             </DropdownMenuContent>
