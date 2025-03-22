@@ -33,7 +33,7 @@ export default async function RootLayout({
       <body className="bg-zinc-100 dark:bg-zinc-900 ">
         
         <Navbar/>
-        <div className="mt-[78px] max-sm:mt-[40px]">
+        <div className="pt-[77.8px] max-sm:mt-[40px]">
         {children}
           </div>
         <Toaster position="top-right" richColors />

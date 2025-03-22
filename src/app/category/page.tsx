@@ -30,7 +30,7 @@ async function page() {
 
 
   return (
-    <div className='flex font-montserrat flex-col gap-12 mt-32'>
+    <div className='flex font-montserrat flex-col gap-12 mt-12'>
       {/* TOP Section  */}
       <h1 className='mx-24 text-4xl max-lg:text-3xl max-sm:text-center max-lg:mx-16 font-semibold text-purple-800 dark:text-purple-300 '>Explore a Ton of Categories</h1>
       <ul className='mx-24 max-lg:mx-16 max-sm:mx-6 flex gap-4 max-sm:gap-3 flex-wrap'>

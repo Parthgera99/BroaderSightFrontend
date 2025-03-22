@@ -287,7 +287,7 @@ function EditBlogPage() {
 
   
 
-  if (loading || fetching) return (
+  if (loading || fetching || !blog) return (
 <>
     <div className="flex space-x-6 mt-6 mx-12">
       <Skeleton className="h-8 w-32 ml-12"/>
