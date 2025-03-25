@@ -42,8 +42,8 @@ function page() {
     }
     
     return (
-        <div>
-            User List Page
+        <div className='pt-16 flex flex-col gap-10'>
+            <h1 className='text-2xl font-semibold text-center'>All Users List</h1>
             
             <div className='flex gap-6 flex-wrap'>
                 {userList.map((user) => (

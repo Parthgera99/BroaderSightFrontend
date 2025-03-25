@@ -1,4 +1,6 @@
 import { BanIcon, Calendar, Home, Inbox, Layers, List, Search, Settings, ShieldCheckIcon, Users } from "lucide-react"
+import { usePathname } from "next/navigation"
+
 
 import {
   Sidebar,
@@ -42,6 +44,9 @@ const items = [
 ]
 
 export function AdminSidebar() {
+  const pathname = usePathname()  
+
+
   return (
     <Sidebar className="pt-20 dark:bg-zinc-800">
       <SidebarContent className="dark:bg-zinc-800">
@@ -49,16 +54,26 @@ export function AdminSidebar() {
           <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            {items.map((item) => {
+                const isActive = pathname === item.url  // Check if current path matches item
+                return (
+                  <SidebarMenuItem key={item.title} className="w-[80%]">
+                    <SidebarMenuButton asChild>
+                      <a
+                        href={item.url}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all ${
+                          isActive
+                            ? "bg-purple-500 dark:bg-purple-700 text-zinc-50 hover:bg-purple-500 dark:hover:bg-purple-700 hover:text-zinc-50 font-semibold"  // Active styles
+                            : "hover:bg-purple-100 dark:hover:bg-zinc-700"
+                        }`}
+                      >
+                        <item.icon className={isActive ? "text-white" : "text-gray-500"} />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
