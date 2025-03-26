@@ -1,4 +1,4 @@
-import { BanIcon, Calendar, Home, Inbox, Layers, List, Search, Settings, ShieldCheckIcon, Users } from "lucide-react"
+import { BanIcon, Home, Layers, ShieldCheckIcon, Users } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 
@@ -11,7 +11,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger
 } from "@/components/ui/sidebar"
 
 // Menu items.
@@ -55,7 +54,7 @@ export function AdminSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
             {items.map((item) => {
-                const isActive = pathname === item.url  // Check if current path matches item
+                const isActive = pathname === item.url 
                 return (
                   <SidebarMenuItem key={item.title} className="w-[80%]">
                     <SidebarMenuButton asChild>
@@ -63,7 +62,7 @@ export function AdminSidebar() {
                         href={item.url}
                         className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all ${
                           isActive
-                            ? "bg-purple-500 dark:bg-purple-700 text-zinc-50 hover:bg-purple-500 dark:hover:bg-purple-700 hover:text-zinc-50 font-semibold"  // Active styles
+                            ? "bg-purple-500 dark:bg-purple-700 text-zinc-50 hover:bg-purple-500 dark:hover:bg-purple-700 hover:text-zinc-50 font-semibold" 
                             : "hover:bg-purple-100 dark:hover:bg-zinc-700"
                         }`}
                       >

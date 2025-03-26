@@ -1,7 +1,5 @@
 "use client"
 import { useAuth } from '@/context/UserContext';
-import { Separator } from '@radix-ui/react-dropdown-menu';
-import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { getCategories } from '@/lib/categoryService';
 import api from '@/lib/api';
@@ -19,13 +17,12 @@ type Category = {
   }
 
 function page() {
-    const { user, isAuthenticated, isAdmin, loading, fetchUser } = useAuth();
+    const { user, isAdmin, loading } = useAuth();
     const [createModal, setCreateModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [name, setName] = useState("");
     const [saving, setSaving] = useState(false);
-    const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
 
     const fetchCategories = async () => {
@@ -87,7 +84,7 @@ function page() {
     }
     
     return (
-        <div className='pt-16 flex flex-col gap-10'>
+        <div className='pt-16 flex flex-col gap-10 pr-[15px]'>
             <Card className="flex w-fit py-4 px-12 items-center justify-center cursor-pointer group" onClick={createCategory}>
                 <h1 className="text-lg font-semibold font-montserrat text-zinc-700 dark:text-zinc-50 group-hover:text-purple-700 dark:group-hover:text-purple-300 duration-300">+ Add a New Category</h1>
             </Card>
@@ -99,11 +96,11 @@ function page() {
                     className="relative flex dark:bg-zinc-800 bg-zinc-300 rounded-full py-2 px-6 items-center justify-center cursor-pointer group duration-300 hover:dark:bg-red-900 hover:bg-red-200" 
                     onClick={() => handleDeleteModal(category)}
                   >
-                    <h1 className="text-normal font-normal group-hover:opacity-30 font-montserrat font-bold duration-300">
+                    <h1 className="text-normal max-sm:text-sm font-normal group-hover:opacity-30 font-montserrat font-bold duration-300">
                       {category.name}
                     </h1>
                     
-                    {/* Centered Trash Icon */}
+                   
                     <Trash className="absolute top-1/2 left-1/2 transform dark:text-zinc-200 text-red-700 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 duration-300" />
                   </div>
                   

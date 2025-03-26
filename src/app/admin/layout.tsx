@@ -17,7 +17,7 @@ const pageTitles: Record<string, string> = {
 export default function Layout({ children }: { children: React.ReactNode }) {
     
     const { user, isAuthenticated, isAdmin, loading } = useAuth();
-    const pathname = usePathname(); // Get current route
+    const pathname = usePathname(); 
     const pageTitle = pageTitles[pathname] || "Admin Panel"; 
         const router = useRouter();
       
@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <h1>{pageTitle}</h1>
         </div>
         <Separator className="h-[1px] w-full dark:bg-zinc-800 bg-zinc-200"/>
-        <div className="pl-[50px] ">
+        <div className="pl-[50px] max-sm:pl-[30px]">
             {children}
         </div>
       </main>
