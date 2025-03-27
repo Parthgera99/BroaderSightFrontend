@@ -29,7 +29,7 @@ type Blog = {
 
 export async function fetch3BlogList(): Promise<Blog[]> {
     try {
-      const response = await api.get("/blog/list?limit=3", {
+      const response = await api.post("/blog/list?limit=3", {
         headers: {
           "Cache-Control": "no-cache, no-store, must-revalidate",
           Pragma: "no-cache",

@@ -3,8 +3,9 @@ import { notFound } from "next/navigation";
 import React from 'react'
 
 
+
 const page = async ({ params }: { params: { slug: string } }) => {
-    const { slug } = await params;
+    const { slug } =  await params;
     const categories = await getCategories();
 
     const categoryExists = categories.some((category: { slug: string }) => category.slug === slug);
@@ -15,7 +16,9 @@ const page = async ({ params }: { params: { slug: string } }) => {
     
   return (
     <div>
-        {slug}
+      <h1>
+        {slug} Blogs
+      </h1>
     </div>
   )
 }
