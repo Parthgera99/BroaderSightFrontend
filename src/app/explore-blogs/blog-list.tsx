@@ -40,7 +40,9 @@ export default function BlogsList({ blogs }: { blogs: Blog[] }) {
        {blogs.length > 0 && (
           blogs.map((blog) => (
             
-            <div onClick={() => (window.location.href = `/blog/${blog.slug}`)} key={blog._id} className="cursor-pointer font-montserrat relative px-8 pt-6 pb-6 border rounded shadow flex gap-16 justify-between">
+            <div className="relative" key={blog._id}>
+              
+            <Link href={`/blog/${blog.slug}`} className="cursor-pointer font-montserrat relative px-8 pt-6 pb-10 border rounded shadow flex gap-16 justify-between">
 
               <div className="flex flex-col gap-4">
                   <h1 className="text-xl font-semibold">{blog.title}</h1>
@@ -49,8 +51,15 @@ export default function BlogsList({ blogs }: { blogs: Blog[] }) {
                       ? blog.metaDescription.slice(0, 130) + "..." 
                       : blog.metaDescription}
                   </p>
+
+              </div>
+              <div className="w-40 self-center flex-shrink-0">
+                <img src={blog.displayImage || "logo.svg"} alt={blog.title} className="w-40 h-40 object-cover rounded-lg" />
+              </div>
+              <p className="absolute right-60 bottom-4 text-sm text-gray-500">{new Date(blog.date).toDateString()}</p>
+            </Link>
                 {/* Author  */}
-                <Link href={`/user/${blog.author.username}`} className="w-fit group">
+                <Link href={`/user/${blog.author.username}`} className="absolute bottom-6 left-8 w-fit group">
                       <div className="flex items-center gap-4 rounded-lg">
                         {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
                         {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-10 h-10 rounded-full group-hover:scale-105 duration-300" /> :
@@ -64,12 +73,6 @@ export default function BlogsList({ blogs }: { blogs: Blog[] }) {
                         </div>
                       </div>
                     </Link>
-
-              </div>
-              <div className="w-40 self-center flex-shrink-0">
-                <img src={blog.displayImage} alt={blog.title} className="w-40 h-40 object-cover rounded-lg" />
-              </div>
-              <p className="absolute right-60 bottom-4 text-sm text-gray-500">{new Date(blog.date).toDateString()}</p>
             </div>
           ))
         )}
