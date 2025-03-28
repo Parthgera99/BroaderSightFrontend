@@ -7,16 +7,30 @@ import {useInView} from "react-intersection-observer"
 
 
 type Blog = {
-    _id: string;
-    title: string;
-    author: {
-      fullname: string;
-      username: string;
-      profilePicture: string;
-      role: string;
-    };
-    createdAt: string;
-  };
+  _id: string;
+  displayImage: string;
+  category: [Category];
+  title: string;
+  slug: string;
+  metaDescription: string;
+  authorName: string;
+  authorProfilePicture: string;
+  date: string;
+  authorRole: string;
+  author:{
+    fullname: string;
+    username: string;
+    profilePicture: string;
+    role: string;
+  }
+};
+
+type Category = {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
 
   
   
@@ -34,17 +48,12 @@ type Blog = {
     
     }, [inView])
 
-    // useEffect(() => {
-    //     setPage(1)
-    //     // setBlogs([])
-    //     setHasMore(true)
-    //     // setExcludedIdArray([])
-    // }, [filter])
 
     useEffect(() => {
         setBlogs([]); // Reset blogs when filter changes
         setPage(2); // Reset page number
         setExcludedIdArray(excludedIds); // Reset excluded IDs
+        setHasMore(true)
       }, [filter]); // Run effect when filter changes
       
     
@@ -73,8 +82,11 @@ type Blog = {
     <>
         {page>1 ? <BlogsList blogs={blogs} /> : <div></div>}
         <div ref={ref} className='flex justify-center'>
-            { hasMore && 
-                <Loader2 className='animate-spin '/>
+            { hasMore ? 
+                <Loader2 className='animate-spin '/> 
+                : <div className='w-[3px] h-[3px] rounded-full bg-zinc-500'>
+
+                </div>
             }
         </div>
     </>

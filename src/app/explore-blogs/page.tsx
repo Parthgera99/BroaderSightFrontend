@@ -3,24 +3,43 @@ import BlogsList from "./blog-list";
 import Link from "next/link";
 import api from "@/lib/api";
 import LoadMore from "@/components/LoadMore";
+import { getCategories } from "@/lib/categoryService";
+import { getTrendingAuthors } from "@/lib/trendingAuthors";
+import { User2 } from "lucide-react";
 
 interface ExplorePageProps {
   searchParams: { filter?: string };
   page: number|undefined
 }
+
 type Blog = {
   _id: string;
+  displayImage: string;
+  category: [Category];
   title: string;
-  author: {
+  slug: string;
+  metaDescription: string;
+  authorName: string;
+  authorProfilePicture: string;
+  date: string;
+  authorRole: string;
+  author:{
     fullname: string;
     username: string;
     profilePicture: string;
     role: string;
-  };
-  createdAt: string;
+  }
 };
 
+type Category = {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
 type FetchBlogsResponse = { blogs: Blog[]; totalBlogs: number };
+
+
 
 
 export async function fetchBlogs(filter: string, page: number|undefined, excludedIds:string[]) : Promise<FetchBlogsResponse> {
@@ -76,6 +95,9 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps)  {
   const params = await searchParams;
   const filter = params.filter === "latest" ? "latest" : "trending";
 
+  const categories:any[] = await getCategories();
+  const trendingAuthors:any[] = await getTrendingAuthors();
+
   const blogs  = await fetchBlogs(filter, 1,[]);
   
   return (
@@ -98,11 +120,56 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps)  {
       </div>
 
       {/* Blog List - Suspense for smooth loading */}
-      <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
 
         <div className="w-[60%] flex flex-col gap-4">
           <BlogsList blogs={blogs.blogs} />
           <LoadMore filter={filter} excludedIds={ blogs?.blogs?.map((blog:Blog) => blog._id) }/>
+        </div>
+
+        <div className="w-[2px] mb-12 rounded dark:bg-zinc-700 bg-zinc-400 mx-8">
+            {/* Divider Line   */}
+        </div>       
+
+        <div className="w-[35%] mt-4 font-montserrat flex flex-col gap-8">
+          {/* Categories  */}
+          <h2 className="text-2xl dark:text-purple-300 font-semibold">Explore Categories</h2>
+          <div className="relative flex flex-wrap gap-4 pb-12">
+            {categories.slice(0, 15).map((category) => (
+              <Link href={`/category/${category.slug}`} key={category._id}>
+                <p className="px-4 py-2 rounded-full bg-zinc-800 hover:bg-purple-700 duration-300 cursor-pointer">{category.name}</p>
+              </Link>
+            ))}
+            <Link href={"/category"}>
+              <p className="px-4 absolute right-0 bottom-0 py-2 rounded-xl hover:text-purple-300 duration-300 text-zinc-50 hover:bg-zinc-700 cursor-pointer">View More</p>
+            </Link>
+          </div>
+          {/* Trending Authors  */}
+          <div>
+            {trendingAuthors && (
+              <div className="flex flex-col gap-8">
+                <h2 className="text-2xl dark:text-purple-300 font-semibold">Trending Authors</h2>
+                <div className="flex flex-col gap-4">
+                  {trendingAuthors.slice(0, 5).map((author) => (
+                    <Link href={`/user/${author.username}`} key={author._id}>
+                      <div className="flex items-center gap-4 dark:bg-zinc-800 group w-[90%] py-4 px-6 rounded-lg">
+                        {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
+                        {author.profilePicture ? <img src={author.profilePicture} alt={author.fullname} className="w-10 h-10 rounded-full" /> :
+                          <div className="w-10 h-10 rounded-full bg-gray-800 p-auto flex text-center items-center">
+                            <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto" />
+                          </div>
+                        }
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-zinc-50 group-hover:text-purple-300 duration-300">{author.fullname}</p>
+                          <p className="text-sm text-zinc-200 group-hover:text-purple-300 duration-300">{author.bio}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
