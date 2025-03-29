@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/UserContext";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Loader2 } from "lucide-react";
 
 const pageTitles: Record<string, string> = {
     "/admin": "Admin",
@@ -32,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         }, [loading, user, isAdmin]); 
     
         if (loading || !user || !isAdmin) {
-            return <div>Loading...</div>;
+            return <div><Loader2 className='animate-spin text-center mt-[45vh] max-sm:mt-[40vh] ml-[49vw]'/></div>;
         }
 
 

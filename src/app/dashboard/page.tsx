@@ -145,7 +145,7 @@ function DashboardPage() {
             {/* Left Side: Blog Cards */}
             <div className="w-[60%] flex flex-col gap-2">
               {user?.blogs?.filter(blog => filter === "all" || blog.isPublished).map((blog) => (
-                <Card key={blog._id} className="dark:bg-zinc-900 bg-zinc-100 cursor-pointer group shadow-none border-0 flex gap-4 justify-between items-center p-4" >
+                <Card key={blog._id} className="dark:bg-zinc-900 bg-white cursor-pointer group shadow-none border-0 flex gap-4 justify-between items-center p-4" >
 
 
                   <div className="flex items-center group relative gap-8 w-full p-4" onClick={()=>redirectToBlog(blog?.slug)}>
