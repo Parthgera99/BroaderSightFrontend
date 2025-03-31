@@ -62,17 +62,17 @@ interface BlogSectionProps {
       {/* Blogs Section */}
       <div className="flex lg:flex-nowrap max-lg:flex-wrap max-md:flex-col max-md:items-center justify-center 2xl:gap-12 gap-8">
         {blogs.slice(0,3).map((blog) => (
-          <div key={blog._id} className="dark:bg-zinc-950 flex flex-col justify-between  rounded-lg w-full 2xl:w-[380px] max-2xl:w-[320px] max-xl:w-[290px] max-lg:w-[290px] max-md:w-[400px] max-sm:w-full max-sm:max-w-[350px] flex-shrink-0">
+          <div key={blog._id} className="dark:bg-zinc-950 flex flex-col gap-4 rounded-lg w-full 2xl:w-[380px] max-2xl:w-[320px] max-xl:w-[290px] max-lg:w-[290px] max-md:w-[400px] max-sm:w-full max-sm:max-w-[350px] flex-shrink-0">
             {/* Blog Image */}
             <Link href={`/blog/${blog.slug}`}>
               {blog.displayImage!==undefined ? 
-              <img src={blog.displayImage || "/blogDefault.svg"} alt={blog.title} className="w-full rounded-lg h-[240px] object-cover" />
-              : <div className="w-full rounded-lg h-[240px] bg-gray-200"></div>}
+              <img src={blog.displayImage || "/blogDefault.svg"} alt={blog.title} className="w-full rounded-2xl h-[240px] object-cover" />
+              : <div className="w-full rounded-2xl h-[240px] bg-gray-200"></div>}
             </Link>
 
             {/* Author Info */}
-            <div className="flex max-xl:flex-col max-xl:gap-4 relative justify-between pt-3">
-              <div className="flex items-center gap-3 w-fit">
+            <div className="flex relative justify-between pt-3">
+              <div className="flex items-center gap-3 mr-8 w-full">
                 <Link href={`/user/${blog.author.username}`}>
                 {blog.author.profilePicture && <img src={blog.author.profilePicture} alt={blog.authorName} className="w-10 h-10 rounded-full" />}
                 {!blog.author?.profilePicture && 
@@ -104,15 +104,15 @@ interface BlogSectionProps {
 
               {/* Categories */}
               {type==="trending" && 
-                <div className="flex gap-2 overflow-x-scroll scrollbar-hidden xl:min-w-[25%] xl:max-w-[45%] max-xl:w-full relative ml-auto max-xl:ml-0">
+                <div className="flex gap-2 overflow-x-scroll scrollbar-hidden xl:min-w-[25%] xl:max-w-[30%] max-xl:w-[60%] relative ml-auto max-xl:ml-0">
                 {blog.category && Array.isArray(blog.category) && blog.category.length > 0 ? (
-                  blog.category.map((category, index) => (
+                  blog.category.slice(0,2).map((category, index) => (
                     <Link href={`/category/${category.slug}`} className="py-1" key={`${blog._id}-${category._id}-${index}`}>
-                      <p className="dark:bg-zinc-700 bg-zinc-300 dark:text-zinc-100 text-zinc-700 font-sm py-1 px-2 rounded-lg whitespace-nowrap">{category.name}</p>
+                      <p className="dark:bg-zinc-700 bg-zinc-100 dark:text-zinc-100 text-zinc-700 font-sm py-1 px-2 rounded-lg whitespace-nowrap">{category.name}</p>
                     </Link>
                   ))
                 ) : (
-                  "No categories found"
+                  ""
                 )}
                 </div>
               }
@@ -121,12 +121,12 @@ interface BlogSectionProps {
             
 
             {/* Blog Content */}
-            <div className="py-4 min-h-[140px] max-2xl:min-h-[18px] 2xl:min-h-[180px] max-md:min-h-fit">
+            <div className=" min-h-[140px] max-2xl:min-h-[18px] 2xl:min-h-[180px] max-md:min-h-fit">
               <Link href={`/blog/${blog.slug}`} >
               <h3 className="text-lg max-xl:text-base text-zinc-700 dark:text-zinc-200 font-semibold mb-2 ">{blog.title}</h3>
-              <p className="text-gray-600 dark:text-gray-500 text-sm mb-3 ">
+              {/* <p className="text-gray-600 dark:text-gray-500 text-sm mb-3 ">
                 {blog.metaDescription ? blog.metaDescription.length > 80 ? blog.metaDescription.substring(0, 80) + "..." : blog.metaDescription : ""}
-              </p>
+              </p> */}
               </Link>
 
               

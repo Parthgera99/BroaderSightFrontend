@@ -1,4 +1,5 @@
 "use client"
+import { trendingBlogsByCategory } from '@/app/category/[slug]/page';
 import BlogsList from '@/app/explore-blogs/blog-list';
 import { fetchBlogs } from '@/app/explore-blogs/page';
 import { Loader2 } from 'lucide-react';
@@ -34,19 +35,24 @@ type Category = {
 
   
   
-  function LoadMore({filter,excludedIds}:{filter:string, excludedIds:string[]}) {
+  function LoadMore({filter,excludedIds, componentType, slug}:{filter:string, excludedIds:string[], componentType:string, slug:string}) {
     const [blogs, setBlogs] = useState<Blog[]>([]);
     const [page, setPage] = useState(2);
     const {ref, inView} = useInView();
     const [hasMore, setHasMore] = useState(true)
+    const [type, setType] = useState<string>(componentType)
     const [excludedIdArray,setExcludedIdArray] = useState<string[]>(excludedIds)
 
     useEffect(() => {
       if(inView){
-        loadMoreBlogs(filter,page,excludedIdArray)
+        loadMoreBlogs(filter,page,excludedIdArray, type)
       }
     
     }, [inView])
+
+    useEffect(() => {
+      setType(componentType)
+    }, [])
 
 
     useEffect(() => {
@@ -58,22 +64,33 @@ type Category = {
       
     
     
-    const loadMoreBlogs = async (filter:string,page:number,excludedIdArray:string[]) => {
+    const loadMoreBlogs = async (filter:string,page:number,excludedIdArray:string[], type:string) => {
         
-        let newBlogs = await fetchBlogs(filter, page, excludedIdArray);
-        if(filter==="latest") {
-        //   newBlogs = await fetchBlogs(filter,page);
-        setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs.blogs]);
-        setPage((prev) => prev + 1);
-        if(newBlogs.totalBlogs<1){
-            setHasMore(false)
+      if(type==="explore"){
+          let newBlogs = await fetchBlogs(filter, page, excludedIdArray);
+          if(filter==="latest") {
+          //   newBlogs = await fetchBlogs(filter,page);
+          setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs.blogs]);
+          setPage((prev) => prev + 1);
+          if(newBlogs.totalBlogs<1){
+              setHasMore(false)
+          }
+        } else {
+          setBlogs((prevBlogs)=>[...prevBlogs, ...newBlogs.blogs])
+          const newIds = newBlogs.blogs.map((blog:Blog) => blog._id)
+          setExcludedIdArray((prev)=>[...prev,...newIds])
+          if(newBlogs.totalBlogs<1){
+              setHasMore(false)
+          }
         }
-      } else {
-        setBlogs((prevBlogs)=>[...prevBlogs, ...newBlogs.blogs])
+      }
+      else if(type==="category"){
+        let newBlogs = await trendingBlogsByCategory(excludedIdArray, slug);
+        setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs.blogs]);
         const newIds = newBlogs.blogs.map((blog:Blog) => blog._id)
         setExcludedIdArray((prev)=>[...prev,...newIds])
         if(newBlogs.totalBlogs<1){
-            setHasMore(false)
+          setHasMore(false)
         }
       }
     }

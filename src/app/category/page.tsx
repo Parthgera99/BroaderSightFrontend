@@ -23,6 +23,7 @@ async function page() {
   const categoryBlogs = await Promise.all(
     MainCategories.map(async (category) => {
       const blogs = await fetchCategory3BlogsList(category); // Pass category as parameter
+      console.log(category, blogs)
       return { category, blogs };
     })
   );

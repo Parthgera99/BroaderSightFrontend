@@ -54,7 +54,7 @@ export async function fetch3BlogList(): Promise<Blog[]> {
 
   export async function fetchCategory3BlogsList(category: string): Promise<Blog[]> {
     try {
-        const response = await api.get(`/blog/category/${category}?limit=3`, {
+        const response = await api.post(`/blog/category/${category}?type=trending&limit=3`, {
             headers: {
                 "Cache-Control": "no-cache, no-store, must-revalidate",
                 Pragma: "no-cache",

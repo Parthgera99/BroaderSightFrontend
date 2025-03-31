@@ -46,7 +46,7 @@ useEffect(() => {
   const handleResize = () => {
     if (window.innerWidth < 700) {
       setTitleMaxLength(80); // Large screens (desktop)
-      setDescMaxLength(100); // Small screens (mobile)
+      setDescMaxLength(60); // Small screens (mobile)
     } else if (window.innerWidth < 1290) {
       setTitleMaxLength(60); // Large screens (desktop)
       setDescMaxLength(90); // Medium screens (tablet)
@@ -69,47 +69,82 @@ useEffect(() => {
 
 
   
-  <div className="flex flex-col gap-4 max-sm:gap-12">
+  <div className="flex flex-col gap-8 mx-12 max-2xl:mx-6 max-xl:mx-0">
        {blogs.length > 0 && (
           blogs.map((blog) => (
             
             <div className="relative" key={blog._id}>
               
-            <Link href={`/blog/${blog.slug}`} className="cursor-pointer font-montserrat relative px-8 max-sm:px-0 py-8 rounded-lg border dark:shadow max-sm:shadow-none max-sm:border-none max-md:pb-20 max-sm:pb-0 flex max-sm:pt-4 max-[490px]:pt-0 max-sm:flex-col-reverse gap-16 max-sm:gap-20 justify-between">
+            <div className="cursor-pointer group/card font-montserrat relative rounded-lg group  flex  gap-8 max-sm:gap-6 justify-start">
 
-              <div className="flex flex-col max-sm:px-3 md:pt-16 gap-4 max-sm:gap-2">
-                  <h1 className="text-xl max-xl:text-lg dark:text-zinc-50 text-zinc-800 font-semibold">
-                  {blog.title?.length > titleMaxLength 
-                      ? blog.title.slice(0, titleMaxLength) + "..." 
-                      : blog.title}
+            <Link href={`/blog/${blog.slug}`} className="w-40 h-40 max-sm:w-24 max-sm:h-20 max-xl:w-32 max-xl:h-32 self-center max-sm:self-start flex-shrink-0">
+                
+
+                {blog.displayImage ?
+                      <img src={blog.displayImage || "logo.svg"} alt={blog.title} className="w-40 h-40 max-sm:w-24 max-sm:h-20 max-xl:w-32 max-xl:h-32 object-cover rounded-lg " />
+                      : 
+                        <div className='w-40 h-40 max-sm:w-24 max-sm:h-20 max-xl:w-32 max-xl:h-32 rounded-lg dark:bg-red-200 bg-red-400 rounded-2xl'></div>
+                      }
+              </Link>
+
+              <div className="flex flex-col justify-center w-full  gap-2 ">
+                  <Link href={`/blog/${blog.slug}`} className="text-[20px]/7 font-montserrat max-xl:text-lg max-sm:text-base dark:text-zinc-200 text-zinc-600 group-hover/card:dark:text-purple-300 group-hover/card:text-purple-700 font-semibold max-sm:font-bold duration-300">
+                  <h1>
+                    {blog.title?.length > titleMaxLength 
+                        ? blog.title.slice(0, titleMaxLength) + "..." 
+                        : blog.title}
                   </h1>
-                  <p className="text-sm dark:text-zinc-400 text-zinc-600">
+                  </Link>
+                  <Link href={`/blog/${blog.slug}`} className="text-sm dark:text-zinc-400 text-zinc-600 group-hover/card:dark:text-purple-200 group-hover/card:text-purple-600 duration-300">
+                  <p>
                     {blog.metaDescription?.length > descMaxLength 
                       ? blog.metaDescription.slice(0, descMaxLength) + "..." 
                       : blog.metaDescription}
                   </p>
+                  </Link>
 
-              </div>
-              <div className="w-40 h-40 max-xl:w-32 max-xl:h-32 max-sm:w-full max-sm:h-[200px] self-center flex-shrink-0">
-                <img src={blog.displayImage || "logo.svg"} alt={blog.title} className="w-40 h-40 max-xl:w-32 max-xl:h-32 max-sm:w-[400px] max-sm:h-[200px] max-sm:mx-auto  max-[490px]:w-full object-cover sm:rounded-lg max-sm:rounded-t-lg" />
-              </div>
-              <p className="absolute right-60 max-xl:right-48 max-md:bottom-6 md:top-6 max-sm:top-[215px] max-sm:right-2 text-sm text-zinc-500">{new Date(blog.date).toDateString()}</p>
-            </Link>
-                {/* Author  */}
-                <Link href={`/user/${blog.author.username}`} className="absolute md:top-6 left-8 max-md:bottom-6 max-sm:top-[220px] max-sm:left-3 w-fit group">
-                      <div className="flex items-center gap-4 rounded-lg">
-                        {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
-                        {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-10 h-10 rounded-full group-hover:scale-105 duration-300" /> :
-                          <div className="w-10 h-10 rounded-full p-auto flex text-center items-center">
-                            <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover:scale-105 duration-300" />
+                  <div className="flex justify-between items-center max-sm:hidden">
+                    {/* Author  */}
+                    <Link href={`/user/${blog.author.username}`} className=" w-fit group/author">
+                        <div className="flex items-center gap-4 rounded-lg">
+                          {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
+                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-10 h-10 rounded-full group-hover/author:scale-105 duration-300" /> :
+                            <div className="w-10 h-10 rounded-full p-auto flex text-center items-center">
+                              <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover/author:scale-105 duration-300" />
+                            </div>
+                          }
+                          <div className="flex flex-col">
+                            <p className="font-semibold dark:text-zinc-200 text-zinc-600 group-hover/author:text-purple-700 group-hover/author:dark:text-purple-300 duration-300">{blog.author.fullname}</p>
                           </div>
-                        }
-                        <div className="flex flex-col">
-                          <p className="font-semibold dark:text-zinc-200 text-zinc-600 group-hover:text-purple-700 group-hover:dark:text-purple-300 duration-300">{blog.author.fullname}</p>
-                          <p className="text-sm dark:text-zinc-200 text-zinc-600 group-hover:text-purple-700 group-hover:dark:text-purple-300 duration-300">{blog.author.username}</p>
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
+                    <p className="text-right text-sm text-zinc-500">{new Date(blog.date).toDateString()}</p>
+                  </div>
+              </div>
+              
+            </div>
+
+            <div className="flex justify-between items-center mt-4 sm:hidden">
+                    {/* Author  */}
+                    <Link href={`/user/${blog.author.username}`} className=" w-fit group/author">
+                        <div className="flex items-center gap-4 rounded-lg">
+                          {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
+                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-8 h-8 rounded-full group-hover/author:scale-105 duration-300" /> :
+                            <div className="w-8 h-8 rounded-full p-auto flex text-center items-center">
+                              <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover/author:scale-105 duration-300" />
+                            </div>
+                          }
+                          <div className="flex flex-col">
+                            <p className="font-semibold dark:text-zinc-200 text-zinc-600 group-hover/author:text-purple-700 group-hover/author:dark:text-purple-300 duration-300">{blog.author.fullname}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    <p className="text-right text-sm text-zinc-500">{new Date(blog.date).toDateString()}</p>
+                  </div>
+
+            <div className="h-[1px] mt-8 w-full bg-zinc-200 dark:bg-zinc-800">
+                {/* Divider  */}
+            </div>
             </div>
           ))
         )}
