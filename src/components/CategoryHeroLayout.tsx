@@ -41,7 +41,7 @@ function CategoryHeroLayout({ blogs }: { blogs: Blog[] }) {
                     <div className='flex justify-center mb-4 max-md:flex-col-reverse gap-20 max-xl:gap-12 max-md:gap-6 mx-auto'>
 
                         {/* left  */}
-                        <div className='md:w-[500px] flex flex-col gap-4 md:justify-start max-md:w-[320px] max-md:mx-auto'>
+                        <div className='md:w-[500px] flex flex-col gap-4 md:justify-start max-md:w-[320px] max-md:mx-auto max-sm:mx-2'>
                             {/* Author Info */}
                             <div className="flex max-xl:flex-col max-xl:gap-4 relative justify-between pt-3">
                                 <div className="flex items-center gap-3 w-fit">
@@ -111,7 +111,7 @@ function CategoryHeroLayout({ blogs }: { blogs: Blog[] }) {
         </div>
 
         {/* Second Three Blogs Section  */}
-        <div className="flex my-4 lg:flex-nowrap max-lg:flex-wrap max-md:flex-col max-md:items-center justify-center 2xl:gap-12 gap-8 max-sm:gap-12">
+        <div className="flex my-4 max-sm:mx-2 lg:flex-nowrap max-lg:flex-wrap max-md:flex-col max-md:items-center justify-center 2xl:gap-12 gap-8 max-sm:gap-12">
               {blogs.slice(1,4).map((blog) => (
                 <div key={blog._id} className="flex flex-col gap-4 rounded-lg w-full 2xl:w-[380px] max-2xl:w-[320px] max-xl:w-[290px] max-lg:w-[290px] max-md:w-[400px] max-sm:w-full max-sm:max-w-[350px] flex-shrink-0">
                   {/* Blog Image */}

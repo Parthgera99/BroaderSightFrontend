@@ -1,10 +1,11 @@
 
 "use client"
 
-import { User2 } from "lucide-react";
+import { User2, VerifiedIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { headers } from "next/headers";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 
@@ -113,8 +114,24 @@ useEffect(() => {
                               <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover/author:scale-105 duration-300" />
                             </div>
                           }
-                          <div className="flex flex-col">
+                          {/* <div className="flex flex-col">
                             <p className="font-semibold dark:text-zinc-200 text-zinc-600 group-hover/author:text-purple-700 group-hover/author:dark:text-purple-300 duration-300">{blog.author.fullname}</p>
+                          </div> */}
+                          <div>
+                            <p className="font-semibold flex gap-2 dark:text-zinc-200 text-zinc-600 group-hover/author:text-purple-700 group-hover/author:dark:text-purple-300 duration-300">
+                            {blog.author.fullname} {blog.author.role==="admin" ? 
+                            <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                <VerifiedIcon className="text-green-400 my-auto w-4 h-4"/> 
+                                </TooltipTrigger>
+                                <TooltipContent className="dark:bg-zinc-700 bg-zinc-300">
+                                <p className="dark:text-zinc-50 text-zinc-800 font-montserrat">Official Admin</p>
+                                </TooltipContent>
+                            </Tooltip>
+                            </TooltipProvider>
+                            : ""} 
+                            </p>
                           </div>
                         </div>
                       </Link>
@@ -134,8 +151,21 @@ useEffect(() => {
                               <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover/author:scale-105 duration-300" />
                             </div>
                           }
-                          <div className="flex flex-col">
-                            <p className="font-semibold dark:text-zinc-200 text-zinc-600 group-hover/author:text-purple-700 group-hover/author:dark:text-purple-300 duration-300">{blog.author.fullname}</p>
+                          <div>
+                            <p className="font-semibold flex gap-2 dark:text-zinc-200 text-zinc-600 group-hover/author:text-purple-700 group-hover/author:dark:text-purple-300 duration-300">
+                            {blog.author.fullname} {blog.author.role==="admin" ? 
+                            <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                <VerifiedIcon className="text-green-400 my-auto w-4 h-4"/> 
+                                </TooltipTrigger>
+                                <TooltipContent className="dark:bg-zinc-700 bg-zinc-300">
+                                <p className="dark:text-zinc-50 text-zinc-800 font-montserrat">Official Admin</p>
+                                </TooltipContent>
+                            </Tooltip>
+                            </TooltipProvider>
+                            : ""} 
+                            </p>
                           </div>
                         </div>
                       </Link>
