@@ -64,8 +64,8 @@ function Navbar() {
             <DropdownMenuTrigger>
             <Avatar>
                 <AvatarFallback>
-                  <div className="w-10 h-10 rounded-full bg-gray-800 p-auto flex text-center items-center">
-                    <User2 className="w-[60%] h-[60%] text-gray-300 my-auto m-auto" />
+                  <div className="w-10 h-10 rounded-full dark:bg-gray-800 bg-gray-200 p-auto flex text-center items-center">
+                    <User2 className="w-[60%] h-[60%] dark:text-gray-300 text-gray-600 my-auto m-auto" />
                   </div>                
                 </AvatarFallback>
               <AvatarImage

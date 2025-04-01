@@ -25,8 +25,14 @@ function DashboardPage() {
   const [title, setTitle] = useState("");
   const [filter, setFilter] = useState("all");
   const [redirecting, setRedirecting] = useState(true);
-
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const router = useRouter();
+
+    useEffect(() => {
+      fetchUser().finally(() => {
+        setCheckingAuth(false);
+      });
+    }, []);
 
   // useEffect(() => {
   //   if (!loading && (!user?.username || !user?.fullname)) {
@@ -82,20 +88,17 @@ function DashboardPage() {
   }
 
   useEffect(() => {
-    if ( !user) {
-      router.replace("/sign-in"); // Redirect if not authenticated
-    } else{
-      if (!loading && (!user?.username || !user?.fullname)) {
-        setOpenModal(true);
+    if(!checkingAuth){
+      if (!user) {
+        router.replace("/sign-in"); // Redirect if not authenticated
+      } else{
+        if (!loading && (!user?.username || !user?.fullname)) {
+          setOpenModal(true);
+        }
+        setRedirecting(false);
       }
-      setRedirecting(false);
-
-      if (!loading && (!user?.username || !user?.fullname)) {
-        setOpenModal(true);
-      }
-      console.log("this is user",user);
     }
-  }, []);
+  }, [checkingAuth,user, loading]);
 
   if (loading || redirecting || saving) return (
     <div className="flex flex-col space-x-4 py-6 mx-12">

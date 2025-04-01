@@ -109,8 +109,8 @@ useEffect(() => {
                     <Link href={`/user/${blog.author.username}`} className=" w-fit group/author">
                         <div className="flex items-center gap-4 rounded-lg">
                           {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
-                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-10 h-10 rounded-full group-hover/author:scale-105 duration-300" /> :
-                            <div className="w-10 h-10 rounded-full p-auto flex text-center items-center">
+                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-8 h-8 rounded-full group-hover/author:scale-105 duration-300" /> :
+                            <div className="w-8 h-8 rounded-full p-auto flex text-center items-center">
                               <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover/author:scale-105 duration-300" />
                             </div>
                           }
@@ -146,9 +146,9 @@ useEffect(() => {
                     <Link href={`/user/${blog.author.username}`} className=" w-fit group/author">
                         <div className="flex items-center gap-4 rounded-lg">
                           {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
-                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-8 h-8 rounded-full group-hover/author:scale-105 duration-300" /> :
-                            <div className="w-8 h-8 rounded-full p-auto flex text-center items-center">
-                              <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover/author:scale-105 duration-300" />
+                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-6 h-6 rounded-full group-hover/author:scale-105 duration-300" /> :
+                            <div className="w-6 h-6 rounded-full p-auto dark:bg-gray-800 bg-gray-200 flex text-center items-center">
+                              <User2 className="w-[70%] h-[70%] dark:text-gray-300 text-gray-600 my-auto m-auto group-hover/author:scale-105 duration-300" />
                             </div>
                           }
                           <div>
