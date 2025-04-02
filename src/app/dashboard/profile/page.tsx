@@ -7,9 +7,13 @@ import { Input } from '@/components/ui/input';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import axios from 'axios';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 
 function page() {
-  const { user, isAuthenticated, isAdmin, loading, fetchUser } = useAuth(); 
+  const { user, isAuthenticated, isAdmin, loading, fetchUser, logout } = useAuth(); 
   const router = useRouter();
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,6 +25,78 @@ function page() {
     bio: "",
     mobileNumber: ""
   });
+  const [emailModal, setEmailModal] = useState(false);
+  const [otpModal, setOtpModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  const [loader, setLoader] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [verifyingOTP, setVerifyingOTP] = useState(false);
+
+  const [logoutModal, setLogoutModal] = useState(false);
+
+  const verifyOTP = async () => {
+    setVerifyingOTP(true);
+
+    try {
+      const response = await api.post(`/users/verifyotp`, { email : user?.email,  otp, newEmail : email });
+      console.log(response)
+      toast.success("Email updated successfully!");
+      await fetchUser(); // Refresh user data
+      setOtpModal(false);
+      setEmail("");
+      setOtp("");
+
+    } catch (err) {
+      let errorMessage = "An unexpected error occurred";
+
+      if (axios.isAxiosError(err) && err.response) {
+        errorMessage = err.response.data.message || "Something went wrong";
+      }
+      toast.error(errorMessage);
+    }
+  }
+
+  const handleEmailChange = async (e: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation regex
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address");
+      toast.error("Please enter a valid email address");
+      return;
+    } else {
+      setEmailError("");
+    }
+
+    try {
+      setLoader(true);
+      const response = await api.post(`/users/update-email`, { email }, { withCredentials: true });
+      setEmailModal(false);
+      setOtpModal(true);
+      setLoader(false);
+      console.log(response)
+    } catch (err:unknown) {
+      let errorMessage = "An unexpected error occurred";
+      
+      // Check if the error is an instance of Error
+      if (axios.isAxiosError(err) && err.response) {
+        errorMessage = err.response.data.message || "Something went wrong";
+      }
+      
+      setLoader(false);
+      toast.error(errorMessage);
+    }
+  };
+
+  const logoutFn = () => {
+    logout();
+    setLogoutModal(false);
+  };
+
+  const changeEmail = () => {
+    setEmailModal(true);
+  };
+
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -176,11 +252,11 @@ function page() {
 
 
   return (
-    <div className='w-[700px] flex flex-col gap-8 mx-auto my-16'>
-        <h1 className='text-4xl mb-4 font-bold text-purple-700 dark:text-purple-300 font-montserrat'>Profile</h1>
+    <div className='w-[700px] 2xl:w-[850px] max-lg:w-full max-lg:px-16 max-sm:px-6 flex flex-col gap-8 mx-auto my-16'>
+        <h1 className='text-4xl mb-4 font-bold text-purple-700 dark:text-purple-300 max-sm:text-center font-montserrat'>Profile</h1>
         {/* Image  */}
         <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageUpload} className="hidden" />
-        <div onClick={handleButtonClick} className='cursor-pointer group relative w-[120px] h-[120px] rounded-full bg-purple-500'>
+        <div onClick={handleButtonClick} className='cursor-pointer max-sm:mx-auto group relative w-[120px] h-[120px] rounded-full bg-purple-500'>
           {user.profilePicture ? 
               <img src={user.profilePicture} className='w-[120px] h-[120px] object-cover group-hover:opacity-50 duration-300 rounded-full border'/>
           : 
@@ -195,11 +271,14 @@ function page() {
         
         {/* Email  */}
         <div className='flex flex-col gap-2'>
-        <p className='text-lg font-medium dark:text-zinc-100 text-zinc-700'>Email</p>
-        <div className='py-2 px-6 w-[550px] flex justify-between items-center bg-zinc-100 dark:bg-zinc-600 rounded-2xl'>
-            <h2 className='text-lg text-zinc-400 dark:text-zinc-400 font-semibold font-montserrat'>{user.email}</h2>
-            <Pencil className='w-6 h-6 text-zinc-700 dark:text-zinc-100'/>
-        </div>
+          <p className='text-lg font-normal dark:text-zinc-100 text-zinc-700'>Email</p>
+          <div className='py-2 px-6 w-[550px] 2xl:w-[650px] max-sm:w-full flex justify-between items-center bg-zinc-100 dark:bg-zinc-600 rounded-2xl'>
+            <h2 className='text-lg max-sm:text-base text-zinc-400 dark:text-zinc-400 font-semibold font-montserrat'>{user.email}</h2>
+            <div className='cursor-pointer rounded-xl bg-zinc-200 dark:bg-zinc-700 hover:dark:bg-purple-700 hover:bg-purple-300 duration-300 p-2 max-sm:hidden' onClick={ changeEmail }>
+              <Pencil className='w-6 h-6 text-zinc-700 dark:text-zinc-100'/>
+            </div>
+          </div>
+          <p className='self-end text-zinc-700 dark:text-zinc-100 text-sm font-normal sm:hidden flex gap-2 bg-zinc-200 dark:bg-zinc-700 py-1 px-2 w-fit rounded-lg' onClick={ changeEmail }>Edit <Pencil className='w-4 h-4 text-zinc-700 dark:text-zinc-100'/></p>
         </div>
        {/* Other Info  */}
     <form onSubmit={handleSave} className='flex flex-col gap-8'>
@@ -207,7 +286,7 @@ function page() {
       <div className='flex flex-col gap-2'>
         <label className='text-lg dark:text-zinc-100 text-zinc-700 font-medium' htmlFor='fullname'>Full Name</label>
         <input 
-          className='py-2 text-lg px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[550px] rounded-2xl' 
+          className='py-2 text-lg max-sm:text-base px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[550px] 2xl:w-[650px] max-sm:w-[90%] rounded-2xl' 
           type="text" 
           id="fullname"
           placeholder="Full Name" 
@@ -224,7 +303,7 @@ function page() {
       <div className='flex flex-col gap-2'>
         <label className='text-lg font-medium dark:text-zinc-100 text-zinc-700' htmlFor='username'>Username</label>
         <input 
-          className='py-2 text-lg px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[450px] rounded-2xl' 
+          className='py-2 text-lg max-sm:text-base px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[450px] 2xl:w-[550px] max-sm:w-[80%] rounded-2xl' 
           type="text" 
           id="username"
           placeholder="Username" 
@@ -245,7 +324,7 @@ function page() {
       <div className='flex flex-col gap-2'>
         <label className='text-lg font-medium dark:text-zinc-100 text-zinc-700' htmlFor='bio'>Bio</label>
         <textarea 
-          className='py-2 text-lg px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[700px] rounded-2xl' 
+          className='py-2 text-lg max-sm:text-base px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[700px] 2xl:w-[850px] max-sm:w-full max-lg:w-[550px] rounded-2xl' 
           id="bio"
           placeholder="Bio" 
           value={userData.bio} 
@@ -260,7 +339,7 @@ function page() {
       <div className='flex flex-col gap-2'>
         <label className='text-lg font-medium dark:text-zinc-100 text-zinc-700' htmlFor='mobileNumber'>Mobile Number</label>
         <input 
-          className='py-2 text-lg px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[450px] rounded-2xl' 
+          className='py-2 text-lg max-sm:text-base px-6 dark:bg-zinc-800 bg-zinc-200 text-zinc-700 dark:text-zinc-200 border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700 w-[450px] 2xl:w-[550px] max-sm:w-[90%] rounded-2xl' 
           type="tel" 
           id="mobileNumber"
           placeholder="Mobile Number" 
@@ -272,10 +351,68 @@ function page() {
         />
       </div>
 
-      <button type='submit' disabled={saving} className='border border-input dark:bg-green-700 bg-green-300 shadow-sm dark:text-zinc-50 text-zinc-700 font-semibold dark:hover:bg-purple-700 hover:bg-purple-200 text-base duration-300 px-4 py-2 rounded-2xl w-[200px]'>
+      <button type='submit' disabled={saving} className='border border-input dark:bg-green-700 bg-green-300 shadow-sm dark:text-zinc-50 text-zinc-700 font-semibold dark:hover:bg-purple-700 hover:bg-purple-200 text-base duration-300 px-4 py-2 rounded-2xl w-[200px] max-sm:mx-auto'>
         Save Changes
       </button>
     </form>
+
+    <div className="h-[1px] mt-8 w-full bg-zinc-200 dark:bg-zinc-800">
+        {/* Divider  */}
+    </div>
+
+    <Button className='w-fit' onClick={() => setLogoutModal(true)} variant={"destructive"}>Logout</Button>
+
+
+    <Dialog open={emailModal} onOpenChange={setEmailModal}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Enter New Email</DialogTitle>
+        </DialogHeader>
+        <div>
+          <Input type="email" placeholder="New Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          {emailError && <p style={{ color: "red" }}>{emailError}</p>}
+        </div>
+        <div className="flex justify-end gap-4">
+          <Button onClick={() => setEmailModal(false)} variant="outline">Cancel</Button>
+          <Button onClick={() => handleEmailChange(email)} variant="unselected" disabled={loader} className='dark:bg-green-700 bg-green-300'>{loader ? <Loader2 className="w-4 h-4 animate-spin dark:text-zinc-50 text-zinc-950"></Loader2> : "Continue"}</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+
+    <Dialog open={otpModal}>
+      <DialogContent className='flex flex-col items-center'>
+        <DialogHeader>
+          <DialogTitle>Enter OTP</DialogTitle>
+        </DialogHeader>
+        <div className='text-center self-center'>
+          <InputOTP maxLength={6} value={otp} onChange={setOtp}>
+            <InputOTPGroup>
+              {[...Array(6)].map((_, i) => (
+                <InputOTPSlot key={i} index={i} />
+              ))}
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+        <div className="flex justify-end gap-4">
+          <Button onClick={verifyOTP} disabled={verifyingOTP} className="w-full">
+            {verifyingOTP ? <Loader2 className="w-4 h-4 animate-spin dark:text-zinc-50 text-zinc-950"></Loader2> : "Verify OTP"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+
+    <Dialog open={logoutModal} onOpenChange={setLogoutModal}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Confirm Logout</DialogTitle>
+        </DialogHeader>
+        <p>Are you sure you want to Logout?</p>
+        <div className="flex justify-end gap-4">
+          <Button onClick={() => setLogoutModal(false)} variant="outline">Cancel</Button>
+          <Button onClick={logoutFn} variant="destructive">Logout</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
 
     </div>
   )

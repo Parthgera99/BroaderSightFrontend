@@ -16,12 +16,19 @@ import {
 import styles from "./navbar.module.css";
 import { Skeleton } from "./ui/skeleton";
 import { User2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
 
 function Navbar() {
   const { user, isAuthenticated, loading, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false); // Hamburger state
   const [openDropDown, setOpenDropDown] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false);
+
+  const logoutFn = () => {
+    logout();
+    setLogoutModal(false);
+  };
 
   useEffect(() => {
     setIsOpen(false);
@@ -43,15 +50,15 @@ function Navbar() {
       
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.svg" alt="Logo" width={32} height={32} />
-          <h1 className="text-lg font-semibold text-zinc-900 dark:text-white">
+          <h1 className="text-lg font-semibold nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 duration-300">
             BroaderSight
           </h1>
         </Link>
 
           <ul className="font-montserrat lg:flex max-lg:hidden items-center gap-16">
-            <Link href="/explore-blogs" className="nav-link">Explore</Link>
-            <Link href="/category" className="nav-link">Categories</Link>
-            <Link href="/about" className="nav-link">About</Link>
+            <Link href="/explore-blogs" className="nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 font-semibold duration-300">Explore</Link>
+            <Link href="/category" className="nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 font-semibold duration-300">Categories</Link>
+            <Link href="/about" className="nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 font-semibold duration-300">About</Link>
           </ul>
       
 
@@ -79,7 +86,7 @@ function Navbar() {
               <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)}  href="/dashboard" className="w-full">Dashboard</Link></DropdownMenuItem>
               {user?.role === "admin" && <DropdownMenuItem><Link onClick={() => setOpenDropDown(false)} className="w-full" href="/admin">Admin</Link></DropdownMenuItem>}
               <DropdownMenuItem><ThemeToggle /></DropdownMenuItem>
-              <DropdownMenuItem><Button onClick={logout}>Logout</Button></DropdownMenuItem>
+              <DropdownMenuItem><Button className="bg-red-500 dark:bg-red-200 hover:dark:bg-red-300 hover:bg-red-600" onClick={()=>{setLogoutModal(true); setOpenDropDown(false)}}>Logout</Button></DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
@@ -99,6 +106,21 @@ function Navbar() {
             <Link href="/about" onClick={() => setIsOpen(false)} className="dark:hover:bg-zinc-700 hover:bg-zinc-200 dark:text-zinc-50 py-4 nav-link font-montserrat font-semibold">About</Link>
           </ul>
         </div>
+
+
+        {/* Logout Modal  */}
+        <Dialog open={logoutModal} onOpenChange={setLogoutModal}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Confirm Logout</DialogTitle>
+        </DialogHeader>
+        <p>Are you sure you want to Logout?</p>
+        <div className="flex justify-end gap-4">
+          <Button onClick={() => setLogoutModal(false)} variant="outline">Cancel</Button>
+          <Button onClick={logoutFn} variant="destructive">Logout</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
       
       </>
   );
