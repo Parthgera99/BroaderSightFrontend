@@ -31,12 +31,12 @@ export default async function RootLayout({
     <html lang="en" className={montserrat.variable + " " + cn(theme === "dark" && "dark") }>
       <AuthProvider>
       <body className="bg-white dark:bg-zinc-900 ">
-        
         <Navbar/>
         <div className="pt-[77.8px]">
         {children}
           </div>
         <Toaster position="top-right" richColors />
+        
       </body>
       </AuthProvider>
     </html>

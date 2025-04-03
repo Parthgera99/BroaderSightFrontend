@@ -44,7 +44,7 @@ interface BlogSectionProps {
  const BlogSection: React.FC<BlogSectionProps> = ({ blogs,title,type}) =>  {
 
   return (
-    <div className={`relative mx-auto dark:bg-zinc-950 px-40 max-lg:px-16 max-sm:px-6 pb-24 max-sm:pb-12 ${title === "education" ? "py-24" : ""} ${type === "trending" ? "py-24" : ""}`}>
+    <div className={`relative mx-auto dark:bg-zinc-950 px-40 max-lg:px-16 max-sm:px-6 pb-24 2xl:pb-12 max-sm:pb-12 ${title === "education" ? "py-24" : ""} ${type === "trending" ? "py-24" : ""}`}>
       {/* Header with View All Blogs */}
       <div className="flex font-montserrat mb-12 justify-between items-center">
         <h2 className="text-3xl font-bold text-purple-800 dark:text-purple-200">
@@ -121,7 +121,7 @@ interface BlogSectionProps {
             
 
             {/* Blog Content */}
-            <div className=" min-h-[140px] max-2xl:min-h-[18px] 2xl:min-h-[180px] max-md:min-h-fit">
+            <div className=" min-h-[140px] max-2xl:min-h-[18px] 2xl:min-h-[100px] max-md:min-h-fit">
               <Link href={`/blog/${blog.slug}`} >
               <h3 className="text-lg max-xl:text-base text-zinc-700 dark:text-zinc-200 font-semibold mb-2 ">{blog.title}</h3>
               {/* <p className="text-gray-600 dark:text-gray-500 text-sm mb-3 ">

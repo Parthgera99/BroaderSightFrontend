@@ -1,9 +1,14 @@
+import Footer from '@/components/Footer'
 import React from 'react'
 
 function page() {
   return (
-    <div>
-        About Page
+    <div className='bg-zinc-100 dark:bg-zinc-950'>
+        <div className='py-48 text-center'>
+          About Page
+        </div>
+        {/* Footer  */}
+      <Footer/>
     </div>
   )
 }

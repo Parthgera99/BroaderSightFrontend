@@ -118,8 +118,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   
-  
-
   // Logout function
   const logout = async () => {
     setLoading(true)

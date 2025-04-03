@@ -3,6 +3,7 @@ import { getCategories } from "@/lib/categoryService";
 import Link from 'next/link';
 import { fetchCategory3BlogsList } from '@/lib/fetchBlogList';
 import BlogSection from '@/components/BlogSection';
+import Footer from '@/components/Footer';
 
 type Category = {
   _id: string;
@@ -23,7 +24,7 @@ async function page() {
   const categoryBlogs = await Promise.all(
     MainCategories.map(async (category) => {
       const blogs = await fetchCategory3BlogsList(category); // Pass category as parameter
-      console.log(category, blogs)
+      // console.log(category, blogs)
       return { category, blogs };
     })
   );
@@ -31,6 +32,8 @@ async function page() {
 
 
   return (
+    <div>
+
     <div className='flex font-montserrat flex-col gap-12 mt-12'>
       {/* TOP Section  */}
       <h1 className='mx-24 text-4xl max-lg:text-3xl max-sm:text-center max-lg:mx-16 font-semibold text-purple-800 dark:text-purple-300 '>Explore a Ton of Categories</h1>
@@ -53,6 +56,10 @@ async function page() {
         ))}
       </div>
 
+
+    </div>
+      {/* Footer  */}
+      <Footer/>
     </div>
   )
 }

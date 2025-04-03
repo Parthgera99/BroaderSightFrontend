@@ -6,6 +6,7 @@ import Link from "next/link";
 import BlogSection from "@/components/BlogSection";
 import { getCategories } from "@/lib/categoryService";
 import { fetch3BlogList } from "@/lib/fetchBlogList";
+import Footer from "@/components/Footer";
 
 
 export default async function Home() {
@@ -291,6 +292,7 @@ export default async function Home() {
         <BlogSection blogs={blogs} title="Trending Blogs" type="trending"/>
 
       {/* Footer  */}
+      <Footer/>
 
     </div>
   );
