@@ -10,6 +10,32 @@
   }
 }
 
+.para-html strong{
+  color: #7e22ce;
+}
+
+.dark .para-html strong{
+  color: #e9d5ff;
+}
+
+.para-html a{
+  color: #7e22ce;
+  text-decoration: underline;
+  white-space: nowrap;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dark .para-html a{
+  color: #e9d5ff;
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+
 
 /* remove number input up down arrow  */
 input[type="number"]::-webkit-inner-spin-button,
@@ -88,6 +114,35 @@ input[type="number"] {
     left: -200px;
   }
 }
+
+
+.thin-scrollbar::-webkit-scrollbar {
+  height: 3px;
+  width: 3px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+  margin-block: 2px; /* remove top-bottom padding gap */
+  margin-inline: 2px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #8b5cf6 var(--scrollbar-bg);
+  border-radius: 9999px; /* Fully rounded */
+  border: none;
+}
+
+.thin-scrollbar::-webkit-scrollbar-button {
+  display: none; /* Removes the arrows on both ends */
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #8b5cf6 var(--scrollbar-bg);
+}
+
 
 .item {
   width: 200px;

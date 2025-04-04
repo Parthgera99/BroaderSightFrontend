@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Montserrat_Alternates } from "next/font/google";
 import { cookies } from "next/headers";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
@@ -18,6 +18,12 @@ const montserrat = Montserrat({
   variable: "--font-montserrat", // Define a CSS variable
 });
 
+const montserrat_alt = Montserrat_Alternates({
+  subsets: ['latin'],
+  weight: [ '400', '700'],
+  variable: '--font-montserrat-alt',
+})
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +34,7 @@ export default async function RootLayout({
   const theme = cookieStore.get("theme")?.value || "dark";
 
   return (
-    <html lang="en" className={montserrat.variable + " " + cn(theme === "dark" && "dark") }>
+    <html lang="en" className={`${montserrat.variable} ${montserrat_alt.variable} ${cn(theme === "dark" && "dark")}`}>
       <AuthProvider>
       <body className="bg-white dark:bg-zinc-900 ">
         <Navbar/>
