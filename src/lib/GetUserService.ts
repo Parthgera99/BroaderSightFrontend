@@ -1,10 +1,11 @@
 import { cookies } from 'next/headers';
 import api from './api';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 
 type User = {
-  id: string;
+  _id: string;
   fullname: string;
   email: string;
   profilePicture?:string;
@@ -15,6 +16,7 @@ type User = {
   blogs:Blog[];
   role: "user" | "admin";
   createdAt: Date;
+  isBanned:boolean
 }
 
 type Blog = {
@@ -80,11 +82,11 @@ export async function getUser(): Promise<User | null> {
 export async function getUserProfile(username:string): Promise<User | null> {
 
     try {
-      const response = await api.get(`/blog/profile/${username}`);
+      const response = await api.get(`/blog/profile/${username}?isPublished=true`);
       // console.log(response?.data.data.user);
       return response?.data.data.user;
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      // console.log("Error fetching user profile:", error);
       return null;
     }
 }

@@ -50,12 +50,14 @@ function DashboardPage() {
     try {
       setSaving(true);
       const response = await api.post("/blog/create", { title }, { withCredentials: true });
+      setRedirecting(true)
       const newBlog = response.data.data.blog;
       router.push(`/dashboard/${newBlog.slug}/edit`);
       setTimeout( async () => {
         await fetchUser();
         setCreateModal(false), 200
         setSaving(false), 200;
+        setRedirecting(false),200;
       });
     } catch (error) {
       toast.error("Blog with this name already Exists");
@@ -100,7 +102,7 @@ function DashboardPage() {
     }
   }, [checkingAuth,user, loading]);
 
-  if (loading || redirecting || saving) return (
+  if (loading || redirecting ) return (
     <div className="flex flex-col space-x-4 py-6 mx-12">
       <Skeleton className="h-8 w-64 mx-6 rounded-xl" />
       <div className="space-y-6 flex mx-12">

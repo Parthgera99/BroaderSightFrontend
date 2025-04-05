@@ -68,7 +68,7 @@ function Navbar() {
           <Skeleton className="w-[75px] h-10 bg-gray-200 dark:bg-gray-700 rounded-md"></Skeleton>
         ) : isAuthenticated ? (
           <DropdownMenu open={openDropDown} onOpenChange={setOpenDropDown}>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="focus:outline-none focus:ring-0">
             <Avatar>
                 <AvatarFallback>
                   <div className="w-10 h-10 rounded-full dark:bg-gray-800 bg-gray-200 p-auto flex text-center items-center">

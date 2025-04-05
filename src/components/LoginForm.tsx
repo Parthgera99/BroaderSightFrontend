@@ -66,7 +66,7 @@ export function LoginForm({
 
       // ✅ Extract message properly
       const errorMessage = error.response?.data?.message || error.message || "Sign-up failed ❌";
-      console.error("API Error:", errorMessage);
+      // console.error("API Error:", errorMessage);
       toast.error(errorMessage);
     } finally {
       setLoading(false);

@@ -1,6 +1,7 @@
 import BlogsList from '@/app/explore-blogs/blog-list';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { getUserProfile } from '@/lib/GetUserService';
+import UserAdminControls from '@/components/UserAdminControls';
+import { getUser, getUserProfile } from '@/lib/GetUserService';
 import { VerifiedIcon } from 'lucide-react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -10,10 +11,17 @@ async function page({ params }: { params: { username: string } }) {
     const { username } =  await params;
     const user = await getUserProfile(username)
     if(!user) return notFound();
+    const currentUser = await getUser();
     // {console.log(user)}
+  if(user.isBanned && currentUser?.role !== "admin") {
+    return (
+      <h1 className='text-4xl text-center font-bold text-purple-700 dark:text-purple-300 mt-32 mx-[400px] font-montserratAlt'>This User has been Banned due to policy violations</h1>
+    )
+  }
+
   return (
 
-    <div className='flex flex-col gap-4 mx-[400px] max-2xl:mx-auto max-2xl:w-[90%] items-center'>
+    <div className='relative flex flex-col gap-4 mx-[400px] max-2xl:mx-auto max-2xl:w-[90%] items-center'>
       <div className="flex justify-center mt-16 mb-4">
         {user.profilePicture &&
           <Image
@@ -70,6 +78,14 @@ async function page({ params }: { params: { username: string } }) {
           <BlogsList blogs={user?.blogs} />
         </div>
       </div>
+
+      {
+        currentUser?.role==="admin" && currentUser._id !== user._id &&
+        <div className='absolute top-16 right-0'>
+          <UserAdminControls user={user} currentUser={currentUser}/>
+        </div>
+      }
+      
 
     </div>
   )

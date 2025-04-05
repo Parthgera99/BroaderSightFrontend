@@ -80,6 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (fetchedUser?.username) {
         const blogsResponse = await api.get(`/blog/profile/${fetchedUser.username}`);
         blogs = blogsResponse ? blogsResponse.data.data.user.blogs : [];
+        console.log(blogs)
       }
       
       fetchedUser.blogs = blogs;
