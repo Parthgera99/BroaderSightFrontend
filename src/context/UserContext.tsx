@@ -41,7 +41,7 @@ export interface User {
   bio?:string;
   earnings?:number;
   blogs?:Blog[];
-  role: "user" | "admin" ;
+  role: "user" | "admin" | "superadmin";
 }
 
 interface AuthContextProps {
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Function to fetch user data
   const fetchUser = async () => {
     setLoading(true);
-    // console.log(document.cookie);
+    console.log(document.cookie);
   
     try {
       const response = await api.get("/users/details", { withCredentials: true });
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Fetch blogs only if user exists
       let blogs = [];
       if (fetchedUser?.username) {
-        const blogsResponse = await api.get(`/blog/user/${fetchedUser.username}`);
+        const blogsResponse = await api.get(`/blog/profile/${fetchedUser.username}`);
         blogs = blogsResponse ? blogsResponse.data.data.user.blogs : [];
       }
       

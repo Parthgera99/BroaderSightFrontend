@@ -19,46 +19,8 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/ui/accordion"
-  import { cookies } from 'next/headers';
 import BlogDeleteButton from '@/components/BlogDeleteButton';
-  
-
-
-  async function getUser(): Promise<User | null> {
-
-    try {
-        const cookieStore = await cookies();
-        const cookieString = cookieStore
-            .getAll()
-            .map((c) => `${c.name}=${c.value}`)
-            .join("; ");
-        const response = await api.get("/users/details", {
-            headers: {
-                Cookie: cookieString,
-            },
-        });
-  
-      if (!response) {
-        console.log("Failed to fetch user details")
-      }
-    //   console.log(response)
-      return response?.data.data.givableUser
-    } catch (err) {
-        // console.log(err)
-        if (axios.isAxiosError(err)) {
-            let error = err.response?.status;
-            if(error = 404){
-                return null
-            }
-            console.error("API error:", err.response?.data || err.message);
-        } else {
-            console.error("Unexpected error:", err);
-        }
-        return null;  
-  }
-}
-  
-
+import { getUser } from '@/lib/GetUserService';
 
 
 async function getBlogDetails(blogSlug:string): Promise<Blog | null> {
@@ -82,18 +44,6 @@ async function getBlogDetails(blogSlug:string): Promise<Blog | null> {
 
 
 
-type User = {
-  id: string;
-  fullname: string;
-  email: string;
-  profilePicture?:string;
-  username?:string;
-  mobileNumber?:string;
-  bio?:string;
-  earnings?:number;
-  blogs?:Blog[];
-  role: "user" | "admin";
-}
 
 
 type Blog = {

@@ -4,6 +4,7 @@ import React from 'react'
 function ImageDisplay({ value }: { value: string }) {
   return (
     <div className="flex justify-center my-8">
+      {value!=="" &&
         <Image
             src={value}
             alt="Blog image"
@@ -17,6 +18,7 @@ function ImageDisplay({ value }: { value: string }) {
             }}
             priority
         />
+      }
     </div>
   )
 }

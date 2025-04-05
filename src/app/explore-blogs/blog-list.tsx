@@ -12,20 +12,26 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 type Blog = {
   _id: string;
   displayImage: string;
-  category: [Category];
   title: string;
   slug: string;
   metaDescription: string;
-  authorName: string;
-  authorProfilePicture: string;
+  metaTitle:string;
   date: string;
-  authorRole: string;
+  tags:string[];
+  faq:[{
+      question:string,
+      answer:string
+  }];
   author:{
     fullname: string;
     username: string;
     profilePicture: string;
     role: string;
   }
+  content:[{
+      type:string,
+      value:any
+  }]
 };
 
 type Category = {
@@ -104,13 +110,13 @@ useEffect(() => {
                   </p>
                   </Link>
 
-                  <div className="flex justify-between items-center max-sm:hidden">
+                  <div className="flex justify-between mt-1 items-center max-sm:hidden">
                     {/* Author  */}
                     <Link href={`/user/${blog.author.username}`} className=" w-fit group/author">
                         <div className="flex items-center gap-4 rounded-lg">
                           {/* <img src={author.profilePicture} alt={author.fullname} className="w-12 h-12 rounded-full" /> */}
-                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-8 h-8 rounded-full group-hover/author:scale-105 duration-300" /> :
-                            <div className="w-8 h-8 rounded-full p-auto flex text-center items-center">
+                          {blog.author.profilePicture ? <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-6 h-6 rounded-full group-hover/author:scale-105 duration-300" /> :
+                            <div className="w-6 h-6 rounded-full p-auto flex text-center items-center">
                               <User2 className="w-[70%] h-[70%] text-gray-300 my-auto m-auto group-hover/author:scale-105 duration-300" />
                             </div>
                           }
