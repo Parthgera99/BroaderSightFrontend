@@ -54,8 +54,8 @@ export default function ImageInput({blogId,  value, onChange }: ImageInputProps)
 
       {/* Clickable Button */}
       {value ? (
-        <div onClick={handleButtonClick} className="group/image-wrapper relative w-full h-full">
-            <img src={value} alt="Uploaded Preview" className="w-full rounded h-full object-cover" />
+        <div onClick={handleButtonClick} className="group/image-wrapper relative max-sm:w-[200px] w-full h-full">
+            <img src={value} alt="Uploaded Preview" className="w-full max-sm:w-[200px] rounded h-full object-cover" />
             <label
               className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/image-wrapper:opacity-100 cursor-pointer transition"
               htmlFor="file-input"
@@ -66,7 +66,7 @@ export default function ImageInput({blogId,  value, onChange }: ImageInputProps)
 
         </div>
     ): (
-        <Button className="w-[75%] dark:text-zinc-50 dark:bg-zinc-800 text-zinc-600 hover:dark:bg-purple-700 bg-zinc-200 hover:bg-purple-200" variant="outline" onClick={handleButtonClick} disabled={uploading}>
+        <Button className="w-[75%] max-sm:w-[200px] max-sm:px-4 dark:text-zinc-50 dark:bg-zinc-800 text-zinc-600 hover:dark:bg-purple-700 bg-zinc-200 hover:bg-purple-200" variant="outline" onClick={handleButtonClick} disabled={uploading}>
           {uploading ? "Uploading..." : "Upload Image"}
         </Button>
       )

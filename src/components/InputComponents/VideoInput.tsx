@@ -58,7 +58,7 @@ export default function VideoInput({ value, onChange }: VideoInputProps) {
 
       {/* Show embedded YouTube video only if valid */}
       {videoId && (
-        <div className="w-[50%] rounded aspect-video mt-2">
+        <div className="w-[50%] max-sm:w-[100%] rounded aspect-video mt-2">
           <iframe
             width="100%"
             height="100%"

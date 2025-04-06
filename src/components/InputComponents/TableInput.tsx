@@ -57,7 +57,7 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChange }) => {
     <div className="flex flex-col gap-2">
     <div className="flex gap-4">
 
-    <div className="rounded-md p-2 group/wrapper overflow-x-auto max-w-[730px] scrollbar-hidden border border-zinc-400">
+    <div className="rounded-md p-2 group/wrapper overflow-x-auto max-w-[730px] max-sm:w-[220px] scrollbar-hidden border border-zinc-400">
       <table className="w-full">
         <thead>
           <tr>
@@ -93,7 +93,7 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChange }) => {
               {/* Remove Row Button (only if more than 2 data rows exist) */}
               {value.length > 2 && (
                 <td className="p-2">
-                  <button onClick={() => removeRow(rowIndex + 1)} className="p-1 opacity-0 w-[50px] group-hover/wrapper:opacity-100 duration-300 w-full hover:bg-red-300 duration-200 bg-red-200 text-white rounded">❌</button>
+                  <button onClick={() => removeRow(rowIndex + 1)} className="p-1 opacity-0 max-sm:opacity-100 w-[50px] group-hover/wrapper:opacity-100 duration-300 w-full hover:bg-red-300 duration-200 bg-red-200 text-white rounded">❌</button>
                 </td>
               )}
             </tr>
@@ -101,7 +101,7 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChange }) => {
           {/* Remove Column Buttons at the bottom */}
           <tr>
             {value[0]?.map((_, colIndex) => (
-              <td key={colIndex} className="p-2 text-center opacity-0 group-hover/wrapper:opacity-100 duration-300 w-[30%]">
+              <td key={colIndex} className="p-2 text-center opacity-0 max-sm:opacity-100 group-hover/wrapper:opacity-100 duration-300 w-[30%]">
                 <button onClick={() => removeColumn(colIndex)} className="p-1 w-[50px] hover:bg-red-300 duration-200 bg-red-200 text-white rounded">❌</button>
               </td>
             ))}
@@ -110,9 +110,9 @@ const TableInput: React.FC<TableInputProps> = ({ value, onChange }) => {
       </table>
       {/* Add and Remove Column Buttons */}
     </div>
-      <button onClick={addColumn} className="p-1 bg-green-300 hover:bg-green-400 duration-200 text-white h-[35px] w-[50px] rounded mx-1">➕</button>
+      <button onClick={addColumn} className="p-1 bg-green-300 hover:bg-green-400 duration-200 text-white h-[35px] w-[50px] max-sm:w-[30px] rounded mx-1">➕</button>
       </div>
-      <button onClick={addRow} className="mt-2 p-1 bg-green-300 hover:bg-green-400 duration-200 w-[50px] text-white rounded">
+      <button onClick={addRow} className="mt-2 p-1 bg-green-300 hover:bg-green-400 duration-200 w-[50px] max-sm:w-[30px] text-white rounded">
         ➕ 
       </button>
             </div>

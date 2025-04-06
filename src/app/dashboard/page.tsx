@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Pencil, Trash } from 'lucide-react';
+import { Pencil, ShieldCheckIcon, Trash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import DialogForInfo from '@/components/DialogForInfo';
 import { toast } from 'sonner';
@@ -103,26 +103,26 @@ function DashboardPage() {
   }, [checkingAuth,user, loading]);
 
   if (loading || redirecting ) return (
-    <div className="flex flex-col space-x-4 py-6 mx-12">
-      <Skeleton className="h-8 w-64 mx-6 rounded-xl" />
-      <div className="space-y-6 flex mx-12">
-        <Skeleton className="mx-12 my-12 h-32 w-32" />
+    <div className="flex flex-col space-x-4 py-6 mx-12 max-sm:mx-4">
+      <Skeleton className="h-8 w-64 mx-6 max-sm:mx-0 rounded-xl" />
+      <div className="space-y-6 flex mx-12 max-sm:mx-0">
+        <Skeleton className="mx-12 max-sm:mx-0 my-12 h-32 w-32" />
         <div className='flex flex-col'>
           <Skeleton className="mt-6 mb-2 h-6 w-[200px]" />
           <Skeleton className="my-2 h-12 w-[400px]" />
           <Skeleton className="my-2 h-6 w-[100px]" />
         </div>
       </div>
-      <div className="space-y-6 flex mx-12">
-        <Skeleton className="mx-12 my-12 h-32 w-32" />
+      <div className="space-y-6 flex mx-12 max-sm:mx-0">
+        <Skeleton className="mx-12 max-sm:mx-0 my-12 h-32 w-32" />
         <div className='flex flex-col'>
           <Skeleton className="mt-6 mb-2 h-6 w-[200px]" />
           <Skeleton className="my-2 h-12 w-[400px]" />
           <Skeleton className="my-2 h-6 w-[100px]" />
         </div>
       </div>
-      <div className="space-y-6 flex mx-12">
-        <Skeleton className="mx-12 my-12 h-32 w-32" />
+      <div className="space-y-6 flex mx-12 max-sm:mx-0">
+        <Skeleton className="mx-12 max-sm:mx-0 my-12 h-32 w-32" />
         <div className='flex flex-col'>
           <Skeleton className="mt-6 mb-2 h-6 w-[200px]" />
           <Skeleton className="my-2 h-12 w-[400px]" />
@@ -133,12 +133,12 @@ function DashboardPage() {
   )
 
   return (
-    <div className="mx-[5vw] py-5">
+    <div className="mx-[5vw] max-w-[1300px] 2xl:mx-auto py-5">
       <DialogForInfo openModal={openModal} setOpenModal={setOpenModal} />
 
       {isAuthenticated ? (
         <>
-          <div className="flex  font-montserrat justify-between items-center mb-5">
+          <div className="flex max-sm:flex-col max-sm:space-y-4 font-montserrat justify-between items-center mb-5">
             <h1 className="text-2xl dark:text-purple-200 text-purple-900 font-bold">Welcome, {user?.fullname}</h1>
             <div className="space-x-2">
               <Button variant={filter === "published" ? "default" : "outline"} onClick={() => setFilter("published")}>Published Only</Button>
@@ -146,18 +146,18 @@ function DashboardPage() {
             </div>
           </div>
 
-          <div className="flex gap-24">
+          <div className="flex gap-24 max-lg:gap-12 max-lg:flex-col-reverse">
             {/* Left Side: Blog Cards */}
-            <div className="w-[60%] flex flex-col gap-2">
+            <div className="w-[60%] max-lg:w-full flex flex-col gap-2">
               {user?.blogs?.filter(blog => filter === "all" || blog.isPublished).map((blog) => (
-                <Card key={blog._id} className="dark:bg-zinc-900 bg-white cursor-pointer group shadow-none border-0 flex gap-4 justify-between items-center p-4" >
+                <Card key={blog._id} className="dark:bg-zinc-900 bg-white cursor-pointer group shadow-none border-0 flex gap-4 max-sm:gap-2 justify-between items-center p-4 max-sm:px-0" >
 
 
-                  <div className="flex items-center group relative gap-8 w-full p-4" onClick={()=>redirectToBlog(blog?.slug)}>
+                  <div className="flex items-center group relative gap-8 max-sm:gap-6 w-full p-4" onClick={()=>redirectToBlog(blog?.slug)}>
                     <div className="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                     <Pencil className="text-white text-4xl transition-transform duration-300" />
                   </div>
-                    <div className='relative w-32 h-32 shrink-0' >
+                    <div className='relative max-lg:w-16 max-lg:h-16 w-32 h-32 shrink-0' >
                       <Image src={blog.displayImage || "logo.svg"} alt="Blog Image" fill className=" rounded-lg object-cover" />
                     </div>
                     <div className='flex flex-col gap-2'>
@@ -170,7 +170,7 @@ function DashboardPage() {
                         </div>
                     </div>
                   </div>
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex gap-2 opacity-0 max-lg:opacity-100 group-hover:opacity-100 transition-opacity duration-300">
                     <Button variant="destructive" className='hover:bg-red-600' onClick={() => handleDeleteModal(blog._id)}><Trash className="w-5 h-5 " /></Button>
                   </div>
                 </Card>
@@ -178,15 +178,18 @@ function DashboardPage() {
             </div>
 
             {/* Right Side: Create New Blog */}
-            <div className="w-[35%]">
+            <div className="w-[35%] max-lg:w-[60%] max-sm:w-[90%] max-lg:mx-auto">
               <Card className="flex items-center justify-center h-48 cursor-pointer group" onClick={createBlog}>
                 <h1 className="text-6xl font-bold group-hover:scale-110 group-hover:text-purple-700 dark:group-hover:text-purple-300 duration-300">+</h1>
               </Card>
 
               {user?.role === "admin" && (
-                <div className="mt-4">
+                <div className="mt-8">
                   <Link href="/admin" className="flex items-center gap-2 mt-4 text-sm font-medium text-zinc-900 dark:text-white hover:text-zinc-600 dark:hover:text-zinc-400">
-                    Admin Panel
+                    <h2 className='text-xl flex gap-2 items-center font-semibold px-4 py-2 rounded-xl dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-100 text-zinc-700 font-montserrat mx-auto'>
+                      Admin Panel
+                      <ShieldCheckIcon className="w-5 h-5" />
+                    </h2>
                   </Link>
                 </div>
               )}

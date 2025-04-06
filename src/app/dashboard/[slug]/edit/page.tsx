@@ -203,6 +203,11 @@ function EditBlogPage() {
         alert("No blog data found.");
         return;
       }
+      if(!blogData.title){
+        toast.error("Please enter a title");
+        return;
+      }
+      
 
       const { _id, title, slug, displayImage, faq, category, author, content, tags, metaTitle, metaDescription, isPublished } = blogData;
 
@@ -213,6 +218,27 @@ function EditBlogPage() {
       let cleanBlogData;
 
       if(publish) {
+        if(!blogData.category.length){
+          toast.error("Please select a category");
+          return;
+        }
+        if(blogData.displayImage === "" || !blogData.displayImage){
+          toast.error("Please upload a display image");
+          return;
+        }
+        if(!blogData.content.length){
+          toast.error("Please add at least one content block");
+          return;
+        }
+        if(!blogData.metaTitle){
+          toast.error("Please enter a meta title");
+          return;
+        }
+        if(!blogData.metaDescription){
+          toast.error("Please enter a Blog description");
+          return;
+        }
+
          cleanBlogData = { title, category, faq : filteredFaq, displayImage, content, tags, metaTitle, metaDescription, isPublished : !blogData.isPublished };
       } else {
         cleanBlogData = { title, category, faq : filteredFaq, displayImage, content, tags, metaTitle, metaDescription, isPublished : blogData.isPublished };
@@ -238,7 +264,7 @@ function EditBlogPage() {
       if(response?.data.data.blog.slug !== blog?.slug){
         blog = user?.blogs?.find((b) => b.slug === updatedBlog.slug);
         console.log("user blog" , blog)
-        router.replace(`/dashboard/edit/${response?.data.data.blog.slug}`);
+        router.replace(`/dashboard/${response?.data.data.blog.slug}/edit`);
       }
 
       if(publish){
@@ -289,22 +315,22 @@ function EditBlogPage() {
 
   if (loading || fetching || !blog) return (
 <>
-    <div className="flex space-x-6 mt-6 mx-12">
-      <Skeleton className="h-8 w-32 ml-12"/>
+    <div className="flex max-sm:flex-wrap max-sm:gap-2 space-x-6 max-sm:space-x-1 mt-6 mx-12 max-sm:mx-4">
+      <Skeleton className="h-8 w-32 max-sm:w-24 max-sm:ml-0 ml-12"/>
       <Skeleton className="h-8 w-32"/>
+      <Skeleton className="h-8 w-32 max-sm:w-16"/>
+      <Skeleton className="h-8 w-32 max-sm:w-16"/>
       <Skeleton className="h-8 w-32"/>
-      <Skeleton className="h-8 w-32"/>
-      <Skeleton className="h-8 w-32"/>
-      <Skeleton className="h-8 w-32"/>
+      <Skeleton className="h-8 w-32 max-sm:w-48"/>
       <Skeleton className="h-8 w-32"/>
     </div>
     <div className="flex gap-2">
       <div className="w-[66%]">
 
         <div className="mt-12 flex flex-col space-y-6">
-          <Skeleton className="h-20 mt-2 w-[400px] mx-24"/>
-          <Skeleton className="h-[40px] w-64 mx-24"/>
-          <Skeleton className="h-8 w-32 mx-24"/>
+          <Skeleton className="h-20 mt-2 w-[400px] max-sm:w-[300px] mx-24 max-sm:mx-4"/>
+          <Skeleton className="h-[40px] w-64 mx-24 max-sm:mx-4"/>
+          <Skeleton className="h-8 w-32 mx-24 max-sm:mx-4"/>
         </div>
       </div>
       
@@ -324,11 +350,12 @@ function EditBlogPage() {
   return (
     !blog ? <p>...</p> :(
       <>
-        <div className="flex justify-between pb-12 pt-6 px-24">
+        <div className="flex justify-between pb-12 pt-6 px-24 max-lg:px-12 max-sm:px-0">
 
-          <div className="flex space-x-6">
-            {["heading", "paragraph", "image", "youtube Video", "list", "table", "quote"].map((type) => (
-              <Button variant="outline" className="dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 hover:bg-purple-200 dark:hover:bg-purple-700" key={type} onClick={() => addContentBlock(type as BlogData["content"][number]["type"])}>
+          <div className="flex max-xl:flex-wrap gap-4 max-sm:gap-2">
+            {/* Quote removed for now  */}
+            {["heading", "paragraph", "image", "youtube Video", "list", "table"].map((type) => (
+              <Button variant="outline" className="dark:text-zinc-50 max-md:text-sm dark:bg-zinc-800 bg-zinc-200 text-zinc-600 hover:bg-purple-200 dark:hover:bg-purple-700" key={type} onClick={() => addContentBlock(type as BlogData["content"][number]["type"])}>
                 Add {type.charAt(0).toUpperCase() + type.slice(1)}
               </Button>
             ))}
@@ -339,10 +366,10 @@ function EditBlogPage() {
         </div>
 
 
-        <div className="flex flex-row px-24 gap-2">
+        <div className="flex flex-row max-sm:flex-col px-24 max-sm:px-0 gap-2">
 
           {/* Left Side */}
-          <div className="w-[75%] mb-96 flex flex-col gap-5">
+          <div className="w-[75%] max-sm:w-[95%] max-sm:mx-auto mb-96 max-sm:mb-0 flex flex-col gap-5">
 
             {/* Title Input and Error */}
             <div className="w-full">
@@ -350,7 +377,7 @@ function EditBlogPage() {
               type="text"
               placeholder="Title"
               style={{ fontSize: "36px", width: `${Math.min(80, 30 + blogData.title.length * 2)}%` }}
-              className={`min-w-[30%] max-w-[80%] w-auto transition-[width] duration-300 
+              className={`min-w-[30%] max-w-[80%] max-sm:min-w-[100%] max-sm:rounded-xl w-auto transition-[width] duration-300 
                           focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700
                           dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 
                           rounded h-[85px] !text-4xl font-bold px-4 py-2 border border-transparent
@@ -367,7 +394,7 @@ function EditBlogPage() {
             {/* Category Dropdown    */}
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-[30%] hover:bg-purple-200 dark:hover:bg-purple-700 dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 truncate">
+                <Button variant="outline" className="w-[30%] max-sm:w-[70%] max-sm:rounded-xl hover:bg-purple-200 dark:hover:bg-purple-700 dark:text-zinc-50 dark:bg-zinc-800 bg-zinc-200 text-zinc-600 truncate">
                   {blogData.category.length
                     ? (() => {
                         const selectedCategories = categories.filter((cat) => blogData.category.includes(cat._id));
@@ -411,7 +438,7 @@ function EditBlogPage() {
 
             {/* Content */}
             {blogData?.content?.map((block, index) => (
-              <Card key={index} className="mb-4 flex border-none bg-transparent shadow-none  items-center gap-4 w-[100%] group">
+              <Card key={index} className="mb-4 flex max-sm:justify-between border-none bg-transparent shadow-none  items-center gap-4 w-[100%] group">
               {/* <CardContent className="p-4 space-y-2"> */}
                 {/* <p className="font-bold capitalize">{block.type}</p> */}
                 {block.type === "heading" ? (
@@ -439,19 +466,23 @@ function EditBlogPage() {
                   <QuoteInput value={block.value as string} onChange={(value) => updateContent(index, value)} />
                 ) : null}
               {/* </CardContent> */}
-              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="flex gap-2 opacity-0 max-sm:opacity-100 group-hover:opacity-100 transition-opacity duration-300">
                 <Button variant="destructive" className='hover:bg-red-600' onClick={() => handleDeleteSection(index)}><Trash className="w-5 h-5 " /></Button>
               </div>
             </Card>
             ))}
           </div>
 
-          <div className="w-[2px] mb-24 rounded dark:bg-zinc-700 bg-zinc-400 ml-16 mr-8">
+          <div className="w-[2px] mb-24 max-sm:hidden rounded dark:bg-zinc-700 bg-zinc-400 ml-16 mr-8">
           {/* Divider Line   */}
-          </div>         
+          </div>       
+
+          <Separator className="dark:bg-zinc-700 bg-zinc-400 my-2 sm:hidden" />
+
+
 
           {/* Right Side  */}
-          <div className="w-[25%] flex flex-col gap-4 pl-4 mb-24">
+          <div className="w-[25%] max-sm:w-full flex flex-col gap-4 pl-4 mb-24">
 
           <h1 className="text-purple-800 text-xl font-semibold dark:text-purple-400 font-montserrat">
               Meta Title

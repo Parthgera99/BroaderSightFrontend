@@ -41,7 +41,7 @@ export default function ListInput({ value, onChange }: ListInputProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 max-sm:w-[90%]">
       {/* List Type Selection */}
       <div className="flex gap-2 mb-2">
         <Button
@@ -64,7 +64,7 @@ export default function ListInput({ value, onChange }: ListInputProps) {
           <input
             type="text"
             value={item}
-            className="dark:text-zinc-50 dark:bg-zinc-800 py-2 px-4 rounded-xl bg-zinc-200 text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700"
+            className="dark:text-zinc-50 max-sm:w-[80%] dark:bg-zinc-800 py-2 px-4 rounded-xl bg-zinc-200 text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-700"
             onChange={(e) => handleInputChange(index, e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {

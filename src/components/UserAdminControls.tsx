@@ -122,25 +122,25 @@ function UserAdminControls({user, currentUser}:{user:User , currentUser:User}) {
         <DropdownMenuLabel className='text-purple-700 dark:text-purple-300'>Admin Options</DropdownMenuLabel>
         <DropdownMenuSeparator />
             {user.role === "user" && (
-            <DropdownMenuItem onClick={() => makeAdmin(user)}>
+            <DropdownMenuItem className='cursor-pointer' onClick={() => makeAdmin(user)}>
                 Make Admin
             </DropdownMenuItem>
             )}
 
             {isOtherUserAdmin && isSuperAdmin && (
-            <DropdownMenuItem onClick={() => removeAdmin(user)}>
+            <DropdownMenuItem className='cursor-pointer' onClick={() => removeAdmin(user)}>
                 Remove Admin
             </DropdownMenuItem>
             )}
 
             {!isOtherUserBanned && (
-            <DropdownMenuItem onClick={() => banUser(user)}>
+            <DropdownMenuItem className='cursor-pointer' onClick={() => banUser(user)}>
                 Ban User
             </DropdownMenuItem>
             )}
 
             {isOtherUserBanned && (
-            <DropdownMenuItem onClick={() => unbanUser(user)}>
+            <DropdownMenuItem className='cursor-pointer' onClick={() => unbanUser(user)}>
                 Unban User
             </DropdownMenuItem>
             )}

@@ -44,14 +44,14 @@ const UploadImageButton = ({blogId, src, setBlogData }: { blogId: string, src: s
   };
 
   return (
-    <div className="flex flex-col gap-2 w-[30%]">
+    <div className="flex flex-col gap-2 w-[30%] max-sm:w-full">
       {/* Hidden File Input */}
       <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageUpload} className="hidden" />
 
       {/* Clickable Button */}
       {src ? (
         <div onClick={handleButtonClick} className="group relative w-full h-full">
-          <img src={src} alt="Uploaded Preview" className="w-full rounded h-full object-cover" />
+          <img src={src} alt="Uploaded Preview" className="w-full  max-sm:rounded-xl rounded h-full object-cover" />
           <label
             className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition"
             htmlFor="file-input"
@@ -60,7 +60,7 @@ const UploadImageButton = ({blogId, src, setBlogData }: { blogId: string, src: s
           </label>
         </div>
     ): (
-        <Button className="w-[75%] dark:text-zinc-50 dark:bg-zinc-800 text-zinc-600 hover:dark:bg-purple-700 bg-zinc-200 hover:bg-purple-200" variant="outline" onClick={handleButtonClick} disabled={uploading}>
+        <Button className="w-[75%] dark:text-zinc-50 dark:bg-zinc-800 max-sm:rounded-xl text-zinc-600 hover:dark:bg-purple-700 bg-zinc-200 hover:bg-purple-200" variant="outline" onClick={handleButtonClick} disabled={uploading}>
           {uploading ? "Uploading..." : "Upload Image"}
         </Button>
       )
