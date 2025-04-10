@@ -13,7 +13,7 @@ async function CategorySlider({ categories }: { categories: any[] }) {
     <>
     <div className="wrapper mb-4">
       {categories.length > 0 ? (
-          categories.map((category, index) => (
+          categories.slice(0, 8).map((category, index) => (
             <Link
               href={`/category/${category.slug}`}
               key={category.slug}
@@ -37,7 +37,7 @@ async function CategorySlider({ categories }: { categories: any[] }) {
       </div>
     <div className="wrapper2">
       {categories.length > 0 ? (
-            categories.map((category, index) => ( //Add Slice for next 8
+            categories.slice(8,16).map((category, index) => ( //Add Slice for next 8
               <Link
                 href={`/category/${category.slug}`}
                 key={category.slug}

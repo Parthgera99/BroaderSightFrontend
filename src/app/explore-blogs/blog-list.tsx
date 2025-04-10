@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { headers } from "next/headers";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import Image from "next/image";
 
 
 
@@ -88,7 +89,7 @@ useEffect(() => {
                 
 
                 {blog.displayImage ?
-                      <img src={blog.displayImage || "logo.svg"} alt={blog.title} className="w-40 h-40 max-sm:w-24 max-sm:h-20 max-xl:w-32 max-xl:h-32 object-cover rounded-lg " />
+                      <Image src={blog.displayImage || "logo.svg"} width={150} height={100}  alt={blog.title} className="w-40 h-40 max-sm:w-24 max-sm:h-20 max-xl:w-32 max-xl:h-32 object-cover rounded-lg " />
                       : 
                         <div className='w-40 h-40 max-sm:w-24 max-sm:h-20 max-xl:w-32 max-xl:h-32 rounded-lg dark:bg-red-200 bg-red-400 rounded-2xl'></div>
                       }

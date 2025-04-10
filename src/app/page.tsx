@@ -93,7 +93,7 @@ export default async function Home() {
             <h1 className="2xl:text-7xl xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-2xl font-medium text-purple-900 dark:text-purple-200 font-montserrat ">Think Beyond Limits</h1>
             <h2 className="2xl:text-xl md:text-sm max-sm:text-xs text-sm lg:text-md xl:text-md text-zinc-700 dark:text-zinc-200 font-montserrat font-regular max-lg:mx-32 max-sm:mx-8 mx-64 text-center"><b className="font-medium">Broader Sight</b> - A Platform for curious minds to explore, learn and share knowledge across diverse topics.</h2>
             <div className="flex gap-8 max-sm:gap-2 mt-2">
-              <Link href="/explore" className="hover:dark:bg-zinc-700 font-montserrat font-regular max-sm:text-sm max-lg:text-base hover:bg-zinc-300 duration-300 text-zinc-800 dark:text-zinc-200 font-semibold py-2 px-8 rounded-full focus:outline-none focus:shadow-outline">
+              <Link href="/explore-blogs" className="hover:dark:bg-zinc-700 font-montserrat font-regular max-sm:text-sm max-lg:text-base hover:bg-zinc-300 duration-300 text-zinc-800 dark:text-zinc-200 font-semibold py-2 px-8 rounded-full focus:outline-none focus:shadow-outline">
               Explore
               <ArrowRight className="inline-block ml-2 w-6 h-6 max-sm:w-4 max-sm:h-4"/>
               </Link>
@@ -280,7 +280,7 @@ export default async function Home() {
         <CategorySlider categories={categories.slice(0, 16)}/>
         <h2 className=" my-12 max-sm:my-10 max-md:mx-16 max-sm:text-lg max-sm:mx-8 max-md:text-xl max-lg:mx-32 lg:mx-64 text-center text-3xl font-semibold font-montserrat dark:text-purple-200 text-purple-800">Explore a Wide Range of Categories</h2>
         {/* Change slice values  */}
-        <CategorySlider categories={categories.slice(0, 16)}/> 
+        <CategorySlider categories={categories.slice(16, 32)}/> 
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-zinc-100 to-transparent dark:from-zinc-950 dark:to-transparent"></div> 
       </div>
 

@@ -492,6 +492,7 @@ function EditBlogPage() {
             className="font-montserrat dark:text-zinc-50 py-2 px-6 !text-base font-semibold min-h-[70px] max-h-[300px] dark:bg-zinc-800 bg-zinc-200 text-zinc-600 rounded scrollbar-hidden border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 dark:focus-visible:ring-purple-700 focus-visible:border-purple-400 dark:focus-visible:border-purple-700 overflow-hidden resize-none"
             
             value={blogData.metaTitle}
+            maxLength={60}
             onChange={(e) => setBlogData({ ...blogData, metaTitle: e.target.value })}
             onInput={(e) => {
               const target = e.target as HTMLTextAreaElement; // 👈 Fix: Type assertion
@@ -508,6 +509,7 @@ function EditBlogPage() {
             
             onChange={(e) => setBlogData({ ...blogData, metaDescription: e.target.value })}
             value={blogData.metaDescription}
+            maxLength={200}
             onInput={(e) => {
               const target = e.target as HTMLTextAreaElement; // 👈 Fix: Type assertion
               target.style.height = "auto"; // Reset height
