@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       twitter: {
         card: "summary_large_image",
         title: `${blog?.title} | Broadersight`,
-        description: `${blog?.metaDescription.slice(0, 150)}`,
+        description: `${blog?.metaDescription}`,
         images: [
             {
               url: `${blog?.displayImage}`,
