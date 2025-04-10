@@ -16,6 +16,7 @@ const extractVideoId = (url: string) => {
             width="100%"
             height="100%"
             className="rounded-xl"
+            loading='lazy'
             src={`https://www.youtube.com/embed/${videoId}`}
             title="YouTube Video"
             frameBorder="0"

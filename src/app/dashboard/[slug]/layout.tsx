@@ -9,6 +9,8 @@ interface BlogLayoutProps {
   children: ReactNode;
 }
 
+
+
 const BlogSubNavbar: FC<{ slug: string }> = ({ slug }) => {
   const pathname = usePathname();
 

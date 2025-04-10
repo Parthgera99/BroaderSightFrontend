@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from 'next/link';
 
-function DashboardPage() {
+function page() {
   const { user, isAuthenticated, isAdmin, loading, fetchUser } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [createModal, setCreateModal] = useState(false);
@@ -230,4 +230,4 @@ function DashboardPage() {
   );
 }
 
-export default DashboardPage;
+export default page;

@@ -4,12 +4,32 @@ import Link from 'next/link';
 import { fetchCategory3BlogsList } from '@/lib/fetchBlogList';
 import BlogSection from '@/components/BlogSection';
 import Footer from '@/components/Footer';
+import { Metadata } from 'next';
 
 type Category = {
   _id: string;
   name: string;
   slug: string;
 }
+
+export const metadata: Metadata = {
+  title: "Explore Categories | Interesting Topics for your daily enlightenment | Broadersight Blogs",
+  description:"Browse diverse blog categories from BroaderSight — from tech to lifestyle, health to education and 1000+ more. Find topics that fuel your curiosity and give a fresh perspective.",
+  openGraph: {
+    title: "Categories | Broadersight Blogs",
+    description:
+      "Browse diverse range of categories from BroaderSight — from tech to lifestyle, health to education and 1000+ more.",
+    url: "https://broadersight.com/category",
+    siteName: "Broadersight Blogs",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Categories | Broadersight Blogs",
+    description:
+    "Browse diverse range of categories from BroaderSight — from tech to lifestyle, health to education and 1000+ more.",
+  },
+};
 
 
 

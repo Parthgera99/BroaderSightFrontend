@@ -3,9 +3,36 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import UserAdminControls from '@/components/UserAdminControls';
 import { getUser, getUserProfile } from '@/lib/GetUserService';
 import { VerifiedIcon } from 'lucide-react';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react'
+
+
+export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
+  const { username } =  await params;
+  const user = await getUserProfile(username)
+
+
+  return {
+    title: `${user?.fullname} - Profile | Broadersight`,
+    description: `Explore blogs written by ${user?.fullname} on BroaderSight. Dive into unique perspectives, in-depth analysis, and personal insights across topics.`,
+    openGraph: {
+      title: `${user?.fullname} Profile | Broadersight`,
+      description: `Explore blogs written by ${user?.fullname} on BroaderSight Blogs.`,
+      url: `https://broadersight.com/user/${username}`,
+      siteName: "Broadersight Blogs",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${user?.fullname} Profile | Broadersight`,
+      description: `Explore blogs written by ${user?.fullname} on BroaderSight Blogs.`,
+    },
+  };
+}
+
+
 
 async function page({ params }: { params: { username: string } }) {
     const { username } =  await params;

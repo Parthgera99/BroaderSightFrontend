@@ -1,7 +1,7 @@
 "use client"
-import { trendingBlogsByCategory } from '@/app/category/[slug]/page';
+import { trendingBlogsByCategory } from '@/app/category/[slug]/categoryPage';
 import BlogsList from '@/app/explore-blogs/blog-list';
-import { fetchBlogs } from '@/app/explore-blogs/page';
+import { fetchBlogs } from '@/app/explore-blogs/explorePage';
 import { Loader2 } from 'lucide-react';
 import React , { useState, useEffect } from 'react'
 import {useInView} from "react-intersection-observer"
@@ -10,20 +10,26 @@ import {useInView} from "react-intersection-observer"
 type Blog = {
   _id: string;
   displayImage: string;
-  category: [Category];
   title: string;
   slug: string;
   metaDescription: string;
-  authorName: string;
-  authorProfilePicture: string;
+  metaTitle:string;
   date: string;
-  authorRole: string;
+  tags:string[];
+  faq:[{
+      question:string,
+      answer:string
+  }];
   author:{
     fullname: string;
     username: string;
     profilePicture: string;
     role: string;
   }
+  content:[{
+      type:string,
+      value:any
+  }]
 };
 
 type Category = {

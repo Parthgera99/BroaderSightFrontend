@@ -5,22 +5,28 @@ import { User2, VerifiedIcon } from 'lucide-react';
 
 
 type Blog = {
-    _id: string;
-    displayImage: string;
-    category: [Category];
-    title: string;
-    slug: string;
-    metaDescription: string;
-    authorName: string;
-    authorProfilePicture: string;
-    date: string;
-    authorRole: string;
-    author:{
-      fullname: string;
-      username: string;
-      profilePicture: string;
-      role: string;
-    }
+  _id: string;
+  displayImage: string;
+  title: string;
+  slug: string;
+  metaDescription: string;
+  metaTitle:string;
+  date: string;
+  tags:string[];
+  faq:[{
+      question:string,
+      answer:string
+  }];
+  author:{
+    fullname: string;
+    username: string;
+    profilePicture: string;
+    role: string;
+  }
+  content:[{
+      type:string,
+      value:any
+  }]
 };
 
   type Category = {
@@ -46,7 +52,7 @@ function CategoryHeroLayout({ blogs }: { blogs: Blog[] }) {
                             <div className="flex max-xl:flex-col max-xl:gap-4 relative justify-between pt-3">
                                 <div className="flex items-center gap-3 w-fit">
                                     <Link href={`/user/${blog.author.username}`}>
-                                    {blog.author.profilePicture && <img src={blog.author.profilePicture} alt={blog.authorName} className="w-10 h-10 rounded-full" />}
+                                    {blog.author.profilePicture && <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-10 h-10 rounded-full" />}
                                     {!blog.author?.profilePicture && 
                                         <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 p-auto flex text-center items-center">
                                         <User2 className="w-[70%] h-[70%] text-gray-600 dark:text-gray-300 my-auto m-auto" />
@@ -125,7 +131,7 @@ function CategoryHeroLayout({ blogs }: { blogs: Blog[] }) {
                   <div className="flex max-xl:flex-col max-xl:gap-4 relative justify-between pt-2">
                     <div className="flex items-center gap-3 w-fit">
                       <Link href={`/user/${blog.author.username}`}>
-                      {blog.author.profilePicture && <img src={blog.author.profilePicture} alt={blog.authorName} className="w-8 h-8 rounded-full" />}
+                      {blog.author.profilePicture && <img src={blog.author.profilePicture} alt={blog.author.fullname} className="w-8 h-8 rounded-full" />}
                       {!blog.author?.profilePicture && 
                         <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-800 p-auto flex text-center items-center">
                           <User2 className="w-[70%] h-[70%] text-gray-600 dark:text-gray-300 my-auto m-auto" />

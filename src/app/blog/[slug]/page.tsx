@@ -21,12 +21,58 @@ import {
   } from "@/components/ui/accordion"
 import BlogDeleteButton from '@/components/BlogDeleteButton';
 import { getUser } from '@/lib/GetUserService';
+import { Metadata } from 'next';
+import BlogSchema from './BlogSchema';
 
+
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+    const { slug } =  await params;
+    const blog:Blog|null = await getBlogDetails(slug);
+  
+    return {
+      title: `${blog?.title} | Broadersight`,
+      description: `${blog?.metaDescription}`,
+      openGraph: {
+        title: `${blog?.title} | Broadersight`,
+        description: `${blog?.metaDescription}`,
+        url: `https://broadersight.com/blog/${slug}`,
+        siteName: "Broadersight Blogs",
+        type: "article",
+        publishedTime: blog?.date,
+        modifiedTime: blog?.updatedAt,
+        images: [
+            {
+              url: `${blog?.displayImage}`,
+              width: 1200,
+              height: 630,
+              alt: `${blog?.title}`,
+            }
+          ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${blog?.title} | Broadersight`,
+        description: `${blog?.metaDescription.slice(0, 150)}`,
+        images: [
+            {
+              url: `${blog?.displayImage}`,
+              width: 1200,
+              height: 630,
+              alt: `${blog?.title}`,
+            }
+        ]
+      },
+    };
+  }
+
+  
+  
+  
 
 async function getBlogDetails(blogSlug:string): Promise<Blog | null> {
     try {
         const response = await api.get(`/blog/${blogSlug}`);
-        // console.log(response.data.data)
         return response.data.data.blog; 
     } catch (err) {
         if (axios.isAxiosError(err)) {
@@ -69,6 +115,7 @@ type Blog = {
         type:string,
         value:any
     }]
+    updatedAt: string;
   };
 
 async function page({params}:{params:{slug:string}}) {
@@ -139,16 +186,17 @@ async function page({params}:{params:{slug:string}}) {
 
 
   return (
-    <div>
-    <div className='mx-auto 2xl:w-[1100px] xl:w-[1000px] lg:w-[900px] max-lg:w-[90%]  max-sm:mx-4 flex justify-center py-20 pb-6 max-sm:py-16 max-sm:pb-0'>
+    <main>
+        <BlogSchema blog={blog} />
+    <article className='mx-auto 2xl:w-[1100px] xl:w-[1000px] lg:w-[900px] max-lg:w-[90%]  max-sm:mx-4 flex justify-center py-20 pb-6 max-sm:py-16 max-sm:pb-0' itemScope itemType="https://schema.org/BlogPosting">
         {/* Main Content  */}
-        <div className='flex flex-col gap-6 2xl:w-[85%] xl:w-[100%] w-[100%] max-md:w-full'>
+        <header className='flex flex-col gap-6 2xl:w-[85%] xl:w-[100%] w-[100%] max-md:w-full'>
             <h1 className='text-[40px] max-sm:text-3xl leading-[50px] text-zinc-700 dark:text-purple-200 font-bold font-montserratAlt'>
                  {blog.title}
             </h1>
-            <p className='text-base max-sm:text-sm max-lg:pr-4 text-zinc-500 dark:text-zinc-300 font-medium font-montserrat pr-16 '>
+            <h2 className='text-base max-sm:text-sm max-lg:pr-4 text-zinc-500 dark:text-zinc-300 font-medium font-montserrat pr-16 '>
                 {blog.metaDescription}
-            </p>
+            </h2>
             <div className="flex justify-between gap-4 items-center">
                 {/* Author  */}
                 <div className='flex gap-4 items-center'>
@@ -201,7 +249,7 @@ async function page({params}:{params:{slug:string}}) {
             <div className="flex justify-center my-4">
             <Image
                 src={blog.displayImage}
-                alt="Blog image"
+                alt={blog.title}
                 className="rounded-2xl"
                 width={800} // or a reasonably large default width
                 height={0} // let height auto-adjust based on width
@@ -227,7 +275,7 @@ async function page({params}:{params:{slug:string}}) {
                         case "paragraph":
                           return <ParagraphDisplay key={index} value={block.value} />;
                         case "image":
-                          return <ImageDisplay key={index} value={block.value} />;
+                          return <ImageDisplay key={index} value={block.value} title={blog.title} />;
                         case "youtube video":
                           return <VideoDisplay key={index} value={block.value} />;
                         case "list":
@@ -240,12 +288,12 @@ async function page({params}:{params:{slug:string}}) {
                 })}
             </div>
 
-        </div>
+        </header>
         {/* Ads  */}
         {/* <div className='flex flex-col w-[24%] max-md:hidden bg-purple-100 dark:bg-zinc-800 rounded-xl'>
             Future Work
         </div> */}
-    </div>
+    </article>
 
     <div className="h-[1px] my-12 w-full bg-zinc-200 dark:bg-zinc-800">
         {/* Divider  */}
@@ -305,7 +353,7 @@ async function page({params}:{params:{slug:string}}) {
     
 
     <Footer/>
-    </div>
+    </main>
     
   )
 }

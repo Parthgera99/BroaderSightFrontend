@@ -1,5 +1,11 @@
 import Footer from '@/components/Footer'
 import React from 'react'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'About Us | Broadersight Blogs',
+  description: 'About our team - Created by Parth Gera',
+}
 
 function page() {
   return (

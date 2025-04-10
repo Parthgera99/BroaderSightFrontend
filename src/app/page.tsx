@@ -7,6 +7,61 @@ import BlogSection from "@/components/BlogSection";
 import { getCategories } from "@/lib/categoryService";
 import { fetch3BlogList } from "@/lib/fetchBlogList";
 import Footer from "@/components/Footer";
+import { Metadata } from 'next';
+
+
+export const metadata: Metadata = {
+  title: "Broadersight Blogs | Think Beyond Limits",
+  description:"Broadersight Blogs is your go to blogging platform to read blogs and earn money by writing blogs. This is the Best and Easiest Blog Generator with Highly informative blogs.",
+  openGraph: {
+    title: "Broadersight Blogs",
+    description:
+      "Broaden your perspective with daily blogs on education, tech, health and 1000+ more topics.",
+    url: "https://broadersight.com",
+    siteName: "Broadersight Blogs",
+    type: "website",
+    images: [
+      {
+        url: "https://broadersight.com/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "Broadersight Blogs",
+      },
+      {
+        url: "https://broadersight.com/computerTick.svg",
+        width: 1200,
+        height: 630,
+        alt: "Best Blog Generator",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Broadersight Blogs",
+    description:
+      "Broaden your perspective with daily blogs on education, tech, health and 1000+ more topics.",
+  },
+};
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Broadersight Blogs",
+  "url": "https://broadersight.com",
+  "logo": "https://broadersight.com/logo.svg",
+  "sameAs": [
+    "https://www.facebook.com/Broadersight",
+    "https://www.instagram.com/Broadersight",
+    "https://www.linkedin.com/company/broadersight"
+  ],
+  "founder": {
+    "@type": "Person",
+    "name": "Parth Gera"
+  },
+  "foundingDate": "2025-02-20",
+  "description": "Broadersight Blogs is a blog platform where users can read, write and earn from blogs across various domains like education, tech, health, and 1000+ more."
+};
+
 
 
 export default async function Home() {
@@ -16,7 +71,12 @@ export default async function Home() {
   const blogs = await fetch3BlogList();
 
   return (
+    
     <div className="relative ">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
       <div className="relative w-full pb-[100px]">
 
         {/* Background Image */}
@@ -31,7 +91,7 @@ export default async function Home() {
           {/* Hero Section  */}
           <div className="flex flex-col items-center gap-10 max-sm:gap-8">
             <h1 className="2xl:text-7xl xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-2xl font-medium text-purple-900 dark:text-purple-200 font-montserrat ">Think Beyond Limits</h1>
-            <p className="2xl:text-xl md:text-sm max-sm:text-xs text-sm lg:text-md xl:text-md text-zinc-700 dark:text-zinc-200 font-montserrat font-regular max-lg:mx-32 max-sm:mx-8 mx-64 text-center"><b className="font-medium">Broader Sight</b> - A Platform for curious minds to explore, learn and share knowledge across diverse topics.</p>
+            <h2 className="2xl:text-xl md:text-sm max-sm:text-xs text-sm lg:text-md xl:text-md text-zinc-700 dark:text-zinc-200 font-montserrat font-regular max-lg:mx-32 max-sm:mx-8 mx-64 text-center"><b className="font-medium">Broader Sight</b> - A Platform for curious minds to explore, learn and share knowledge across diverse topics.</h2>
             <div className="flex gap-8 max-sm:gap-2 mt-2">
               <Link href="/explore" className="hover:dark:bg-zinc-700 font-montserrat font-regular max-sm:text-sm max-lg:text-base hover:bg-zinc-300 duration-300 text-zinc-800 dark:text-zinc-200 font-semibold py-2 px-8 rounded-full focus:outline-none focus:shadow-outline">
               Explore
