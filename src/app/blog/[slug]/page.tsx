@@ -122,7 +122,7 @@ type Blog = {
   type paramsType = Promise<{ slug: string }>
 
 
-async function page(props: { params: paramsType }) {
+async function Page(props: { params: paramsType }) {
     const {slug} = await props.params;
 
     const blog:Blog|null = await getBlogDetails(slug);
@@ -374,4 +374,4 @@ https://broadersight.com/blog/${slug}`)}`,
   )
 }
 
-export default page
+export default Page
