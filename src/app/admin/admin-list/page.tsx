@@ -15,7 +15,7 @@ type User = {
     blogCount: number;
   };
 
-function page() {
+function Page() {
     const { user, isAdmin, loading } = useAuth();
     const [adminList, setAdminList] = useState<User[]>([]);
     const [error, setError] = useState<boolean>(false);
@@ -93,4 +93,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

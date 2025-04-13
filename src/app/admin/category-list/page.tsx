@@ -16,7 +16,7 @@ type Category = {
     slug: string;
   }
 
-function page() {
+function Page() {
     const { user, isAdmin, loading } = useAuth();
     const [createModal, setCreateModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
@@ -136,4 +136,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

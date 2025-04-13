@@ -14,7 +14,7 @@ type User = {
     earnings: number;
   };
 
-function page() {
+function Page() {
     const { user, isAdmin, loading } = useAuth();
     const [bannedUserList, setBannedUserList] = useState<User[]>([]);
 
@@ -77,4 +77,4 @@ function page() {
     )
 }
 
-export default page
+export default Page
