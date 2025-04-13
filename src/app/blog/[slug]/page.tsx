@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { notFound } from "next/navigation";
 import api from "@/lib/api";
 import axios from 'axios';
@@ -119,14 +119,11 @@ type Blog = {
   };
 
 
-  type PageProps = {
-    params: Promise<{ slug: string }>;
-  };
+  type Params = Promise<{ slug: string }>
 
 
-
-async function page({params}:PageProps) {
-    const { slug } = await params;
+async function page({ params }: { params: Params }) {
+    const {slug} = await params;
 
     const blog:Blog|null = await getBlogDetails(slug);
     const user = await getUser();
