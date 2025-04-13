@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import api from "@/lib/api";
 import axios from 'axios';
 import Link from 'next/link';
-import { Trash2Icon, User2, VerifiedIcon } from 'lucide-react';
+import { User2, VerifiedIcon } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Image from 'next/image';
 import HeadingDisplay from '@/components/displayComponents/HeadingDisplay';
@@ -118,8 +118,17 @@ type Blog = {
     updatedAt: string;
   };
 
-async function page({params}:{params:{slug:string}}) {
-    const { slug } = params;
+
+  type PageProps = {
+    params: {
+      slug: string;
+    };
+  };
+
+
+
+async function page({params}:PageProps) {
+    const { slug } = await params;
 
     const blog:Blog|null = await getBlogDetails(slug);
     const user = await getUser();
