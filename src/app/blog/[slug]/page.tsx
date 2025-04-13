@@ -120,9 +120,7 @@ type Blog = {
 
 
   type PageProps = {
-    params: {
-      slug: string;
-    };
+    params: Promise<{ slug: string }>;
   };
 
 
