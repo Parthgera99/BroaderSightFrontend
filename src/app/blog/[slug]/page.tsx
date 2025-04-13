@@ -119,11 +119,11 @@ type Blog = {
   };
 
 
-  type Params = Promise<{ slug: string }>
+  type paramsType = Promise<{ slug: string }>
 
 
-async function page({ params }: { params: Params }) {
-    const {slug} = await params;
+async function page(props: { params: paramsType }) {
+    const {slug} = await props.params;
 
     const blog:Blog|null = await getBlogDetails(slug);
     const user = await getUser();
