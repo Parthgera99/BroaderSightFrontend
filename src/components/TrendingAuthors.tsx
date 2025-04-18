@@ -42,7 +42,10 @@ async function TrendingAuthors() {
 
                 
 
-                          <p className="text-sm dark:text-zinc-200 text-zinc-600 group-hover:dark:text-purple-300 group-hover:text-purple-700 duration-300">{author.bio.length>60 ? author.bio.slice(0, 60) + "..." : author.bio}</p>
+                          <p className="text-sm dark:text-zinc-200 text-zinc-600 group-hover:dark:text-purple-300 group-hover:text-purple-700 duration-300">
+                            {author.bio ? (author.bio.length > 60 ? author.bio.slice(0, 60) + "..." : author.bio) : ""}
+                          </p>
+
                         </div>
                       </div>
                     </Link>
