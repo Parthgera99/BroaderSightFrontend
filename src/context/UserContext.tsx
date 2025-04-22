@@ -134,7 +134,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    fetchUser(); // Fetch user data on mount
+    // fetchUser(); // Fetch user data on mount
+    const timer = setTimeout(() => {
+      fetchUser();
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const isAuthenticated = !!user;

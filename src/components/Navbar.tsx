@@ -58,7 +58,7 @@ function Navbar() {
           <ul className="font-montserrat lg:flex max-lg:hidden items-center gap-16">
             <Link href="/explore-blogs" className="nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 font-semibold duration-300">Explore</Link>
             <Link href="/category" className="nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 font-semibold duration-300">Categories</Link>
-            <Link href="/about" className="nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 font-semibold duration-300">About</Link>
+            <Link href="/about" className="nav-link text-zinc-700 dark:text-zinc-50 hover:text-purple-600 hover:dark:text-purple-300 font-semibold duration-300">About</Link>           
           </ul>
       
 
