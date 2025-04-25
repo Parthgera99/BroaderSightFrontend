@@ -197,11 +197,12 @@
 
 
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import CategoryPage from './categoryPage'
 import { getCategories } from '@/lib/categoryService';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import GlobalLoader from '@/components/GlobalLoader';
 
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -240,7 +241,11 @@ async function page({ params, searchParams }: { params: { slug: string }, search
       const params2 = await searchParams;
       const filter = params2.filter === "latest" ? "latest" : "trending";
   return (
-    <CategoryPage slug={slug} filter={filter}/>
+    <Suspense fallback={
+      <GlobalLoader/>
+    }>
+      <CategoryPage slug={slug} filter={filter}/>
+    </Suspense>
   )
 }
 
