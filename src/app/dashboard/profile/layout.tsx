@@ -1,4 +1,5 @@
-import React from 'react'
+import GlobalLoader from '@/components/GlobalLoader';
+import React, { Suspense } from 'react'
 
 export const metadata = {
     title: 'My Profile | BroaderSight Blogs'
@@ -11,10 +12,14 @@ function layout({
   }>) {
     
   return (
-    <div>
+      <Suspense fallback={
+      <GlobalLoader/>
+    }>
         {children}
-    </div>
+    </Suspense>
   )
 }
 
 export default layout
+
+

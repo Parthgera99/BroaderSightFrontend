@@ -7,6 +7,8 @@ import { getTrendingAuthors } from "@/lib/trendingAuthors";
 import { User2 } from "lucide-react";
 import ExploreCategories from "@/components/ExploreCategories";
 import TrendingAuthors from "@/components/TrendingAuthors";
+import { Suspense } from "react";
+import GlobalLoader from "@/components/GlobalLoader";
 
 interface ExplorePageProps {
   searchParams: { filter?: string };
@@ -130,7 +132,12 @@ export default async function ExplorePage({ filter}: {filter:string})  {
       <div className="flex gap-4">
 
         <div className="w-[65%] max-2xl:w-[60%] max-lg:w-full flex flex-col gap-12 max-sm:gap-12">
+          <Suspense fallback={
+                <GlobalLoader/>
+              }>
           <BlogsList blogs={blogs.blogs} />
+              </Suspense>
+                
           <LoadMore filter={filter} componentType="explore" slug="" excludedIds={ blogs?.blogs?.map((blog:Blog) => blog._id) }/>
         </div>
 

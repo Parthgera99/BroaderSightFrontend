@@ -8,6 +8,8 @@ import { getCategories } from "@/lib/categoryService";
 import { fetch3BlogList } from "@/lib/fetchBlogList";
 import Footer from "@/components/Footer";
 import { Metadata } from 'next';
+import { Suspense } from "react";
+import GlobalLoader from "@/components/GlobalLoader";
 
 
 export const metadata: Metadata = {
@@ -71,6 +73,10 @@ export default async function Home() {
   const blogs = await fetch3BlogList();
 
   return (
+
+    <Suspense fallback={
+      <GlobalLoader/>
+    }>
     
     <div className="relative ">
       <script
@@ -355,5 +361,6 @@ export default async function Home() {
       <Footer/>
 
     </div>
+    </Suspense>
   );
 }

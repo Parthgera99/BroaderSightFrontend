@@ -167,9 +167,10 @@
 
 
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import ExplorePage from './explorePage'
 import { Metadata } from 'next';
+import GlobalLoader from '@/components/GlobalLoader';
 
 interface ExplorePageProps {
   searchParams: { filter?: string };
@@ -207,7 +208,11 @@ async function page({ searchParams }: ExplorePageProps) {
   const filter = params.filter === "latest" ? "latest" : "trending";
 
   return (
-    <ExplorePage filter={filter}/>
+    <Suspense fallback={
+      <GlobalLoader/>
+    }>
+    <ExplorePage key={filter} filter={filter}/>
+    </Suspense>
   )
 }
 
