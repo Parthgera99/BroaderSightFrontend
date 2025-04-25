@@ -9,7 +9,7 @@ import { getTrendingAuthors } from '@/lib/trendingAuthors';
 import { User2, VerifiedIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from "next/navigation";
-import React from 'react'
+import React ,  {use} from 'react'
 
 
 interface ExplorePageProps {
@@ -125,9 +125,9 @@ export async function trendingBlogsByCategory(excludedIds:string[], slug:string)
 }
 
 
-const CategoryPage = async ({ slug, filter }: {slug: string , filter: string }) => {
+const CategoryPage = ({ slug, filter }: {slug: string , filter: string }) => {
     // const { slug } =  await params;
-    const categories:any[] = await getCategories();
+    const categories:any[] = use(getCategories());
 
     const categoryExists = categories.some((category: { slug: string }) => category.slug === slug);
 
@@ -140,9 +140,9 @@ const CategoryPage = async ({ slug, filter }: {slug: string , filter: string }) 
     // const filter = params2.filter === "latest" ? "latest" : "trending";
     
 
-    const blogs  = await trendingBlogsByCategory([], slug);
+    const blogs  = use(trendingBlogsByCategory([], slug));
     // console.log(blogs)
-    const latestBlogs = await latestBlogsByCategory(slug);
+    const latestBlogs = use(latestBlogsByCategory(slug));
     // console.log(latestBlogs)
     
     
