@@ -9,12 +9,8 @@ function layout({
     children: React.ReactNode
   }) {
   return (
-    <Suspense fallback={
-      <GlobalLoader/>
-    }>
-
+    
       <div>{children}</div>
-    </Suspense>
   )
 }
 
