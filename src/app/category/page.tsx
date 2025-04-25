@@ -5,8 +5,7 @@ import { fetchCategory3BlogsList } from '@/lib/fetchBlogList';
 import BlogSection from '@/components/BlogSection';
 import Footer from '@/components/Footer';
 import { Metadata } from 'next';
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+
 
 
 

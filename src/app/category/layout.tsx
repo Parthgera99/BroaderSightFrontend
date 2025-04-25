@@ -1,5 +1,7 @@
 import GlobalLoader from '@/components/GlobalLoader'
 import React, { Suspense } from 'react'
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 function layout({
     children,
