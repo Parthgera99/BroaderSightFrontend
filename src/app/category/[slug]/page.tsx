@@ -204,6 +204,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import GlobalLoader from '@/components/GlobalLoader';
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 
 
