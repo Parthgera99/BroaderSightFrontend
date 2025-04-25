@@ -10,6 +10,8 @@ import { User2, VerifiedIcon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from "next/navigation";
 import React ,  {use} from 'react'
+export const dynamic = "force-dynamic";
+
 
 
 interface ExplorePageProps {
