@@ -60,7 +60,7 @@ export async function fetch3BlogList(): Promise<Blog[]> {
         headers: {
           'Content-Type': 'application/json',
         },
-        next: { revalidate: 60 } 
+        next: { revalidate: 120 } 
       });
   
       if (!res.ok) {

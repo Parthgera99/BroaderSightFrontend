@@ -7,7 +7,7 @@ export async function getCategories() {
 
     const baseURL =   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
     const res = await fetch(`${baseURL}/category/list`, {
-      next: { revalidate: 60 }, // cache for 60 seconds
+      next: { revalidate: 120 }, // cache for 60 seconds
     });
 
     if (!res.ok) {

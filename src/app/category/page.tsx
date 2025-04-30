@@ -1,12 +1,11 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { getCategories } from "@/lib/categoryService";
 import Link from 'next/link';
 import { fetchCategory3BlogsList } from '@/lib/fetchBlogList';
 import BlogSection from '@/components/BlogSection';
 import Footer from '@/components/Footer';
 import { Metadata } from 'next';
-import GlobalLoader from '@/components/GlobalLoader';
-export const revalidate = 60;
+export const revalidate = 120;
 
 
 
@@ -56,9 +55,6 @@ async function page() {
 
 
   return (
-    <Suspense fallback={
-          <GlobalLoader/>
-        }>
     <div>
 
     <div className='flex font-montserrat flex-col gap-12 mt-12'>
@@ -88,7 +84,6 @@ async function page() {
       {/* Footer  */}
       <Footer/>
     </div>
-    </Suspense>
 
   )
 }
