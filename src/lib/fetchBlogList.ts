@@ -54,7 +54,8 @@ export async function fetch3BlogList(): Promise<Blog[]> {
 
   export async function fetchCategory3BlogsList(category: string): Promise<Blog[]> {
     try {
-      const res = await fetch(`http://192.168.224.48:8000/api/v1/blog/category/${category}?type=trending&limit=3`, {
+      const baseURL =   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+      const res = await fetch(`${baseURL}/blog/category/${category}?type=trending&limit=3`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
