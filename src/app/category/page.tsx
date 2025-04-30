@@ -6,7 +6,7 @@ import BlogSection from '@/components/BlogSection';
 import Footer from '@/components/Footer';
 import { Metadata } from 'next';
 import GlobalLoader from '@/components/GlobalLoader';
-
+export const revalidate = 60;
 
 
 
