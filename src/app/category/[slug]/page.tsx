@@ -203,10 +203,6 @@ import { getCategories } from '@/lib/categoryService';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import GlobalLoader from '@/components/GlobalLoader';
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-
-
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } =  await params;

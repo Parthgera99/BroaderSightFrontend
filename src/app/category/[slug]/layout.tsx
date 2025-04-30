@@ -1,6 +1,4 @@
-import GlobalLoader from '@/components/GlobalLoader'
-import { Loader2Icon } from 'lucide-react'
-import React, { Suspense } from 'react'
+import React from 'react'
 
 function layout({
     children,
@@ -9,13 +7,9 @@ function layout({
   }) {
   return (
 
-    <Suspense fallback={
-      <GlobalLoader/>
-    }>
     <div>
         {children}
     </div>
-    </Suspense>
   )
 }
 

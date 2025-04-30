@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, User2, VerifiedIcon } from "lucide-react";
-import api from "@/lib/api";
 import {
   Tooltip,
   TooltipContent,
