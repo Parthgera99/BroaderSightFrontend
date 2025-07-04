@@ -135,6 +135,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // fetchUser(); // Fetch user data on mount
+    console.log("useEffect called");
     const timer = setTimeout(() => {
       fetchUser();
     }, 0);

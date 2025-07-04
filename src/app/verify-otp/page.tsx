@@ -183,6 +183,10 @@ export default function OtpForm() {
               ))}
             </InputOTPGroup>
           </InputOTP>
+          <div className="text-xs text-gray-500 ">
+            Note:
+            <p className="text-xs text-yellow-500">Please check the Spam folder if email not visible.</p>
+          </div>
 
           {error && <p className="text-red-500 mt-2">{error}</p>}
 
